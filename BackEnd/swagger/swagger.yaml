@@ -1,0 +1,201 @@
+openapi: 3.0.0
+info:
+  title: API de Usuarios y Datos Personales
+  version: 1.0.0
+  description: Esta API permite gestionar usuarios del sistema y su información personal.
+servers:
+  - url: http://localhost:4321
+
+paths:
+  /users/all:
+    get:
+      summary: Obtener todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /users/create:
+    post:
+      summary: Crear nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Usuario creado
+
+  /users/{id}:
+    get:
+      summary: Obtener usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuario no encontrado
+    put:
+      summary: Actualizar usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Usuario actualizado
+    delete:
+      summary: Eliminar usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Usuario eliminado
+
+  /data-users:
+    get:
+      summary: Obtener todos los datos personales
+      responses:
+        '200':
+          description: Lista de datos personales
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataUser'
+    post:
+      summary: Crear datos personales
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataUser'
+      responses:
+        '201':
+          description: Datos creados
+
+  /data-users/{id}:
+    get:
+      summary: Obtener datos por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Datos encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataUser'
+        '404':
+          description: Datos no encontrados
+    put:
+      summary: Actualizar datos personales
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataUser'
+      responses:
+        '200':
+          description: Datos actualizados
+    delete:
+      summary: Eliminar datos personales
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Datos eliminados
+
+components:
+  components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      
+  schemas:
+    User:
+      type: object
+      required:
+        - userName
+        - pass
+        - email
+      properties:
+        userName:
+          type: string
+        pass:
+          type: string
+          format: password
+        email:
+          type: string
+        active:
+          type: boolean
+        roleId:
+          type: integer
+      example:
+        username: "mperez"
+        password: "Example3@"
+        email: "mperez@example.com"
+
+
+    DataUser:
+      type: object
+      required:
+        - name
+        - lastname
+        - direccion
+        - telefono
+      properties:
+        name:
+          type: string
+        lastname:
+          type: string
+        direccion:
+          type: string
+        telefono:
+          type: string

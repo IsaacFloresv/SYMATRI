@@ -1,0 +1,28 @@
+{
+  "description": "Backend basico",
+  "name": "backendbasic",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node --watch server.js",
+    "migrate": "npx sequelize-cli db:migrate",
+    "umigrate": "npx sequelize-cli db:migrate:undo:all",
+    "seed": "npx sequelize-cli db:seed:all",
+    "useed": "npx sequelize-cli db:seed:undo:all"
+  },
+  "keywords": [
+    "beb"
+  ],
+  "author": "IFV",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mariadb": "^3.4.2",
+    "sequelize": "^6.37.7",
+    "sequelize-cli": "^6.6.3",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  }
+}

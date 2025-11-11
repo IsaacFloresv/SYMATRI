@@ -1,0 +1,27 @@
+npx sequelize-cli model:generate --name usuarios --attributes userName:string,pass:string,email:string,activo:boolean,firstName:string,lastName:string,telefono:string,direccion:text,roleId:integer
+
+npx sequelize-cli model:generate --name roles --attributes nombre:string,modulos:text
+
+npx sequelize-cli model:generate --name materias --attributes name:string,description:text
+
+npx sequelize-cli model:generate --name materiaProfesor --attributes materiaId:integer,profesorId:integer
+
+npx sequelize-cli model:generate --name seccionAlumnos --attributes seccionId:integer,alumnoId:integer
+
+npx sequelize-cli model:generate --name secciones --attributes name:string,profesorId:integer
+
+npx sequelize-cli model:generate --name seccionProfesor --attributes seccionId:integer,profesorId:integer
+
+npx sequelize-cli model:generate --name seccionAlumnos --attributes seccionId:integer,alumnoId:integer
+
+npx sequelize-cli model:generate --name encargadoAlumnos --attributes alumnoId:integer,encargadoId:integer
+
+npx sequelize-cli model:generate --name horarios --attributes seccionId:integer,profesorId:integer,dia:string,inicio:time,final:time
+
+npx sequelize-cli model:generate --name notas --attributes alumnoId:integer,materiaId:integer,usuarioId:integer,nota:decimal
+
+npx sequelize-cli model:generate --name actividades --attributes name:string,descripcion:text,fechaInicio:datetime,fechaFinal:datetime
+
+npx sequelize-cli model:generate --name mensajes --attributes asunto:string,mensaje:text,emisorId:integer,receptorId:integer,leido:boolean,fechaEnvio:timestamp
+
+npx sequelize-cli model:generate --name config --attributes clave:string,valor:text,tipo:enum
