@@ -4,20 +4,25 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class actividades extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      // Relación: cada actividad pertenece a un usuario
+      actividades.belongsTo(models.User, {
+        foreignKey: 'userId',
+        as: 'generador',
+      });
     }
   }
   actividades.init({
     name: DataTypes.STRING,
     descripcion: DataTypes.TEXT,
-    fechaInicio: DataTypes.DATE,
-    fechaFinal: DataTypes.DATE
+    userId: DataTypes.INTEGER,
+    estado: DataTypes.BOOLEAN,
+    fechaInicio: DataTypes.DATEONLY,
+    fechaFinal: DataTypes.DATEONLY,
+    horaInicio: DataTypes.TIME,
+    horaFinal: DataTypes.TIME,
+    ubicacion: DataTypes.STRING,
+    objetivo: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'actividades',

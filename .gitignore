@@ -1,0 +1,41 @@
+# 📁 Archivos de configuración de VS Code
+.vscode/
+
+# 🔐 Archivos de entorno
+/FrontEnd/.env
+/BackEnd/.env
+
+# 📦 Dependencias y archivos de bloqueo
+/FrontEnd/node_modules/
+/FrontEnd/package-lock.json
+/BackEnd/node_modules/
+/BackEnd/package-lock.json
+
+# ⚙️ Archivos de configuración personalizados
+/FrontEnd/config
+/FrontEnd/config.js
+/FrontEnd/config.json
+/BackEnd/config
+/BackEnd/config.js
+/BackEnd/config.json
+
+# 🏗️ Carpetas de compilación y distribución
+/FrontEnd/dist/
+/FrontEnd/build/
+/BackEnd/dist/
+/BackEnd/build/
+
+# 🧹 Archivos temporales y logs
+*.log
+*.tmp
+*.swp
+
+# 🖥️ Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# 🧪 Archivos de pruebas (opcional)
+/FrontEnd/coverage/
+/BackEnd/coverage/
+*.test.js
+*.spec.js

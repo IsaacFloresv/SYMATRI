@@ -5,7 +5,18 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class mensajes extends Model {
     static associate(models) {
-      // define association here
+      // Relación con el emisor
+      mensajes.belongsTo(models.User, {
+        foreignKey: 'emisorId',
+        as: 'emisor',
+      });
+
+      // Relación con el receptor
+      mensajes.belongsTo(models.User, {
+        foreignKey: 'receptorId',
+        as: 'receptor',
+      });
+
     }
   }
   mensajes.init({

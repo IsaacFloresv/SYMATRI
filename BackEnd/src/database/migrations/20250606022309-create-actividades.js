@@ -12,14 +12,32 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      userId: {
+        type: Sequelize.INTEGER
+      },
+      estado: {
+        type: Sequelize.BOOLEAN
+      },
       descripcion: {
         type: Sequelize.TEXT
       },
       fechaInicio: {
-        type: Sequelize.DATE
+        type: Sequelize.DATEONLY
       },
       fechaFinal: {
-        type: Sequelize.DATE
+        type: Sequelize.DATEONLY
+      },
+      horaInicio: {
+        type: Sequelize.TIME
+      },
+      horaFinal: {
+        type: Sequelize.TIME
+      },
+      ubicacion: {
+        type: Sequelize.TEXT
+      },
+      objetivo: {
+        type: Sequelize.STRING
       },
       createdAt: {
         type: Sequelize.DATE,

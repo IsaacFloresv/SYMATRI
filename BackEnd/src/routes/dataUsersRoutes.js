@@ -4,8 +4,8 @@ const router = express.Router();
 const {
   getAll,
   getById,
-  createD,
-  updateD
+  create,
+  update
 } = require("../controllers/dataUsersControllers");
 
 router.get("/", (req, res) => {
@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 
 router.get("/all", getAll);
 router.get("/byid", getById);
-router.post("/create", createD);
-router.put("/update", updateD);
+router.post("/create", create);
+router.put("/update", update);
 
 module.exports = router;

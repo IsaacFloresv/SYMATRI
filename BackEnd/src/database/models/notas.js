@@ -4,13 +4,25 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class notas extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      // Relación con el alumno
+      notas.belongsTo(models.User, {
+        foreignKey: 'alumnoId',
+        as: 'alumno',
+      });
+
+      // Relación con el usuario que asigna la nota
+      notas.belongsTo(models.User, {
+        foreignKey: 'usuarioId',
+        as: 'autor',
+      });
+
+      // Relación con la materia
+      notas.belongsTo(models.materias, {
+        foreignKey: 'materiaId',
+        as: 'materia',
+      });
+
     }
   }
   notas.init({

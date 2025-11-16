@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       modulos: {
-        type: Sequelize.TEXT
+        type: Sequelize.JSON
       },
       createdAt: {
         type: Sequelize.DATE,

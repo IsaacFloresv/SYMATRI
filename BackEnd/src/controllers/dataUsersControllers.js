@@ -46,7 +46,7 @@ const getById = async (req, res) => {
   }
 };
 
-const createD = async (req, res) => {
+const create = async (req, res) => {
   try {
     console.log(req.body);
     const { data } = req.body;
@@ -63,7 +63,7 @@ const createD = async (req, res) => {
   }
 };
 
-const updateD = async (req, res) => {
+const update = async (req, res) => {
   try {
     const { userId, ...data } = req.body.data;
     let resp = await dataUser.update(data, {
@@ -83,6 +83,6 @@ const updateD = async (req, res) => {
 module.exports = {
   getAll,
   getById,
-  createD,
-  updateD
+  create,
+  update
 };

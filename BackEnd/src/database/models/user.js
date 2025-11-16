@@ -3,14 +3,78 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
+      // Relación uno a uno con dataUser
       User.hasOne(models.dataUser, {
         as: "datosPersonales",
         foreignKey: "userId",
       });
+
+      // Relación uno a muchos con secciones
       User.hasMany(models.secciones, {
         as: "ProfesorResponsable",
         foreignKey: "profesorId",
       });
+
+      // Relación uno a muchos con logs
+      User.hasMany(models.logs, {
+        as: "logs",
+        foreignKey: "userId",
+      });
+
+      // Relación uno a muchos con actividades
+      User.hasMany(models.actividades, {
+        as: "generador",
+        foreignKey: "userId",
+      });
+
+      // Relación uno a muchos con encargadoAlumnos
+      User.hasMany(models.encargadoAlumnos, {
+        as: "encargado",
+        foreignKey: "userId",
+      });
+
+      // Relación uno a muchos con horarios
+      User.hasMany(models.horarios, {
+        foreignKey: 'profesorId',
+        as: 'horarios',
+      });
+
+      // Relación uno a muchos con materiaProfesor
+      User.hasMany(models.materiaProfesor, {
+        foreignKey: 'profesorId',
+        as: 'materiasAsignadas',
+      });
+
+      // Relación uno a muchos con mensajes
+      User.hasMany(models.mensajes, {
+        foreignKey: 'emisorId',
+        as: 'mensajesEnviados',
+      });
+
+      // Relación uno a muchos con mensajes
+      User.hasMany(models.mensajes, {
+        foreignKey: 'receptorId',
+        as: 'mensajesRecibidos',
+      });
+
+      // Relación uno a muchos con notas
+      User.hasMany(models.notas, {
+        foreignKey: 'alumnoId',
+        as: 'notasRecibidas',
+      });
+
+      // Relación uno a muchos con notas
+      User.hasMany(models.notas, {
+        foreignKey: 'usuarioId',
+        as: 'notasAsignadas',
+      });
+
+      // Relación uno a muchos con seccionAlumnos
+      User.hasMany(models.seccionAlumnos, {
+        foreignKey: 'alumnoId',
+        as: 'seccionesAsignadas',
+      });
+
     }
   }
   User.init(

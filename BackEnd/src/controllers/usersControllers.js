@@ -1,14 +1,20 @@
-const { User } = require("../database/models/index");
-const { dataUser } = require("../database/models/index");
+const { User, dataUser } = require("@models/index");
+const { hashPassword } = require('@services/auth');
 
 const getAll = async (req, res) => {
   try {
+    const { id } = req.query;
+
+    const where = {};
+    if (id) where.id = id;
+
     let users = await User.findAll({
-      attributes: { exclude: ["id", "roleId","createdAt", "updatedAt"] },
+      where,
+      attributes: { exclude: ["id", "roleId","pass", "createdAt", "updatedAt"] },
       include: [
-       {
+        {
           model: dataUser,
-          attributes: { exclude: ["userId","id","createdAt", "updatedAt"] },
+          attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
           as: "datosPersonales",
         },
       ],
@@ -26,9 +32,9 @@ const getById = async (req, res) => {
   try {
     const { userId } = req.query;
     let users = await User.findOne({
-      where: userId,
+      where: { userId: userId },
       attributes: {
-        exclude: ["userId", "createdAt", "updatedAt"],
+        exclude: ["userId", "pass", "createdAt", "updatedAt"],
       },
       include: [
         {
@@ -47,9 +53,10 @@ const getById = async (req, res) => {
   }
 };
 
-const createU = async (req, res) => {
+const create = async (req, res) => {
   try {
-    const { user } = req.body;
+    const user = req.body;
+    user.pass = await hashPassword(user.pass);
     let users = await User.create(user, {
       attributes: { exclude: ["createdAt", "updatedAt"] },
     });
@@ -63,9 +70,12 @@ const createU = async (req, res) => {
   }
 };
 
-const updateU = async (req, res) => {
+const update = async (req, res) => {
   try {
-    const { user } = req.body;
+    const user = req.body;
+    if (user.pass) {
+      user.pass = await hashPassword(user.pass);
+    }
     let users = await User.update(user, {
       where: { id: user.id },
     });
@@ -79,7 +89,7 @@ const updateU = async (req, res) => {
   }
 };
 
-const validateU = async (req, res) => {
+const validate = async (req, res) => {
   try {
     const { user } = req.body;
     let users = await User.update(user, {
@@ -96,7 +106,7 @@ const validateU = async (req, res) => {
   }
 };
 
-const deleteU = async (req, res) => {
+const deleteR = async (req, res) => {
   try {
     const { user } = req.body;
     let users = await User.update(user, {
@@ -116,8 +126,8 @@ const deleteU = async (req, res) => {
 module.exports = {
   getAll,
   getById,
-  createU,
-  updateU,
-  validateU,
-  deleteU,
+  create,
+  update,
+  validate,
+  deleteR,
 };
