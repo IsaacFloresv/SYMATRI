@@ -8,7 +8,7 @@ const getAll = async (req, res) => {
       include: [
         {
           model: User,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
+          attributes: { exclude: ["pass", "createdAt", "updatedAt"] },
           as: "Usuario",
         },
       ],
@@ -27,12 +27,12 @@ const getById = async (req, res) => {
     const { userId } = req.query;
     console.log(req.query);
     let dataUsers = await dataUser.findOne({
-      where: data,
+      where: {userId},
       attributes: { exclude: ["userId", "createdAt", "updatedAt"] },
       include: [
         {
           model: User,
-          attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+          attributes: { exclude: ["id", "pass", "createdAt", "updatedAt"] },
           as: "Usuario",
         },
       ],
@@ -49,7 +49,7 @@ const getById = async (req, res) => {
 const create = async (req, res) => {
   try {
     console.log(req.body);
-    const { data } = req.body;
+    const data = req.body;
     let resp = await dataUser.create(data, {
       attributes: { exclude: ["createdAt", "updatedAt"] },
     });
@@ -65,9 +65,10 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { userId, ...data } = req.body.data;
+    const data = req.body;
+    console.log(data);
     let resp = await dataUser.update(data, {
-      where: { id: userId }
+      where: { id: data.id },
     });
     res.json(resp);
   } catch (error) {
