@@ -37,7 +37,6 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   try {
     const { id } = req.query;
-     console.log(id);
     let result = await actividades.findOne({
       where: {id},
       attributes: {
@@ -60,7 +59,6 @@ const getById = async (req, res) => {
     });
     res.json(result);
   } catch (error) {
-    console.log(`Error: ${error}`);
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,

@@ -4,13 +4,6 @@ const getAll = async (req, res) => {
   try {
     let result = await config.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
-      include: [
-       {
-          model: dataUser,
-          attributes: { exclude: ["userId","id","createdAt", "updatedAt"] },
-          as: "datosPersonales",
-        },
-      ],
     });
     res.json(result);
   } catch (error) {
@@ -25,17 +18,10 @@ const getById = async (req, res) => {
   try {
     const { id } = req.query;
     let result = await config.findOne({
-      where: id,
+      where: { id },
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
-      include: [
-        {
-          model: dataUser,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-          as: "datosPersonales",
-        },
-      ],
     });
     res.json(result);
   } catch (error) {
@@ -48,9 +34,10 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { registroN } = req.body;
+    const registroN = req.body;
+    console.log(registroN);
     let result = await config.create(registroN, {
-      //attributes: { exclude: ["createdAt", "updatedAt"] },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
     });
     res.json(result);
   } catch (error) {
@@ -64,7 +51,7 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { registroU } = req.body;
+    const registroU = req.body;
     let result = await config.update(registroU, {
       where: { id: registroU.id },
     });
@@ -80,7 +67,7 @@ const update = async (req, res) => {
 
 const validate = async (req, res) => {
   try {
-    const { registro } = req.body;
+    const registro = req.body;
     let result = await config.update(registro, {
       where: { id: registro.id },
       fields: ["active"],
@@ -97,12 +84,19 @@ const validate = async (req, res) => {
 
 const deleteR = async (req, res) => {
   try {
-    const { registro } = req.body;
-    let result = await config.update(registro, {
-      where: { id: registro.id },
-      attributes: ["active"],
+    const registro = req.body;
+    if (registro.tipo == "0") {
+      let result = await config.update(registro, {
+        where: { id: registro.id },
+        attributes: ["tipo"],
+      });
+      res.json(result);
+    }
+    res.json({
+      message: "No fue posible completar la operacion",
+      cause: error,
+      res: false,
     });
-    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",
