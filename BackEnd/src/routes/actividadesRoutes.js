@@ -12,5 +12,5 @@ router.get("/byid", getById);
 router.post("/create", create);
 router.put("/update", update);
 router.patch("/validate", validate);
-router.patch("/delete", deleteR)
+router.put("/delete", deleteR)
 module.exports = router;

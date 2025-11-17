@@ -70,9 +70,9 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { registroN } = req.body;
+    const registroN = req.body;
     let result = await actividades.create(registroN, {
-      //attributes: { exclude: ["createdAt", "updatedAt"] },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
     });
     res.json(result);
   } catch (error) {
@@ -86,7 +86,7 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { registroU } = req.body;
+    const registroU = req.body;
     let result = await actividades.update(registroU, {
       where: { id: registroU.id },
     });
@@ -102,7 +102,7 @@ const update = async (req, res) => {
 
 const validate = async (req, res) => {
   try {
-    const { registro } = req.body;
+    const registro = req.body;
     let result = await actividades.update(registro, {
       where: { id: registro.id },
       fields: ["active"],
@@ -119,10 +119,10 @@ const validate = async (req, res) => {
 
 const deleteR = async (req, res) => {
   try {
-    const { registro } = req.body;
+    const registro = req.body;
     let result = await actividades.update(registro, {
       where: { id: registro.id },
-      attributes: ["active"],
+      attributes: ["estado"],
     });
     res.json(result);
   } catch (error) {
