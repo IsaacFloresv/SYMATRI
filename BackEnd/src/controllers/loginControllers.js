@@ -1,6 +1,6 @@
+const { where } = require("sequelize");
 const { User, dataUser } = require("../database/models/index");
-const { create } = require("./usersControllers");
-const { refreshAccessToken, auth, validatePassword } = require('@services/auth');
+const { refreshAccessToken, auth, validatePassword, hashPassword } = require('@services/auth');
 
 const login = async (req, res) => {
   try {
@@ -31,7 +31,7 @@ const login = async (req, res) => {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    const token  = await auth({ id: user.id, roleId: user.roleId });
+    const token = await auth({ id: user.id, roleId: user.roleId });
     res.json({
       id: user.id,
       datosPersonales: user.datosPersonales,
@@ -47,7 +47,52 @@ const login = async (req, res) => {
 };
 
 const register = async (req, res) => {
-  return await create(req, res);
+  let user = req.body;
+  let role = user.rol;
+  let { roleId, active } = req?.body;
+  if (roleId || active) {
+    delete user.roleId;
+    delete user.active;
+  }
+  if (role || role === 'guest') {
+    user.pass = await hashPassword(user.pass);
+    let result = await User.create(user);
+    delete result.dataValues.pass;
+    delete result.dataValues.roleId;
+    delete result.dataValues.id;
+    delete result.dataValues.active;
+    delete result.dataValues.createdAt;
+    delete result.dataValues.updatedAt;
+    res.status(200).json({
+      message: "En las siguientes 24 horas se enviara un correo para la activacion de su cuenta",
+      success: true,
+      result: result
+    });
+  } else {
+    res.status(401).json({ error: 'No tiene permiso para registrarse' });
+  }
+}
+
+const forgotPass = async (req, res) => {
+  let user = req.body;
+  let role = user.rol;
+  let { id } = user
+  let { roleId, active } = req?.body;
+  if (roleId || active) {
+    delete user.roleId;
+    delete user.active;
+  }
+  if (role || role === 'guest') {
+    user.pass = await hashPassword(user.pass);
+    let result = await User.update(user, { where: { id } });
+    res.status(200).json({
+      message: "Contraseña actualizada correctamente",
+      success: true,
+      result: result
+    });
+  } else {
+    res.status(401).json({ error: 'No tiene permiso para esta accion' });
+  }
 }
 
 const generateToken = async (req, res) => {
@@ -69,5 +114,5 @@ const refreshToken = async (req, res) => {
 };
 
 module.exports = {
-  login, register, refreshToken, generateToken
+  login, register, refreshToken, generateToken, forgotPass
 };

@@ -39,7 +39,9 @@ const decodedToken = async (token) => {
 const verifierToken = async (token) => {
   try {
     if (!token) {
-      return res.status(403).json({ mensaje: 'Token no proporcionado' });
+      return { mensaje: 'Token no proporcionado' ,
+        status: 401,
+      };
     }
 
     const decoded = jwt.verify(token, jwtSecret);

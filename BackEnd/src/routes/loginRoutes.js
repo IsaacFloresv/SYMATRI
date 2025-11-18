@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const {login, register} = require("../controllers/loginControllers");
+const {login, register, forgotPass} = require("../controllers/loginControllers");
 
 router.get("/", (req, res) => {
   res.json({ login: "aqui" });
@@ -9,4 +9,5 @@ router.get("/", (req, res) => {
 
 router.post("/login", login);
 router.post("/register", register);
+router.patch("/forgotPass", forgotPass);
 module.exports = router;
