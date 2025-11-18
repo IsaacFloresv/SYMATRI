@@ -98,9 +98,7 @@ const getById = async (req, res) => {
 const create = async (req, res) => {
   try {
     const registroN = req.body;
-    let result = await horarios.create(registroN, {
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-    });
+    let result = await horarios.create(registroN);
     res.json(result);
   } catch (error) {
     res.json({
