@@ -42,13 +42,13 @@ module.exports = (sequelize, DataTypes) => {
       // Relación uno a muchos con horarios
       User.hasMany(models.horarios, {
         foreignKey: 'profesorId',
-        as: 'horarios',
+        as: 'profesor',
       });
 
       // Relación uno a muchos con materiaProfesor
       User.hasMany(models.materiaProfesor, {
         foreignKey: 'profesorId',
-        as: 'materiasAsignadas',
+        as: 'profesorAsignado',
       });
 
       // Relación uno a muchos con mensajes

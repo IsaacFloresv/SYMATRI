@@ -1,14 +1,39 @@
-const { horarios } = require("../database/models/index");
+const { horarios, User,dataUser, secciones, materiaProfesor, materias } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
     let result = await horarios.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
+      attributes: { exclude: ["id", "createdAt", "updatedAt"] },
       include: [
-       {
-          model: dataUser,
-          attributes: { exclude: ["userId","id","createdAt", "updatedAt"] },
-          as: "datosPersonales",
+        {
+          model: secciones,
+          attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
+          as: 'seccion',
+        },
+        {
+          model: User,
+          attributes: ["id"],
+          as: 'profesor',
+          include: [
+            {
+              model: dataUser,
+              attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
+              as: 'datosPersonales',
+            },
+            {
+              model: materiaProfesor,
+              attributes: ["materiaId"],
+              as: 'profesorAsignado',
+              include: [
+                {
+                  model: materias,
+                  attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+                  as: 'materia',
+                }
+              ],
+            }
+          ]
+
         },
       ],
     });
@@ -25,20 +50,44 @@ const getById = async (req, res) => {
   try {
     const { id } = req.query;
     let result = await horarios.findOne({
-      where: id,
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
+      where: {id},
+      attributes: { exclude: ["id", "createdAt", "updatedAt"] },
       include: [
         {
-          model: dataUser,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-          as: "datosPersonales",
+          model: secciones,
+          attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
+          as: 'seccion',
+        },
+        {
+          model: User,
+          attributes: ["id"],
+          as: 'profesor',
+          include: [
+            {
+              model: dataUser,
+              attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
+              as: 'datosPersonales',
+            },
+            {
+              model: materiaProfesor,
+              attributes: ["materiaId"],
+              as: 'profesorAsignado',
+              include: [
+                {
+                  model: materias,
+                  attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+                  as: 'materia',
+                }
+              ],
+            }
+          ]
+
         },
       ],
     });
     res.json(result);
   } catch (error) {
+        console.log(error);
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       // Relación con materiaProfesor
       materias.hasMany(models.materiaProfesor, {
         foreignKey: 'materiaId',
-        as: 'profesoresAsignados',
+        as: 'materia',
       });
 
       // Relación con notas

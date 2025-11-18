@@ -2,76 +2,74 @@ const { encargadoAlumnos, User, dataUser } = require("../database/models/index")
 
 const getAll = async (req, res) => {
   try {
-    let result = await encargadoAlumnos.findAll({
+    let result = await User.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
-          model: User,
+          model: dataUser,
+          attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
+          as: "datosPersonales",
+        },
+        {
+          model: encargadoAlumnos,
           attributes: ["id"],
           as: "encargado",
           include: [
             {
-              model: dataUser,
-              attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
-              as: "datosPersonales",
-            }],
-        },
-        {
-          model: User,
-          attributes: ["id"],
-          as: "alumno",
-          include: [
-            {
-              model: dataUser,
-              attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
-              as: "datosPersonales",
+              model: User,
+              attributes: ["id"],
+              as: "alumno",
+              include: [
+                {
+                  model: dataUser,
+                  attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
+                  as: "datosPersonales",
+                }],
             }],
         }
-      ],
-      where: { encargadoId }
+      ]
     });
     res.json(result);
   } catch (error) {
-      res.json({
-        message: "No fue posible obtener la informacion",
-        res: false,
-        err: error,
-      });
+    console.log(error);
+    res.json({
+      message: "No fue posible obtener la informacion",
+      res: false,
+      err: error,
+    });
   }
 };
 
 const getById = async (req, res) => {
   try {
-    const { encargadoId } = req.query;
-    let result = await encargadoAlumnos.findAll({
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
+    const { id } = req.query;
+    let result = await User.findAll({
+      where: { id },
+      attributes: ["id"],
       include: [
         {
-          model: User,
-          attributes: ["id"],
-          as: "alumno",
-          include: [
-            {
-              model: dataUser,
-              attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
-              as: "datosPersonales",
-            }],
+          model: dataUser,
+          attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
+          as: "datosPersonales",
         },
         {
-          model: User,
+          model: encargadoAlumnos,
           attributes: ["id"],
           as: "encargado",
           include: [
             {
-              model: dataUser,
-              attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
-              as: "datosPersonales",
+              model: User,
+              attributes: ["id"],
+              as: "alumno",
+              include: [
+                {
+                  model: dataUser,
+                  attributes: { exclude: ["userId", "id", "createdAt", "updatedAt"] },
+                  as: "datosPersonales",
+                }],
             }],
-        },
-      ],
-      where: { encargadoId }
+        }
+      ]
     });
     res.json(result);
   } catch (error) {
