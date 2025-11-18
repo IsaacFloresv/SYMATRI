@@ -5,10 +5,11 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class dataUser extends Model {
     static associate(models) {
+      // relacion con Users
       dataUser.belongsTo(models.User, {
         as: "Usuario",
         foreignKey: "userId"
-      })
+      });
     }
   }
   dataUser.init({
