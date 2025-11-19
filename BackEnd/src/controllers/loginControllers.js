@@ -95,6 +95,27 @@ const forgotPass = async (req, res) => {
   }
 }
 
+const activateAccount = async (req, res) => {
+  console.log("Activar cuenta", req.body);
+  let user = req.body;
+  let { id, rol, roleId } = user;
+  if (roleId) {
+    delete user.roleId;
+  }
+  if (rol || rol === 'guest') {
+    let result = await User.update(user, { where: { id } });
+    res.status(200).json({
+      message: "cuenta activada correctamente",
+      success: true,
+      result: result
+    });
+    console.log()
+  } else {
+
+    res.status(401).json({ error: 'No tiene permiso para esta accion' });
+  }
+}
+
 const generateToken = async (req, res) => {
   const { Token } = req.body;
   const accessToken = generateToken(Token);
@@ -114,5 +135,5 @@ const refreshToken = async (req, res) => {
 };
 
 module.exports = {
-  login, register, refreshToken, generateToken, forgotPass
+  login, register, refreshToken, generateToken, forgotPass, activateAccount
 };
