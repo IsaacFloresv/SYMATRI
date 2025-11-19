@@ -1,14 +1,28 @@
-const { mensajes } = require("../database/models/index");
+const { materias, materiaProfesor, dataUser, User } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
-    let result = await materiaProfesor.findAll({
+    let result = await materias.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
-       {
-          model: dataUser,
-          attributes: { exclude: ["userId","id","createdAt", "updatedAt"] },
-          as: "datosPersonales",
+        {
+          model: materiaProfesor,
+          attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+          as: "materia",
+          include: [
+            {
+              model: User,
+              attributes: ["id"],
+              as: "profesorAsignado",
+              include: [
+                {
+                  model: dataUser,
+                  attributes: ["firstName", "lastName"],
+                  as: "datosPersonales",
+                },
+              ],
+            },
+          ],
         },
       ],
     });
@@ -24,21 +38,34 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   try {
     const { id } = req.query;
-    let result = await materiaProfesor.findOne({
-      where: id,
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
+    let result = await materias.findOne({
+      where: { id },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
-          model: dataUser,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-          as: "datosPersonales",
+          model: materiaProfesor,
+          attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+          as: "materia",
+          include: [
+            {
+              model: User,
+              attributes: ["id"],
+              as: "profesorAsignado",
+              include: [
+                {
+                  model: dataUser,
+                  attributes: ["firstName", "lastName"],
+                  as: "datosPersonales",
+                },
+              ],
+            },
+          ],
         },
       ],
     });
     res.json(result);
-  } catch (error) {
+  } catch (error) {    
+    console.log(error);
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,
@@ -48,7 +75,7 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { registroN } = req.body;
+    const registroN = req.body;
     let result = await materiaProfesor.create(registroN, {
       //attributes: { exclude: ["createdAt", "updatedAt"] },
     });
@@ -64,7 +91,7 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { registroU } = req.body;
+    const registroU = req.body;
     let result = await materiaProfesor.update(registroU, {
       where: { id: registroU.id },
     });
@@ -80,7 +107,7 @@ const update = async (req, res) => {
 
 const validate = async (req, res) => {
   try {
-    const { registro } = req.body;
+    const registro = req.body;
     let result = await materiaProfesor.update(registro, {
       where: { id: registro.id },
       fields: ["active"],
@@ -97,7 +124,7 @@ const validate = async (req, res) => {
 
 const deleteR = async (req, res) => {
   try {
-    const { registro } = req.body;
+    const egistro = req.body;
     let result = await materiaProfesor.update(registro, {
       where: { id: registro.id },
       attributes: ["active"],
