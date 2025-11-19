@@ -5,26 +5,22 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class mensajes extends Model {
     static associate(models) {
+
       // Relación con el emisor
       mensajes.belongsTo(models.User, {
-        foreignKey: 'emisorId',
-        as: 'emisor',
+        through: 'mensaje_receptor',
+        as: 'receptores',
+        foreignKey: 'mensajeId',
+        otherKey: 'receptorId'
       });
-
-      // Relación con el receptor
-      mensajes.belongsTo(models.User, {
-        foreignKey: 'receptorId',
-        as: 'receptor',
-      });
-
     }
   }
   mensajes.init({
     asunto: DataTypes.STRING,
     mensaje: DataTypes.TEXT,
     emisorId: DataTypes.INTEGER,
-    receptorId: DataTypes.INTEGER,
-    leido: DataTypes.BOOLEAN,
+    receptorId: DataTypes.TEXT,
+    leido: DataTypes.INTEGER,
     fechaEnvio: DataTypes.DATE
   }, {
     sequelize,

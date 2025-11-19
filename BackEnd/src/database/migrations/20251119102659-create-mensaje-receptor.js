@@ -1,31 +1,37 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('mensajes', {
+    await queryInterface.createTable('mensajeReceptor', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
-      asunto: {
-        type: Sequelize.STRING
-      },
-      mensaje: {
-        type: Sequelize.TEXT
-      },
-      emisorId: {
-        type: Sequelize.INTEGER
+      mensajeId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'mensajes',
+          key: 'id',
+        }
       },
       receptorId: {
-        type: Sequelize.TEXT
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+        }
       },
       leido: {
-        type: Sequelize.INTEGER
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
-      fechaEnvio: {
-        type: Sequelize.DATE
+      fechaLectura: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -39,7 +45,8 @@ module.exports = {
       }
     });
   },
+
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('mensajes');
-  }
+    await queryInterface.dropTable('mensajeReceptor');
+  },
 };

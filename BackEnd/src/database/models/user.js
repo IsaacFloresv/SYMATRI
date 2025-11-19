@@ -52,15 +52,11 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // Relación uno a muchos con mensajes
-      User.hasMany(models.mensajes, {
-        foreignKey: 'emisorId',
-        as: 'mensajesEnviados',
-      });
-
-      // Relación uno a muchos con mensajes
-      User.hasMany(models.mensajes, {
-        foreignKey: 'receptorId',
+      User.belongsToMany(models.mensajes, {
+        through: 'mensaje_receptor',
         as: 'mensajesRecibidos',
+        foreignKey: 'receptorId',
+        otherKey: 'mensajeId',
       });
 
       // Relación uno a muchos con notas
