@@ -18,11 +18,8 @@ module.exports = {
       emisorId: {
         type: Sequelize.INTEGER
       },
-      receptorId: {
-        type: Sequelize.TEXT
-      },
       leido: {
-        type: Sequelize.INTEGER
+        type: Sequelize.BOOLEAN
       },
       fechaEnvio: {
         type: Sequelize.DATE

@@ -2,7 +2,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('mensaje_receptors', [
+    await queryInterface.bulkInsert('mensajeReceptor', [
       {
         mensajeId: 1,
         receptorId: 3,
@@ -119,6 +119,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('mensaje_receptors', null, {});
+    await queryInterface.bulkDelete('mensajeReceptor', null, {});
   },
 };
