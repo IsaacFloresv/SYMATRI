@@ -78,20 +78,11 @@ const getById = async (req, res) => {
 // Crear registros para receptores de un mensaje
 const create = async (req, res) => {
   try {
-    const { mensajeId, receptorIds } = req.body;
-
-    const registros = receptorIds.map((receptorId) => ({
-      mensajeId,
-      receptorId,
-      leido: false,
-      fechaLectura: null,
-    }));
-
+    const registros = req.body;
     const result = await mensajeReceptors.bulkCreate(registros);
 
     res.status(201).json({ message: 'Receptores registrados', res: true, result: result });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Error al registrar receptores', res: false });
   }
 };
