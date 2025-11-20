@@ -1,17 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const mensajeReceptorController = require('../controllers/mensajeReceptorControllers');
+const {getAll, getAllById, getById, create, update} = require('../controllers/mensajeReceptorControllers');
 
 // Obtener todos los registros
-router.get('/getAll', mensajeReceptorController.getAll);
+router.get('/all', getAll);
+
+// Obtener todos los registros que corresponde a un mismo mensaje
+router.get('/allById', getAllById);
 
 // Obtener un registro por ID
-router.get('/byId', mensajeReceptorController.getById);
+router.get('/byId', getById);
 
 // Crear registros de receptores para un mensaje
-router.post('/create', mensajeReceptorController.create);
+router.post('/create', create);
 
 // Marcar un mensaje como leído por un receptor
-router.put('/update', mensajeReceptorController.update);
+router.put('/update', update);
 
 module.exports = router;

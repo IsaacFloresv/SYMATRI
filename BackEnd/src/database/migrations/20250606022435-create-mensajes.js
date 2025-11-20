@@ -18,8 +18,13 @@ module.exports = {
       emisorId: {
         type: Sequelize.INTEGER
       },
-      leido: {
-        type: Sequelize.BOOLEAN
+      isReaded: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      isArchived: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       fechaEnvio: {
         type: Sequelize.DATE

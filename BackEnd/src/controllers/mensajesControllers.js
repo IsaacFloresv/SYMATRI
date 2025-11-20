@@ -21,29 +21,7 @@ const getAll = async (req, res) => {
         }
       ],
     });
-
-    // Paso 1: acceder al campo receptorId
-    const receptorRaw = result;
-    console.log(receptorRaw); 
-
-
-    /*
-     result.receptores = await User.findAll({
-      where: {
-        id: {
-          [Op.in]: ids,
-        },
-      },
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-      include: [
-        {
-          model: dataUser,
-          attributes: { exclude: ["id", "createdAt", "updatedAt"] },
-          as: "datosPersonales",
-        },
-      ],
-    }); */
-
+    console.log(result)
     res.json(result);
   } catch (error) {
     console.log(error);
@@ -69,18 +47,6 @@ const getById = async (req, res) => {
             {
               model: dataUser,
               attributes: { exclude: ["id", "createdAt", "updatedAt"] },
-              as: "datosPersonales",
-            },
-          ],
-        },
-        {
-          model: User,
-          attributes: { exclude: ["id", "pass", "active", "roleId", "createdAt", "updatedAt"] },
-          as: "receptor",
-          include: [
-            {
-              model: dataUser,
-              attributes: { exclude: ["id", "pass", "active", "roleId", "createdAt", "updatedAt"] },
               as: "datosPersonales",
             },
           ],
@@ -127,12 +93,34 @@ const update = async (req, res) => {
   }
 };
 
-const validate = async (req, res) => {
+const isReaded = async (req, res) => {
   try {
-    const { registro } = req.body;
-    let result = await mensajes.update(registro, {
-      where: { id: registro.id },
-      fields: ["active"],
+    console.log("Estamos aqui")
+    const { id } = req.body;
+    const isReaded = {"isReaded":true};
+    let result = await mensajes.update(isReaded, {
+      where: { id },
+      fields: ["isReaded"],
+    });
+    console.log(id, result)
+    res.json(result);
+  } catch (error) {
+    console.log(error)
+    res.json({
+      message: "No fue posible obtener la informacion",
+      causa: error,
+      res: false,
+    });
+  }
+};
+
+const isArchived = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const isArchived = {"isArchived":true};
+    let result = await mensajes.update(isArchived, {
+      where: { id },
+      fields: ["isArchived"],
     });
     res.json(result);
   } catch (error) {
@@ -166,6 +154,7 @@ module.exports = {
   getById,
   create,
   update,
-  validate,
+  isReaded,
+  isArchived,
   deleteR,
 };

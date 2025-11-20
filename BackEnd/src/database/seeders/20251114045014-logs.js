@@ -5,22 +5,18 @@ module.exports = {
   async up (queryInterface, Sequelize) {
      await queryInterface.bulkInsert('logs', [
       {
-        nameTable: 'usuarios',
+        nameTable: 'Notas',
         userId: 1,
         estado: true,
-        valorAnterior: 'null',
-        valorActual: '{"nombre":"Isaac"}',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        valorAnterior: '{"Materia":"Ciencias","Nota":"45"}',
+        valorActual: '{"Materia":"Ciencias","Nota":"75"}'
       },
       {
-        nameTable: 'productos',
+        nameTable: 'Notas',
         userId: 2,
         estado: false,
-        valorAnterior: '{"precio":100}',
-        valorActual: '{"precio":80}',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        valorAnterior: '{"Materia":"Ciencias","Nota":"45"}',
+        valorActual: '{"Materia":"Fisica","Nota":"85"}'
       }
     ], {});
   },

@@ -77,6 +77,12 @@ module.exports = (sequelize, DataTypes) => {
         as: 'seccionesAsignadas',
       });
 
+      // Relación uno a muchos con mensajeReceptors
+      User.hasMany(models.mensajeReceptors, {
+        foreignKey: 'receptorId',
+        as: 'receptor',
+      });
+
     }
   }
   User.init(
