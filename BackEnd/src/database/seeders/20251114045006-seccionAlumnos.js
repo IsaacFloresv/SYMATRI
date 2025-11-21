@@ -7,18 +7,22 @@ module.exports = {
       "seccionAlumnos",
       [
         {
+          periodo: "2024",
           seccionId: "1",
           alumnoId: 1,
         },
         {
+          periodo: "2024",
           seccionId: "1",
           alumnoId: 2,
         },
         {
+          periodo: "2024",
           seccionId: "2",
           alumnoId: 3,
         },
         {
+          periodo: "2024",
           seccionId: "2",
           alumnoId: 4,
         },

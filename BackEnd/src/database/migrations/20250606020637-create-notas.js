@@ -9,6 +9,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      periodo: {
+        type: Sequelize.STRING
+      },
       alumnoId: {
         type: Sequelize.INTEGER
       },

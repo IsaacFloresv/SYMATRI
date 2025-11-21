@@ -1,18 +1,25 @@
-const { secciones } = require("../database/models/index");
+const { secciones, User, dataUser } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
-    let users = await secciones.findAll({
+    let result = await secciones.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
        {
+          model: User,
+          attributes: { exclude: ["userId","pass", "roleId", "userName", "createdAt", "updatedAt"] },
+          as: "ProfesorResponsable",
+          include: [
+       {
           model: dataUser,
-          attributes: { exclude: ["userId","id","createdAt", "updatedAt"] },
+          attributes: { exclude: ["userId","id","address", "telefono", "createdAt", "updatedAt"] },
           as: "datosPersonales",
         },
       ],
+        },
+      ],
     });
-    res.json(users);
+    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",
@@ -23,21 +30,26 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const { id } = req.query;
-    let secciones = await secciones.findOne({
-      where: id,
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
+    const { id } = req.body;
+    let result = await secciones.findAll({
+      where: {id},
+      attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
-        {
+       {
+          model: User,
+          attributes: { exclude: ["userId","pass", "roleId", "userName", "createdAt", "updatedAt"] },
+          as: "ProfesorResponsable",
+          include: [
+       {
           model: dataUser,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
+          attributes: { exclude: ["userId","id","address", "telefono", "createdAt", "updatedAt"] },
           as: "datosPersonales",
         },
       ],
+        },
+      ],
     });
-    res.json(secciones);
+    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",
@@ -48,12 +60,13 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { seccion } = req.body;
-    let secciones = await secciones.create(seccion, {
+    const seccion  = req.body;
+    let result = await secciones.create(seccion, {
       attributes: { exclude: ["createdAt", "updatedAt"] },
     });
-    res.json(secciones);
+    res.json(result);
   } catch (error) {
+    console.log(error)
     res.json({
       message: "No fue posible obtener la informacion",
       causa: error,
@@ -65,10 +78,10 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { seccion } = req.body;
-    let secciones = await secciones.update(seccion, {
+    let result = await secciones.update(seccion, {
       where: { id: seccion.id },
     });
-    res.json(secciones);
+    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",
@@ -81,11 +94,11 @@ const update = async (req, res) => {
 const validate = async (req, res) => {
   try {
     const { seccion } = req.body;
-    let secciones = await secciones.update(seccion, {
+    let result = await secciones.update(seccion, {
       where: { id: seccion.id },
       fields: ["active"],
     });
-    res.json(secciones);
+    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",
@@ -97,12 +110,13 @@ const validate = async (req, res) => {
 
 const deleteR = async (req, res) => {
   try {
-    const { seccion } = req.body;
-    let secciones = await secciones.update(seccion, {
-      where: { id: seccion.id },
-      attributes: ["active"],
-    });
-    res.json(secciones);
+    const { id } = req.body;
+    const name = ""
+    /* let result = await secciones.update(name, {
+      where: { id },
+      fields: ["name"],
+    }); */
+    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",

@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   actividades.init({
+    periodo: DataTypes.STRING,
     name: DataTypes.STRING,
     descripcion: DataTypes.TEXT,
     userId: DataTypes.INTEGER,

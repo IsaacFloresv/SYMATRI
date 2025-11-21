@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   notas.init({
+    periodo: DataTypes.STRING,
     alumnoId: DataTypes.INTEGER,
     materiaId: DataTypes.INTEGER,
     usuarioId: DataTypes.INTEGER,

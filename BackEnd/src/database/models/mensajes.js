@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   mensajes.init({
+    periodo: DataTypes.STRING,
     asunto: DataTypes.STRING,
     mensaje: DataTypes.TEXT,
     emisorId: DataTypes.INTEGER,

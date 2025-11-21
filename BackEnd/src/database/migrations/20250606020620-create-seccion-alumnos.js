@@ -9,6 +9,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      periodo: {
+        type: Sequelize.STRING
+      },
       seccionId: {
         type: Sequelize.INTEGER
       },

@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   seccionProfesor.init({
+    periodo: DataTypes.STRING,
     seccionId: DataTypes.INTEGER,
     profesorId: DataTypes.INTEGER
   }, {

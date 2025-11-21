@@ -197,7 +197,7 @@ const deleteR = async (req, res) => {
     const { registro } = req.body;
     let Nota = await notas.update(registro, {
       where: { id: registro.id },
-      attributes: ["active"],
+      fields: ["active"],
     });
     res.json(Nota);
   } catch (error) {

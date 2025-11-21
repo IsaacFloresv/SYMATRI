@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   horarios.init({
+    periodo: DataTypes.STRING,
     seccionId: DataTypes.INTEGER,
     profesorId: DataTypes.INTEGER,
     dia: DataTypes.STRING,

@@ -83,10 +83,11 @@ const validate = async (req, res) => {
 
 const deleteR = async (req, res) => {
   try {
-    const { registro } = req.body;
-    let Rol = await seccionAlumnos.update(registro, {
-      where: { id: registro.id },
-      attributes: ["active"],
+    const {id} = req.body;
+    const modules = []
+    let Rol = await seccionAlumnos.update(modules, {
+      where: { id},
+      fields: ["modules"],
     });
     res.json(Rol);
   } catch (error) {

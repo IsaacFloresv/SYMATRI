@@ -120,10 +120,11 @@ const validate = async (req, res) => {
 
 const deleteR = async (req, res) => {
   try {
-    const { registro } = req.body;
+    const { id } = req.body;
+    const registro = {}
     let seccionA = await seccionAlumnos.update(registro, {
-      where: { id: registro.id },
-      attributes: ["active"],
+      where: { id },
+      fields: ["active"],
     });
     res.json(seccionA);
   } catch (error) {
