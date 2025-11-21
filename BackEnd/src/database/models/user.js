@@ -77,6 +77,12 @@ module.exports = (sequelize, DataTypes) => {
         as: 'alumnoS',
       });
 
+      // Relación uno a muchos con seccionProfesor
+      User.hasMany(models.seccionProfesor, {
+        foreignKey: 'profesorId',
+        as: 'Profesor',
+      });
+
       // Relación uno a muchos con mensajeReceptors
       User.hasMany(models.mensajeReceptors, {
         foreignKey: 'receptorId',

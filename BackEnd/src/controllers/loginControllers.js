@@ -39,6 +39,7 @@ const login = async (req, res) => {
     });
 
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       message: "No fue posible obtener la información",
       success: false

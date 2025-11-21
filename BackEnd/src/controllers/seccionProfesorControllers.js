@@ -1,4 +1,6 @@
 const {
+  materiaProfesors,
+  materia,
   User,
   secciones,
   seccionProfesor,
@@ -7,36 +9,33 @@ const {
 
 const getAll = async (req, res) => {
   try {
-    let data = await seccionProfesor.findAll({
-      attributes: ["createdAt"],
+    let data = await secciones.findAll({
+      attributes: ["name", "periodo"],
       include: [
         {
-          model: secciones,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
+          model: seccionProfesor,
+          attributes: { exclude: ["seccionId", "id", "periodo", "createdAt", "updatedAt"] },
           as: "Seccion",
           include: [
             {
               model: User,
-              attributes: ["createdAt"],
-              as: "ProfesorResponsable",
+              attributes: ["id"],
+              as: "Profesor",
               include: [
                 {
                   model: dataUser,
-                  attributes: ["firstName","lastName","telefono"],
+                  attributes: ["firstName", "lastName"],
                   as: "datosPersonales",
-                },
+                }
               ],
-            },
-          ] /*      {
-          model: User,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-          as: "Profesores",
-        }, */,
+            }
+          ]
         },
       ],
     });
     res.json(data);
   } catch (error) {
+    console.log(error)
     res.json({
       message: "No fue posible obtener la informacion",
       mjs: error,
@@ -47,20 +46,35 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const { seccionId } = req.query;
-    let data = await seccionProfesor.findOne({
-      where: seccionId,
-      attributes: { exclude: ["createdAt", "updatedAt"] },
+    const { id } = req.body;
+    let data = await secciones.findAll({
+      where: { id },
+      attributes: ["name", "periodo"],
       include: [
         {
-          model: Seccion,
-          attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+          model: seccionProfesor,
+          attributes: { exclude: ["seccionId", "id", "periodo", "createdAt", "updatedAt"] },
           as: "Seccion",
+          include: [
+            {
+              model: User,
+              attributes: ["id"],
+              as: "Profesor",
+              include: [
+                {
+                  model: dataUser,
+                  attributes: ["firstName", "lastName"],
+                  as: "datosPersonales",
+                }
+              ],
+            }
+          ]
         },
       ],
     });
     res.json(data);
   } catch (error) {
+    console.log(error)
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,
@@ -69,12 +83,9 @@ const getById = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  /* try {
-    console.log(req.body);
-    const { data } = req.body;
-    let resp = await dataUser.create(data, {
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-    });
+  try {
+    const registroN = req.body;
+    let resp = await seccionProfesor.create(registroN);
     res.json(resp);
   } catch (error) {
     res.json({
@@ -82,23 +93,24 @@ const create = async (req, res) => {
       causa: error,
       res: false,
     });
-  } */
+  }
 };
 
 const update = async (req, res) => {
-  /* try {
-    const { userId, ...data } = req.body.data;
-    let resp = await dataUser.update(data, {
-      where: { id: userId }
+  try {
+    const { id, ...data } = req.body;
+    let resp = await seccionProfesor.update(data, {
+      where: { id }
     });
     res.json(resp);
   } catch (error) {
+    console.log(error)
     res.json({
       message: "No fue posible obtener la informacion",
       causa: error,
       res: false,
     });
-  } */
+  }
 };
 
 module.exports = {
