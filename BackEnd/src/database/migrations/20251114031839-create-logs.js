@@ -25,12 +25,14 @@ module.exports = {
         type: Sequelize.TEXT
       },
       createdAt: {
+        type: Sequelize.DATE,
         allowNull: false,
-        type: Sequelize.DATE
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
+        type: Sequelize.DATE,
         allowNull: false,
-        type: Sequelize.DATE
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       }
     });
   },

@@ -18,6 +18,9 @@ module.exports = {
       usuarioId: {
         type: Sequelize.INTEGER
       },
+      tipo: {
+        type: Sequelize.STRING
+      },
       nota: {
         type: Sequelize.DECIMAL
       },

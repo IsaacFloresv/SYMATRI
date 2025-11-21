@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       // Relación con el alumno
       notas.belongsTo(models.User, {
         foreignKey: 'alumnoId',
-        as: 'alumno',
+        as: 'alumnoNota',
       });
 
       // Relación con el usuario que asigna la nota
@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     alumnoId: DataTypes.INTEGER,
     materiaId: DataTypes.INTEGER,
     usuarioId: DataTypes.INTEGER,
+    tipo: DataTypes.STRING,
     nota: DataTypes.DECIMAL
   }, {
     sequelize,

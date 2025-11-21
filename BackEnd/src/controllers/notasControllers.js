@@ -1,15 +1,39 @@
-const { notas } = require("../database/models/index");
+const { notas, User, dataUser, materias } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
     let Notas = await notas.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
+        {
+          model: materias,
+          attributes: ["name"],
+          as: "materia",          
+        },
+       {
+          model: User,
+          attributes: ["id"],
+          as: "alumnoNota",
+          include: [
        {
           model: dataUser,
-          attributes: { exclude: ["userId","id","createdAt", "updatedAt"] },
+          attributes: ["firstName", "lastName"],
           as: "datosPersonales",
         },
+      ],
+        },
+        {
+          model: User,
+          attributes: ["id"],
+          as: "autor",
+          include: [
+       {
+          model: dataUser,
+          attributes: ["firstName", "lastName"],
+          as: "datosPersonales",
+        },
+      ],
+        }
       ],
     });
     res.json(Notas);
@@ -25,16 +49,38 @@ const getById = async (req, res) => {
   try {
     const { id } = req.query;
     let Nota = await notas.findOne({
-      where: id,
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
+      where: {id},
+      attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
+          model: materias,
+          attributes: ["name"],
+          as: "materia",          
+        },
+       {
+          model: User,
+          attributes: ["id"],
+          as: "alumnoNota",
+          include: [
+       {
           model: dataUser,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
+          attributes: ["firstName", "lastName"],
           as: "datosPersonales",
         },
+      ],
+        },
+        {
+          model: User,
+          attributes: ["id"],
+          as: "autor",
+          include: [
+       {
+          model: dataUser,
+          attributes: ["firstName", "lastName"],
+          as: "datosPersonales",
+        },
+      ],
+        }
       ],
     });
     res.json(Nota);
@@ -46,10 +92,60 @@ const getById = async (req, res) => {
   }
 };
 
+const getByAlumnoId = async (req, res) => {
+  try {
+    const { id, alumnoId } = req.body;
+    let Nota = await notas.findOne({
+      where: {id, alumnoId},
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: materias,
+          attributes: ["name"],
+          as: "materia",          
+        },
+       {
+          model: User,
+          attributes: ["id"],
+          as: "alumnoNota",
+          include: [
+       {
+          model: dataUser,
+          attributes: ["firstName", "lastName"],
+          as: "datosPersonales",
+        },
+      ],
+        },
+        {
+          model: User,
+          attributes: ["id"],
+          as: "autor",
+          include: [
+       {
+          model: dataUser,
+          attributes: ["firstName", "lastName"],
+          as: "datosPersonales",
+        },
+      ],
+        }
+      ],
+    });
+
+    if(!Nota) res.status(404).json({message:"No existe el registro solicitado"});
+    res.json(Nota);
+  } catch (error) {
+    console.log(error)
+    res.json({
+      message: "No fue posible obtener la informacion",
+      res: false,
+    });
+  }
+};
+
 const create = async (req, res) => {
   try {
-    const { registroN } = req.body;
-    let Nota = await notas.create(registroN, {
+    const registroN  = req.body;
+    let Nota = await notas.bulkCreate(registroN, {
       //attributes: { exclude: ["createdAt", "updatedAt"] },
     });
     res.json(Nota);
@@ -64,12 +160,13 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { registroU } = req.body;
+    const registroU = req.body;
     let Nota = await notas.update(registroU, {
       where: { id: registroU.id },
     });
     res.json(Nota);
   } catch (error) {
+    console.log(error)
     res.json({
       message: "No fue posible obtener la informacion",
       causa: error,
@@ -115,6 +212,7 @@ const deleteR = async (req, res) => {
 module.exports = {
   getAll,
   getById,
+  getByAlumnoId,
   create,
   update,
   validate,

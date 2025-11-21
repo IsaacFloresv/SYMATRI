@@ -7,25 +7,57 @@ module.exports = {
         alumnoId: 10, // alumno1
         materiaId: 1, // Matemáticas
         usuarioId: 6, // profe1
-        nota: 85.5,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        tipo: "T1-Tarea1",
+        nota: "85.5",
+      },
+      {
+        alumnoId: 10, // alumno1
+        materiaId: 1, // Matemáticas
+        usuarioId: 6, // profe1
+        tipo: "T1-Tarea2",
+        nota: "86.5",
+      },
+      {
+        alumnoId: 10, // alumno2
+        materiaId: 2, // Ciencias Naturales
+        usuarioId: 7, // profe2
+        tipo: "T1-Exa2",
+        nota: "92.0",
+      },
+      {
+        alumnoId: 10, // alumno3
+        materiaId: 3, // Estudios Sociales
+        usuarioId: 6, // profe1
+        tipo: "T1-Exa1",
+        nota: "78.25",
+      },
+      {
+        alumnoId: 11, // alumno1
+        materiaId: 1, // Matemáticas
+        usuarioId: 6, // profe1
+        tipo: "T1-Tarea1",
+        nota: "85.5",
+      },
+      {
+        alumnoId: 11, // alumno1
+        materiaId: 1, // Matemáticas
+        usuarioId: 6, // profe1
+        tipo: "T1-Tarea2",
+        nota: "86.5",
       },
       {
         alumnoId: 11, // alumno2
         materiaId: 2, // Ciencias Naturales
         usuarioId: 7, // profe2
-        nota: 92.0,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        tipo: "T1-Exa2",
+        nota: "92.0",
       },
       {
-        alumnoId: 12, // alumno3
+        alumnoId: 11, // alumno3
         materiaId: 3, // Estudios Sociales
         usuarioId: 6, // profe1
-        nota: 78.25,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        tipo: "T1-Exa1",
+        nota: "78.25",
       }
     ], {});
   },
