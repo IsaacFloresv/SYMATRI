@@ -3,14 +3,7 @@ const { roles } = require("../database/models/index");
 const getAll = async (req, res) => {
   try {
     let Roles = await roles.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-      include: [
-       {
-          model: dataUser,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-          as: "datosPersonales",
-        },
-      ],
+      attributes: { exclude: ["createdAt", "updatedAt"] }
     });
     res.json(Roles);
   } catch (error) {
@@ -23,19 +16,12 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const { id } = req.query;
+    const { id } = req.body;
     let Rol = await roles.findOne({
-      where: id,
+      where: {id},
       attributes: {
         exclude: ["createdAt", "updatedAt"],
-      },
-      include: [
-        {
-          model: dataUser,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-          as: "datosPersonales",
-        },
-      ],
+      }
     });
     res.json(Rol);
   } catch (error) {
@@ -48,7 +34,7 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { registroN } = req.body;
+    const registroN = req.body;
     let Rol = await roles.create(registroN, {
       //attributes: { exclude: ["createdAt", "updatedAt"] },
     });
@@ -64,7 +50,7 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { registroU } = req.body;
+    const registroU = req.body;
     let Rol = await roles.update(registroU, {
       where: { id: registroU.id },
     });
