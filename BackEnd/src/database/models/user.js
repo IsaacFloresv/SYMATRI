@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
       // Relación uno a muchos con seccionAlumnos
       User.hasMany(models.seccionAlumnos, {
         foreignKey: 'alumnoId',
-        as: 'seccionesAsignadas',
+        as: 'alumnoS',
       });
 
       // Relación uno a muchos con mensajeReceptors

@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       // relacion con seccionAlumnos
       secciones.hasMany(models.seccionAlumnos, {
         foreignKey: 'seccionId',
-        as: 'alumnosInscritos',
+        as: 'seccionA',
       });
 
     }

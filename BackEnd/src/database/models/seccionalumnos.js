@@ -8,13 +8,13 @@ module.exports = (sequelize, DataTypes) => {
       // Relación con la sección
       seccionAlumnos.belongsTo(models.secciones, {
         foreignKey: 'seccionId',
-        as: 'seccion',
+        as: 'seccionA',
       });
 
       // Relación con el alumno (User)
       seccionAlumnos.belongsTo(models.User, {
         foreignKey: 'alumnoId',
-        as: 'alumno',
+        as: 'alumnoS',
       });
 
     }
