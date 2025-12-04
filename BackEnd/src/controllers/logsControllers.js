@@ -3,7 +3,15 @@ const { logs } = require("../database/models/index");
 const getAll = async (req, res) => {
   try {
     let result = await logs.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
+      attributes: { exclude: ["createdAt", "updatedAt", "userId"] },
+      include: [{
+        association: "usuario",
+        attributes: ["id"],
+        include: [{
+          association: "datosPersonales",
+          attributes: ["firstName", "lastName"]
+        }]
+      }],
     });
     res.json(result);
   } catch (error) {
@@ -19,9 +27,15 @@ const getById = async (req, res) => {
     const { id } = req.query;
     let result = await logs.findOne({
       where: { id },
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
+      attributes: { exclude: ["createdAt", "updatedAt", "userId"] },
+      include: [{
+        association: "usuario",
+        attributes: ["id"],
+        include: [{
+          association: "datosPersonales",
+          attributes: ["firstName", "lastName"]
+        }]
+      }],
     });
     res.json(result);
   } catch (error) {

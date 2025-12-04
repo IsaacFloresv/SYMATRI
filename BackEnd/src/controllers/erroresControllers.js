@@ -36,9 +36,7 @@ const create = async (req, res) => {
   try {
     const registroN = req.body;
     console.log(registroN);
-    let result = await errores.create(registroN, {
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-    });
+    let result = await errores.create(registroN, {});
     res.json(result);
   } catch (error) {
     res.json({

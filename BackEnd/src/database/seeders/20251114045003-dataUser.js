@@ -102,9 +102,7 @@ module.exports = {
           lastName: "Flores",
           address: "Calle sin salida #2",
           telefono: "78945612",
-          userId: 14,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 14
         }
 
       ],
