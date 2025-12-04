@@ -6,13 +6,13 @@ module.exports = (sequelize, DataTypes) => {
   class notas extends Model {
     static associate(models) {
       // Relación con el alumno
-      notas.belongsTo(models.User, {
+      notas.belongsTo(models.user, {
         foreignKey: 'alumnoId',
         as: 'alumnoNota',
       });
 
       // Relación con el usuario que asigna la nota
-      notas.belongsTo(models.User, {
+      notas.belongsTo(models.user, {
         foreignKey: 'usuarioId',
         as: 'autor',
       });

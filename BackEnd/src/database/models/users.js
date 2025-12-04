@@ -1,58 +1,58 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class user extends Model {
     static associate(models) {
       // Relación uno a uno con dataUser
-      User.hasOne(models.dataUser, {
+      user.hasOne(models.dataUser, {
         as: "datosPersonales",
         foreignKey: "userId",
       });
 
       // Relación uno a muchos con secciones
-      User.hasMany(models.secciones, {
+      user.hasMany(models.secciones, {
         as: "ProfesorResponsable",
         foreignKey: "profesorId",
       });
 
       // Relación uno a muchos con logs
-      User.hasMany(models.logs, {
+      user.hasMany(models.logs, {
         as: "logs",
         foreignKey: "userId",
       });
 
       // Relación uno a muchos con actividades
-      User.hasMany(models.actividades, {
+      user.hasMany(models.actividades, {
         as: "generador",
         foreignKey: "userId",
       });
 
       // Relación uno a muchos con encargadoAlumnos
-      User.hasMany(models.encargadoAlumnos, {
+      user.hasMany(models.encargadoAlumnos, {
         as: "encargado",
         foreignKey: "encargadoId",
       });
 
       // Relación uno a muchos con encargadoAlumnos
-      User.hasMany(models.encargadoAlumnos, {
+      user.hasMany(models.encargadoAlumnos, {
         as: "alumno",
         foreignKey: "alumnoId",
       });
 
       // Relación uno a muchos con horarios
-      User.hasMany(models.horarios, {
+      user.hasMany(models.horarios, {
         foreignKey: 'profesorId',
         as: 'profesor',
       });
 
       // Relación uno a muchos con materiaProfesor
-      User.hasMany(models.materiaProfesor, {
+      user.hasMany(models.materiaProfesor, {
         foreignKey: 'profesorId',
         as: 'profesorAsignado',
       });
 
       // Relación uno a muchos con mensajes
-      User.belongsToMany(models.mensajes, {
+      user.belongsToMany(models.mensajes, {
         through: 'mensaje_receptor',
         as: 'mensajesRecibidos',
         foreignKey: 'receptorId',
@@ -60,38 +60,50 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // Relación uno a muchos con notas
-      User.hasMany(models.notas, {
+      user.hasMany(models.notas, {
         foreignKey: 'alumnoId',
         as: 'alumnoNota',
       });
 
       // Relación uno a muchos con notas
-      User.hasMany(models.notas, {
+      user.hasMany(models.notas, {
         foreignKey: 'usuarioId',
         as: 'autor',
       });
 
       // Relación uno a muchos con seccionAlumnos
-      User.hasMany(models.seccionAlumnos, {
+      user.hasMany(models.seccionAlumnos, {
         foreignKey: 'alumnoId',
         as: 'alumnoS',
       });
 
       // Relación uno a muchos con seccionProfesor
-      User.hasMany(models.seccionProfesor, {
+      user.hasMany(models.seccionProfesor, {
         foreignKey: 'profesorId',
         as: 'Profesor',
       });
 
       // Relación uno a muchos con mensajeReceptors
-      User.hasMany(models.mensajeReceptors, {
+      user.hasMany(models.mensajeReceptors, {
         foreignKey: 'receptorId',
         as: 'receptor',
       });
 
+      // Relación uno a muchos con asistencia
+      user.hasMany(models.asistencia, {
+        as: "alumnoAsistente",
+        foreignKey: "alumnoId",
+      });
+
+      // Relación uno a muchos con asistencia
+      user.hasMany(models.asistencia, {
+        as: "registrador",
+        foreignKey: "profesorId",
+      });
+
     }
   }
-  User.init(
+  user.init(
     {
       userName: DataTypes.STRING,
       pass: DataTypes.STRING,
@@ -104,8 +116,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "user",
     }
   );
-  return User;
+  return user;
 };

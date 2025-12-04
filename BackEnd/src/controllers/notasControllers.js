@@ -1,4 +1,4 @@
-const { notas, User, dataUser, materias } = require("../database/models/index");
+const { notas, user, dataUser, materias } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ const getAll = async (req, res) => {
           as: "materia",          
         },
        {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: "alumnoNota",
           include: [
@@ -23,7 +23,7 @@ const getAll = async (req, res) => {
       ],
         },
         {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: "autor",
           include: [
@@ -58,7 +58,7 @@ const getById = async (req, res) => {
           as: "materia",          
         },
        {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: "alumnoNota",
           include: [
@@ -70,7 +70,7 @@ const getById = async (req, res) => {
       ],
         },
         {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: "autor",
           include: [
@@ -105,7 +105,7 @@ const getByAlumnoId = async (req, res) => {
           as: "materia",          
         },
        {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: "alumnoNota",
           include: [
@@ -117,7 +117,7 @@ const getByAlumnoId = async (req, res) => {
       ],
         },
         {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: "autor",
           include: [

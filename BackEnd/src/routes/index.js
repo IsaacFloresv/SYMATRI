@@ -48,7 +48,10 @@ router.get("/", (req, res) => res.json({ foo: "bar" }));
 
 
 router.use(`/actividades`, verifyToken, authorizeRole('admin1','admin2','alumno','encargado','profesor'), actividadesRoutes)
+router.use(`/asistencia`, verifyToken, authorizeRole('admin1','admin2','alumno','encargado','profesor'), actividadesRoutes)
 router.use(`/config`, verifyToken, authorizeRole('admin1'), configRoutes)
+router.use(`/errores`, verifyToken, authorizeRole('admin007'), configRoutes)
+router.use(`/logs`, verifyToken, authorizeRole('admin007','admin1'), configRoutes)
 router.use(`/dataUsers`, verifyToken, authorizeRole('admin1','admin2'), dataUserRouter)
 router.use(`/encargadoAlumnos`, verifyToken, authorizeRole('admin1','admin2','profesor'), encargadoAlumnosRoutes)
 router.use(`/horarios`, verifyToken, authorizeRole('admin1','admin2','alumno','encargado','profesor'), horariosRoutes)

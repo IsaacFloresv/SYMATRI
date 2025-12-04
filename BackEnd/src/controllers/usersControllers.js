@@ -1,4 +1,4 @@
-const { User, dataUser } = require("@models/index");
+const { user, dataUser } = require("@models/index");
 const { hashPassword } = require('@services/auth');
 
 const getAll = async (req, res) => {
@@ -8,7 +8,7 @@ const getAll = async (req, res) => {
     const where = {};
     if (id) where.id = id;
 
-    let users = await User.findAll({
+    let users = await user.findAll({
       where,
       attributes: { exclude: ["id", "roleId","pass", "createdAt", "updatedAt"] },
       include: [
@@ -30,9 +30,9 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const { userId } = req.query;
-    let users = await User.findOne({
-      where: { userId: userId },
+    const { id } = req.query;
+    let users = await user.findOne({
+      where: { id },
       attributes: {
         exclude: ["userId", "pass", "createdAt", "updatedAt"],
       },
@@ -57,7 +57,7 @@ const create = async (req, res) => {
   try {
     const user = req.body;
     user.pass = await hashPassword(user.pass);
-    let users = await User.create(user, {
+    let users = await user.create(user, {
       attributes: { exclude: ["createdAt", "updatedAt"] },
     });
     res.json(users);
@@ -76,7 +76,7 @@ const update = async (req, res) => {
     if (user.pass) {
       user.pass = await hashPassword(user.pass);
     }
-    let users = await User.update(user, {
+    let users = await user.update(user, {
       where: { id: user.id },
     });
     res.json(users);
@@ -91,9 +91,10 @@ const update = async (req, res) => {
 
 const validate = async (req, res) => {
   try {
-    const { user } = req.body;
-    let users = await User.update(user, {
-      where: { id: user.id },
+    const { id } = req.body;
+    const isActive = {"active": true};
+    let users = await user.update(isActive, {
+      where: { id },
       fields: ["active"],
     });
     res.json(users);
@@ -108,10 +109,11 @@ const validate = async (req, res) => {
 
 const deleteR = async (req, res) => {
   try {
-    const { user } = req.body;
-    let users = await User.update(user, {
-      where: { id: user.id },
-      attributes: ["active"],
+    const { id } = req.body;
+    const isActive = {"active": false};
+    let users = await user.update(isActive, {
+      where: { id },
+      fields: ["active"],
     });
     res.json(users);
   } catch (error) {

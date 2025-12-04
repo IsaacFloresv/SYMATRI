@@ -8,7 +8,6 @@ router.get("/", (req, res) => {
 });
 
 router.get("/all", getAll);
-
 router.get("/byid", getById);
 router.post("/create", create);
 router.put("/update", update);

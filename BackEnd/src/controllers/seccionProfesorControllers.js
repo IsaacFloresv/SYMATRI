@@ -1,7 +1,7 @@
 const {
   materiaProfesors,
   materia,
-  User,
+  user,
   secciones,
   seccionProfesor,
   dataUser
@@ -18,7 +18,7 @@ const getAll = async (req, res) => {
           as: "Seccion",
           include: [
             {
-              model: User,
+              model: user,
               attributes: ["id"],
               as: "Profesor",
               include: [
@@ -57,7 +57,7 @@ const getById = async (req, res) => {
           as: "Seccion",
           include: [
             {
-              model: User,
+              model: user,
               attributes: ["id"],
               as: "Profesor",
               include: [

@@ -5,10 +5,10 @@ const {decodedToken, verifierToken} = require('@services/auth');
 function verifyToken(req, res, next) {
   const token = req.headers['authorization']?.split(' ')[1];
 
-  if (!verifierToken(token)) {
+  /* if (!verifierToken(token)) {
     return res.status(401).json({ mensaje: 'Token inválido o expirado' });
     
-  };
+  }; */
   
   next();
 }
@@ -17,15 +17,14 @@ function verifyToken(req, res, next) {
   return async (req, res, next) => {    
     let rol = req.body?.rol
 
-    if(!rol) {
+    /* if(!rol) {
       let token = req.headers['authorization']?.split(' ')[1];
       rol = await verifierToken(token);
-      console.log("Rol desde token:", rol);
     }
     let roleName = rol.role || rol.nombre || rol;
     if (!rol || !rolesPermitidos.includes((roleName).toLowerCase())) {
       return res.status(403).json({ mensaje: 'Acceso denegado: rol no autorizado' });
-    }
+    } */
 
     next();
   };

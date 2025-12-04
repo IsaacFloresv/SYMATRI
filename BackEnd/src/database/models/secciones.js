@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // relacion con user (profesor responsable)
-      secciones.belongsTo(models.User, {
+      secciones.belongsTo(models.user, {
         as: "ProfesorResponsable",
         foreignKey: "profesorId",
       });

@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 
-const { mensajes, User, dataUser } = require("../database/models/index");
+const { mensajes, user, dataUser } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
@@ -8,7 +8,7 @@ const getAll = async (req, res) => {
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
-          model: User,
+          model: user,
           attributes: { exclude: ["id", "pass", "active", "roleId", "createdAt", "updatedAt"] },
           as: "emisor",
           include: [
@@ -21,10 +21,8 @@ const getAll = async (req, res) => {
         }
       ],
     });
-    console.log(result)
     res.json(result);
   } catch (error) {
-    console.log(error);
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,
@@ -40,7 +38,7 @@ const getById = async (req, res) => {
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
-          model: User,
+          model: user,
           attributes: { exclude: ["id", "pass", "active", "roleId", "createdAt", "updatedAt"] },
           as: "emisor",
           include: [
@@ -55,7 +53,6 @@ const getById = async (req, res) => {
     });
     res.json(result);
   } catch (error) {
-    console.log(error);
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,
@@ -95,20 +92,16 @@ const update = async (req, res) => {
 
 const isReaded = async (req, res) => {
   try {
-    console.log("Estamos aqui")
     const { id } = req.body;
     const isReaded = {"isReaded":true};
     let result = await mensajes.update(isReaded, {
       where: { id },
       fields: ["isReaded"],
     });
-    console.log(id, result)
     res.json(result);
   } catch (error) {
-    console.log(error)
     res.json({
       message: "No fue posible obtener la informacion",
-      causa: error,
       res: false,
     });
   }

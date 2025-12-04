@@ -1,29 +1,29 @@
-const { seccionAlumnos, secciones, user, dataUser } = require("../database/models/index");
+const { actividades, User, dataUser } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
-    let result = await secciones.findAll({
+    const { userId } = req.query;
+
+    const where = {};
+    if (userId) where.userId = userId;
+
+    let result = await actividades.findAll({
+      where,
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
-          model: seccionAlumnos,
+          model: User,
           attributes: ["id"],
-          as: "seccionA",
+          as: "generador",
           include: [
             {
-              model: user,
-              attributes: ["id"],
-              as: "alumnoS",
-              include: [
-                {
-                  model: dataUser,
-                  attributes: { exclude: ["userId", "id", "address", "telefono", "createdAt", "updatedAt"] },
-                  as: "datosPersonales",
-                }],
+              model: dataUser,
+              attributes: ["firstName", "lastName"],
+              as: "datosPersonales",
             },
-          ]
+          ],
         },
-      ]
+      ],
     });
     res.json(result);
   } catch (error) {
@@ -36,34 +36,29 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const { id } = req.body;
-    let result = await secciones.findAll({
-      where:{id},
-      attributes: { exclude: ["createdAt", "updatedAt"] },
+    const { id } = req.query;
+    let result = await actividades.findOne({
+      where: {id},
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
       include: [
         {
-          model: seccionAlumnos,
+          model: User,
           attributes: ["id"],
-          as: "seccionA",
+          as: "generador",
           include: [
             {
-              model: User,
-              attributes: ["id"],
-              as: "alumnoS",
-              include: [
-                {
-                  model: dataUser,
-                  attributes: { exclude: ["userId", "id", "address", "telefono", "createdAt", "updatedAt"] },
-                  as: "datosPersonales",
-                }],
+              model: dataUser,
+              attributes: ["firstName", "lastName"],
+              as: "datosPersonales",
             },
-          ]
+          ],
         },
-      ]
+      ],
     });
     res.json(result);
   } catch (error) {
-    console.log(error)
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,
@@ -74,8 +69,10 @@ const getById = async (req, res) => {
 const create = async (req, res) => {
   try {
     const registroN = req.body;
-    let seccionA = await seccionAlumnos.bulkCreate(registroN);
-    res.json(seccionA);
+    let result = await actividades.create(registroN, {
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",
@@ -88,10 +85,10 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const registroU = req.body;
-    let seccionA = await seccionAlumnos.update(registroU, {
+    let result = await actividades.update(registroU, {
       where: { id: registroU.id },
     });
-    res.json(seccionA);
+    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",
@@ -103,12 +100,12 @@ const update = async (req, res) => {
 
 const validate = async (req, res) => {
   try {
-    const { registro } = req.body;
-    let seccionA = await seccionAlumnos.update(registro, {
+    const registro = req.body;
+    let result = await actividades.update(registro, {
       where: { id: registro.id },
       fields: ["active"],
     });
-    res.json(seccionA);
+    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",
@@ -120,13 +117,12 @@ const validate = async (req, res) => {
 
 const deleteR = async (req, res) => {
   try {
-    const { id } = req.body;
-    const registro = {}
-    let seccionA = await seccionAlumnos.update(registro, {
-      where: { id },
-      fields: ["active"],
+    const registro = req.body;
+    let result = await actividades.update(registro, {
+      where: { id: registro.id },
+      attributes: ["estado"],
     });
-    res.json(seccionA);
+    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",

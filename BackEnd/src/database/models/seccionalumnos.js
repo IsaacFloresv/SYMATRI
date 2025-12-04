@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       // Relación con el alumno (User)
-      seccionAlumnos.belongsTo(models.User, {
+      seccionAlumnos.belongsTo(models.user, {
         foreignKey: 'alumnoId',
         as: 'alumnoS',
       });

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Relación uno a muchos con Users
-      mensajeReceptors.belongsTo(models.User, {
+      mensajeReceptors.belongsTo(models.user, {
         foreignKey: 'receptorId',
         as: 'receptor',
       });

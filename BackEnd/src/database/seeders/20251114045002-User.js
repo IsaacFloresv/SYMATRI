@@ -6,10 +6,10 @@ module.exports = {
       "Users",
       [
         {
-          userName: "isflores",
-          pass: "$2b$10$UXoXzxLOplCJuEsZq0ARYOGV5F8oPgJCbxWaBzp9.7ayUaWC9eJK2", //1234
-          email: "isflores@example.com",
-          roleId: 1,
+          userName: "soporte",
+          pass: "$2b$10$6O4QVIqOXhvWkyO33u35/uL.6HvyFwYCXXFyuCcFr2sSqpt/yAaq2", //1234
+          email: "soporte@example.com",
+          roleId: 0,
           active: true
         },
         {
@@ -109,7 +109,14 @@ module.exports = {
           email: "abigailrod@example.com",
           roleId: 1,
           active: true
-        }
+        },
+        {
+          userName: "isflores",
+          pass: "$2b$10$UXoXzxLOplCJuEsZq0ARYOGV5F8oPgJCbxWaBzp9.7ayUaWC9eJK2", //1234
+          email: "isflores@example.com",
+          roleId: 1,
+          active: true
+        },
       ],
       {}
     );

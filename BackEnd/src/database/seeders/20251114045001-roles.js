@@ -26,6 +26,12 @@ module.exports = {
         modulos: JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8]),
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        nombre: 'Admin007',
+        modulos: JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ], {});
   },

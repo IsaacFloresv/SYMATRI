@@ -1,4 +1,4 @@
-const { mensajeReceptors, User, dataUser } = require('@models/index');
+const { mensajeReceptors, user, dataUser } = require('@models/index');
 
 // Obtener todos los registros
 const getAll = async (req, res) => {
@@ -6,7 +6,7 @@ const getAll = async (req, res) => {
     const resultados = await mensajeReceptors.findAll({
     include: [
         {
-          model: User,
+          model: user,
           attributes: { exclude: ["id","userName", "pass", "active", "roleId", "createdAt", "updatedAt"] },
           as: "receptor",
           include: [
@@ -21,7 +21,6 @@ const getAll = async (req, res) => {
     });
     res.json(resultados);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Error al obtener los registros', res: false });
   }
 };
@@ -33,7 +32,7 @@ const getAllById = async (req, res) => {
       where: { mensajeId },
     include: [
         {
-          model: User,
+          model: user,
           attributes: { exclude: ["id","userName", "pass", "active", "roleId", "createdAt", "updatedAt"] },
           as: "receptor",
           include: [
@@ -53,7 +52,6 @@ const getAllById = async (req, res) => {
       res.status(404).json({ message: 'Registro no encontrado', res: false });
     }
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Error al buscar el registro', res: false });
   }
 };
@@ -70,7 +68,6 @@ const getById = async (req, res) => {
       res.status(404).json({ message: 'Registro no encontrado', res: false });
     }
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Error al buscar el registro', res: false });
   }
 };
@@ -105,7 +102,6 @@ const update = async (req, res) => {
       res.status(404).json({ message: 'Registro no encontrado', res: false });
     }
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Error al actualizar estado de lectura', res: false });
   }
 };

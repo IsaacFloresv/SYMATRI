@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class logs extends Model {
     static associate(models) {
       // Relación: cada log pertenece a un usuario
-      logs.belongsTo(models.User, {
+      logs.belongsTo(models.user, {
         foreignKey: 'userId',
         as: 'usuario',
       });

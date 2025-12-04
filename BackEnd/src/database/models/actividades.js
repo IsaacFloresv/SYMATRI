@@ -6,9 +6,15 @@ module.exports = (sequelize, DataTypes) => {
   class actividades extends Model {
     static associate(models) {
       // Relación: cada actividad pertenece a un usuario
-      actividades.belongsTo(models.User, {
+      actividades.belongsTo(models.user, {
         foreignKey: 'userId',
         as: 'generador',
+      });
+
+      // Relación uno a muchos con asistencia
+      actividades.hasMany(models.asistencia, {
+        as: "actividad",
+        foreignKey: "actividadId",
       });
     }
   }

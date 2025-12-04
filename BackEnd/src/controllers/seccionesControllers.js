@@ -1,4 +1,4 @@
-const { secciones, User, dataUser } = require("../database/models/index");
+const { secciones, user, dataUser } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
@@ -6,7 +6,7 @@ const getAll = async (req, res) => {
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
        {
-          model: User,
+          model: user,
           attributes: { exclude: ["userId","pass", "roleId", "userName", "createdAt", "updatedAt"] },
           as: "ProfesorResponsable",
           include: [
@@ -36,7 +36,7 @@ const getById = async (req, res) => {
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
        {
-          model: User,
+          model: user,
           attributes: { exclude: ["userId","pass", "roleId", "userName", "createdAt", "updatedAt"] },
           as: "ProfesorResponsable",
           include: [

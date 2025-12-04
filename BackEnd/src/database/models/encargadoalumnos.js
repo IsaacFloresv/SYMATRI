@@ -6,13 +6,13 @@ module.exports = (sequelize, DataTypes) => {
   class encargadoAlumnos extends Model {
     static associate(models) {
       // Un encargadoAlumnos pertenece a un alumno
-      encargadoAlumnos.belongsTo(models.User, {
+      encargadoAlumnos.belongsTo(models.user, {
         foreignKey: 'alumnoId',
         as: 'alumno',
       });
 
       // Un encargadoAlumnos pertenece a un encargado
-      encargadoAlumnos.belongsTo(models.User, {
+      encargadoAlumnos.belongsTo(models.user, {
         foreignKey: 'encargadoId',
         as: 'encargado',
       });

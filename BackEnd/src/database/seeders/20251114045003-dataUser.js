@@ -7,119 +7,102 @@ module.exports = {
       "dataUsers",
       [
         {
-          firstName: "Isaac",
-          lastName: "Flores",
-          address: "Calle sin salida #2",
+          firstName: "Soporte",
+          lastName: "Soporte",
+          address: "Soporte",
           telefono: "78945612",
-          userId: 1,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 1
         },
         {
           firstName: "Lelo",
           lastName: "Rodríguez",
           address: "Calle sin salida #3",
           telefono: "78945612",
-          userId: 2,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 2
         },
         {
           firstName: "Joy",
           lastName: "Mora",
           address: "Calle sin salida #5",
           telefono: "78945612",
-          userId: 3,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 3
         },
         {
           firstName: "Admin",
           lastName: "Admin",
           address: "Calle sin salida #10",
           telefono: "78945612",
-          userId: 4,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 4
         },
         {
           firstName: "Admin2",
           lastName: "Admin",
           address: "Calle sin salida #11",
           telefono: "78945612",
-          userId: 5,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 5
         },
         {
           firstName: "Carlos",
           lastName: "Gómez",
           address: "Calle sin salida #12",
           telefono: "78945612",
-          userId: 6,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 6
         },
         {
           firstName: "Ana",
           lastName: "Pérez",
           address: "Calle sin salida #13",
           telefono: "78945612",
-          userId: 7,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 7
         },
         {
           firstName: "Mario",
           lastName: "Encargado",
           address: "Calle sin salida #14",
           telefono: "78945612",
-          userId: 8,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 8
         },
         {
           firstName: "Lucía",
           lastName: "Encargada",
           address: "Calle sin salida #15",
           telefono: "78945612",
-          userId: 9,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 9
         },
         {
           firstName: "Pedro",
           lastName: "Alumno",
           address: "Calle sin salida #16",
           telefono: "78945612",
-          userId: 10,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 10
         },
         {
           firstName: "Sofía",
           lastName: "Alumno",
           address: "Calle sin salida #17",
           telefono: "78945612",
-          userId: 11,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 11
         },
         {
           firstName: "Andrés",
           lastName: "Alumno",
           address: "Calle sin salida #18",
           telefono: "78945612",
-          userId: 12,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          userId: 12
         },
         {
           firstName: "Valeria",
           lastName: "Alumno",
           address: "Calle sin salida #19",
           telefono: "78945612",
-          userId: 13,
+          userId: 13
+        },
+        {
+          firstName: "Isaac",
+          lastName: "Flores",
+          address: "Calle sin salida #2",
+          telefono: "78945612",
+          userId: 14,
           createdAt: new Date(),
           updatedAt: new Date()
         }
