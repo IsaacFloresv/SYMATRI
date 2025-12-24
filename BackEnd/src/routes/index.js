@@ -3,6 +3,7 @@ const express = require("express")
 const router = express.Router();
 
 const actividadesRoutes = require("./actividadesRoutes")
+const asistenciaRoutes = require("./asistenciaRoutes")
 const configRoutes = require("./configRoutes")
 const dataUserRoutes = require("./dataUsersRoutes")
 const encargadoAlumnosRoutes = require("./encargadoAlumnosRoutes")
@@ -23,6 +24,13 @@ const userRoutes = require("./usersRoutes")
 
 //asegurador de rutas, verificador de token
 const { verifyToken, authorizeRole } = require("@middlewares/auth");
+
+//cache middleware
+/* const cacheMiddleware = require("@middlewares/cacheMiddleware");
+router.use(cacheMiddleware()); */
+
+
+
 
 
 //swagger implementacion
@@ -49,24 +57,24 @@ router.get("/", (req, res) => res.json({ foo: "bar" }));
 
 
 
-router.use(`/actividades`, verifyToken, authorizeRole('admin1','admin2','alumno','encargado','profesor'), actividadesRoutes)
-router.use(`/asistencia`, verifyToken, authorizeRole('admin1','admin2','alumno','encargado','profesor'), actividadesRoutes)
+router.use(`/actividades`, verifyToken, authorizeRole('admin1', 'admin2', 'alumno', 'encargado', 'profesor'), actividadesRoutes)
+router.use(`/asistencia`, verifyToken, authorizeRole('admin1', 'admin2', 'alumno', 'encargado', 'profesor'), asistenciaRoutes)
 router.use(`/config`, verifyToken, authorizeRole('admin1'), configRoutes)
 router.use(`/errores`, verifyToken, authorizeRole('admin007'), erroresRoutes)
-router.use(`/logs`, verifyToken, authorizeRole('admin007','admin1'), logsRoutes)
-router.use(`/dataUsers`, verifyToken, authorizeRole('admin1','admin2'), dataUserRoutes)
-router.use(`/encargadoAlumnos`, verifyToken, authorizeRole('admin1','admin2','profesor'), encargadoAlumnosRoutes)
-router.use(`/horarios`, verifyToken, authorizeRole('admin1','admin2','alumno','encargado','profesor'), horariosRoutes)
+router.use(`/logs`, verifyToken, authorizeRole('admin007', 'admin1'), logsRoutes)
+router.use(`/dataUsers`, verifyToken, authorizeRole('admin1', 'admin2'), dataUserRoutes)
+router.use(`/encargadoAlumnos`, verifyToken, authorizeRole('admin1', 'admin2', 'profesor'), encargadoAlumnosRoutes)
+router.use(`/horarios`, verifyToken, authorizeRole('admin1', 'admin2', 'alumno', 'encargado', 'profesor'), horariosRoutes)
 router.use(`/begin`, authorizeRole('guest'), loginRoutes)
 router.use(`/materiasProfesores`, verifyToken, authorizeRole('admin1'), materiasProfesoresRoutes)
 router.use(`/materias`, verifyToken, authorizeRole('admin1'), materiasRoutes)
-router.use(`/mensajes`, verifyToken, authorizeRole('admin1','admin2','alumno','encargado','profesor'), mensajesRoutes)
-router.use(`/mensajeReceptor`, verifyToken, authorizeRole('admin1','admin2','alumno','encargado','profesor'), mensajeReceptorRoutes)
-router.use(`/notas`, verifyToken, authorizeRole('admin1','admin2','alumno','encargado','profesor'), notasRoutes)
+router.use(`/mensajes`, verifyToken, authorizeRole('admin1', 'admin2', 'alumno', 'encargado', 'profesor'), mensajesRoutes)
+router.use(`/mensajeReceptor`, verifyToken, authorizeRole('admin1', 'admin2', 'alumno', 'encargado', 'profesor'), mensajeReceptorRoutes)
+router.use(`/notas`, verifyToken, authorizeRole('admin1', 'admin2', 'alumno', 'encargado', 'profesor'), notasRoutes)
 router.use(`/roles`, verifyToken, authorizeRole('admin1'), rolesRoutes)
-router.use(`/seccionAlumnos`, verifyToken, authorizeRole('admin1','admin2','profesor'), seccionAlumnosRoutes)
-router.use(`/secciones`, verifyToken, authorizeRole('admin1','admin2'), seccionesRoutes)
-router.use(`/seccionProfesor`, verifyToken, authorizeRole('admin1','admin2'), seccionProfesorRoutes)
+router.use(`/seccionAlumnos`, verifyToken, authorizeRole('admin1', 'admin2', 'profesor'), seccionAlumnosRoutes)
+router.use(`/secciones`, verifyToken, authorizeRole('admin1', 'admin2'), seccionesRoutes)
+router.use(`/seccionProfesor`, verifyToken, authorizeRole('admin1', 'admin2'), seccionProfesorRoutes)
 router.use(`/users`, verifyToken, authorizeRole('admin1'), userRoutes)
 
-module.exports = router;
+module.exports =  router;

@@ -5,7 +5,9 @@ const getAll = async (req, res) => {
     const { userId } = req.query;
 
     const where = {};
-    if (userId) where.userId = userId;
+    if (userId) {
+      where.userId = userId;
+    }
 
     let result = await actividades.findAll({
       where,
@@ -25,8 +27,10 @@ const getAll = async (req, res) => {
         },
       ],
     });
+
     res.json(result);
   } catch (error) {
+    console.error(error);
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,
@@ -38,7 +42,7 @@ const getById = async (req, res) => {
   try {
     const { id } = req.query;
     let result = await actividades.findOne({
-      where: {id},
+      where: { id },
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
@@ -57,6 +61,7 @@ const getById = async (req, res) => {
         },
       ],
     });
+
     res.json(result);
   } catch (error) {
     res.json({

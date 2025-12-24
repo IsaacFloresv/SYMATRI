@@ -1,4 +1,4 @@
-const { horarios, User,dataUser, secciones, materiaProfesor, materias } = require("../database/models/index");
+const { horarios, user,dataUser, secciones, materiaProfesor, materias } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ const getAll = async (req, res) => {
           as: 'seccion',
         },
         {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: 'profesor',
           include: [
@@ -59,7 +59,7 @@ const getById = async (req, res) => {
           as: 'seccion',
         },
         {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: 'profesor',
           include: [

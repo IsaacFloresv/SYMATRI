@@ -1,7 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-const {getAll, getById, create, update, validate, deleteR} = require("../controllers/actividadesControllers");
+//Schema y validador
+const { createUsuarioSchema,
+  updateUsuarioSchema,
+  getSchema } = require("@schemas/asistenciaSchema");
+const validateSchema = require("@middlewares/validateSchema");
+
+const { getAll, getById, create, update, validate, deleteR } = require("../controllers/actividadesControllers");
 
 router.get("/", (req, res) => {
   res.json({ Asistencia: "aqui" });

@@ -1,7 +1,8 @@
-const { actividades, User, dataUser } = require("../database/models/index");
+const { actividades, user, dataUser } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
+    console.log("entro al getAll actividades");
     const { userId } = req.query;
 
     const where = {};
@@ -12,7 +13,7 @@ const getAll = async (req, res) => {
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: "generador",
           include: [
@@ -25,8 +26,10 @@ const getAll = async (req, res) => {
         },
       ],
     });
+    console.log(result);
     res.json(result);
   } catch (error) {
+    console.log(error);
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,
@@ -38,7 +41,7 @@ const getById = async (req, res) => {
   try {
     const { id } = req.query;
     let result = await actividades.findOne({
-      where: {id},
+      where: { id },
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },

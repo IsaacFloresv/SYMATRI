@@ -1,4 +1,4 @@
-const { materias, materiaProfesor, dataUser, User } = require("../database/models/index");
+const { materias, materiaProfesor, dataUser, user } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ const getAll = async (req, res) => {
           as: "materia",
           include: [
             {
-              model: User,
+              model: user,
               attributes: ["id"],
               as: "profesorAsignado",
               include: [
@@ -28,6 +28,7 @@ const getAll = async (req, res) => {
     });
     res.json(result);
   } catch (error) {
+    console.log(error);
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,
@@ -48,7 +49,7 @@ const getById = async (req, res) => {
           as: "materia",
           include: [
             {
-              model: User,
+              model: user,
               attributes: ["id"],
               as: "profesorAsignado",
               include: [

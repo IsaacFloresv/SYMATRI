@@ -1,8 +1,8 @@
-const { encargadoAlumnos, User, dataUser } = require("../database/models/index");
+const { encargadoAlumnos, user, dataUser } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
-    let result = await User.findAll({
+    let result = await user.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
@@ -16,7 +16,7 @@ const getAll = async (req, res) => {
           as: "encargado",
           include: [
             {
-              model: User,
+              model: user,
               attributes: ["id"],
               as: "alumno",
               include: [
@@ -43,7 +43,7 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   try {
     const { id } = req.query;
-    let result = await User.findAll({
+    let result = await user.findAll({
       where: { id },
       attributes: ["id"],
       include: [
@@ -58,7 +58,7 @@ const getById = async (req, res) => {
           as: "encargado",
           include: [
             {
-              model: User,
+              model: user,
               attributes: ["id"],
               as: "alumno",
               include: [

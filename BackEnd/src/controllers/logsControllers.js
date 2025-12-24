@@ -2,7 +2,14 @@ const { logs } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
-    let result = await logs.findAll({
+    // page y pageSize pueden venir del frontend
+    const page = parseInt(req.query.page) || 1;       // página actual
+    const pageSize = parseInt(req.query.pageSize) || 10; // registros por página
+
+    let result = await logs.findAndCountAll({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [['createdAt', 'DESC']], // opcional: ordenar resultados
       attributes: { exclude: ["createdAt", "updatedAt", "userId"] },
       include: [{
         association: "usuario",
@@ -13,7 +20,14 @@ const getAll = async (req, res) => {
         }]
       }],
     });
-    res.json(result);
+    res.json(
+      {
+        total: result.count,             // total de registros
+        totalPages: Math.ceil(result.count / pageSize),
+        currentPage: page,
+        data: result.rows                // registros de la página actual
+      }
+    );
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",

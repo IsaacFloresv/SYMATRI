@@ -1,98 +1,310 @@
 openapi: 3.0.0
 info:
-  title: API de Usuarios y Datos Personales
+  title: API del sistema MatriCool
   version: 1.0.0
-  description: Esta API permite gestionar usuarios del sistema y su información personal.
+  description: Esta API permite gestionar la capa de datos.
 servers:
   - url: http://localhost:4321
 
+tags:
+  - name: Actividades
+  - name: Asistencia
+  - name: Config
+  - name: DataUser
+  - name: EncargadoAlumnos
+  - name: Horarios
+  - name: MateriasProfesores
+  - name: Materias
+  - name: MensajeReceptors
+  - name: Mensajes
+  - name: Notas
+  - name: SeccionAlumnos
+  - name: Secciones
+  - name: SeccionProfesor
+  - name: User
+  - name: Auth
+
 paths:
-  /users/all:
+  /actividades/all:
     get:
-      summary: Obtener todos los usuarios
+      summary: Obtener todos los registros
+      tags: [Actividades]
       responses:
         '200':
-          description: Lista de usuarios
+          description: Lista de registros
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
-  /users/create:
-    post:
-      summary: Crear nuevo usuario
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        '201':
-          description: Usuario creado
+                  $ref: '#/components/schemas/Actividades'
 
-  /users/{id}:
+  /actividades/byid:
     get:
-      summary: Obtener usuario por ID
+      summary: Obtener registro por ID
+      tags: [Actividades]
       parameters:
         - name: id
-          in: path
+          in: query
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
-          description: Usuario encontrado
+          description: Registro encontrado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Actividades'
         '404':
-          description: Usuario no encontrado
-    put:
-      summary: Actualizar usuario
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
+          description: Registro no encontrado
+
+  /actividades/create:
+    post:
+      summary: Crear nuevo registro
+      tags: [Actividades]
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/Actividades'
+      responses:
+        '201':
+          description: Registro creado  
+
+# paths para modelo asistencia #
+  /asistencia/all:
+    get:
+      summary: Obtener todas las asistencias
+      tags: [Asistencia]
       responses:
         '200':
-          description: Usuario actualizado
-    delete:
-      summary: Eliminar usuario
+          description: Lista de asistencias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asistencia'
+
+  /asistencia/byid:
+    get:
+      summary: Obtener asistencia por ID
+      tags: [Asistencia]
       parameters:
         - name: id
-          in: path
+          in: query
           required: true
           schema:
-            type: string
-      responses:
-        '204':
-          description: Usuario eliminado
-
-  /data-users:
-    get:
-      summary: Obtener todos los datos personales
+            type: integer
       responses:
         '200':
-          description: Lista de datos personales
+          description: Asistencia encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asistencia'
+        '404':
+          description: Asistencia no encontrada
+
+  /asistencia/create:
+    post:
+      summary: Crear nueva asistencia
+      tags: [Asistencia]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Asistencia'
+      responses:
+        '201':
+          description: Asistencia creada
+
+  /asistencia/update:
+    put:
+      summary: Actualizar asistencia existente
+      tags: [Asistencia]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Asistencia'
+      responses:
+        '200':
+          description: Asistencia actualizada
+        '404':
+          description: Asistencia no encontrada
+
+  /asistencia/validate:
+    patch:
+      summary: Validar asistencia
+      tags: [Asistencia]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Asistencia validada
+        '400':
+          description: Error de validación
+
+  /asistencia/delete:
+    put:
+      summary: Eliminar asistencia
+      tags: [Asistencia]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Asistencia eliminada
+        '404':
+          description: Asistencia no encontrada
+
+# paths para config #
+  /config/all:
+    get:
+      summary: Obtener todas las configuraciones
+      tags: [Config]
+      responses:
+        '200':
+          description: Lista de configuraciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Config'
+
+  /config/byid:
+    get:
+      summary: Obtener configuración por ID
+      tags: [Config]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Configuración encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+        '404':
+          description: Configuración no encontrada
+  /config/create:
+    post:
+      summary: Crear nueva configuración
+      tags: [Config]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+      responses:
+        '201':
+          description: Configuración creada
+
+  /config/update:
+    put:
+      summary: Actualizar configuración existente
+      tags: [Config]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+      responses:
+        '200':
+          description: Configuración actualizada
+        '404':
+          description: Configuración no encontrada
+
+  /config/validate:
+    patch:
+      summary: Validar configuración
+      tags: [Config]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Configuración validada
+        '400':
+          description: Error de validación
+
+  /config/delete:
+    put:
+      summary: Eliminar configuración
+      tags: [Config]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Configuración eliminada
+        '404':
+          description: Configuración no encontrada
+
+# paths para dataUser #
+  /dataUsers/all:
+    get:
+      summary: Obtener todos los datos de usuarios
+      tags: [DataUser]
+      responses:
+        '200':
+          description: Lista de datos de usuarios
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/DataUser'
+
+  /dataUsers/byid:
+    get:
+      summary: Obtener datos de usuario por ID
+      tags: [DataUser]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Datos de usuario encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataUser'
+        '404':
+          description: Datos de usuario no encontrados
+
+  /dataUsers/create:
     post:
-      summary: Crear datos personales
+      summary: Crear datos de usuario
+      tags: [DataUser]
       requestBody:
         required: true
         content:
@@ -103,32 +315,10 @@ paths:
         '201':
           description: Datos creados
 
-  /data-users/{id}:
-    get:
-      summary: Obtener datos por ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Datos encontrados
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataUser'
-        '404':
-          description: Datos no encontrados
+  /dataUsers/update:
     put:
-      summary: Actualizar datos personales
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
+      summary: Actualizar datos de usuario
+      tags: [DataUser]
       requestBody:
         required: true
         content:
@@ -138,64 +328,1735 @@ paths:
       responses:
         '200':
           description: Datos actualizados
-    delete:
-      summary: Eliminar datos personales
+        '404':
+          description: Datos no encontrados
+
+# paths para encargadoAlumnos#
+  /encargadoAlumnos/all:
+    get:
+      summary: Obtener todas las relaciones alumno–encargado
+      tags: [EncargadoAlumnos]
+      responses:
+        '200':
+          description: Lista de relaciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EncargadoAlumnos'
+
+  /encargadoAlumnos/byid:
+    get:
+      summary: Obtener relación alumno–encargado por ID
+      tags: [EncargadoAlumnos]
       parameters:
         - name: id
-          in: path
+          in: query
           required: true
           schema:
-            type: string
+            type: integer
+      responses:
+        '200':
+          description: Relación encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncargadoAlumnos'
+        '404':
+          description: Relación no encontrada
+
+  /encargadoAlumnos/create:
+    post:
+      summary: Crear nueva relación alumno–encargado
+      tags: [EncargadoAlumnos]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncargadoAlumnos'
+      responses:
+        '201':
+          description: Relación creada
+
+  /encargadoAlumnos/update:
+    put:
+      summary: Actualizar relación alumno–encargado existente
+      tags: [EncargadoAlumnos]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncargadoAlumnos'
+      responses:
+        '200':
+          description: Relación actualizada
+        '404':
+          description: Relación no encontrada
+
+  /encargadoAlumnos/validate:
+    patch:
+      summary: Validar relación alumno–encargado
+      tags: [EncargadoAlumnos]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Relación validada
+        '400':
+          description: Error de validación
+  /encargadoAlumnos/delete:
+    patch:
+      summary: Eliminar relación alumno–encargado
+      tags: [EncargadoAlumnos]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
       responses:
         '204':
-          description: Datos eliminados
+          description: Relación eliminada
+        '404':
+          description: Relación no encontrada
+
+# paths para horarios #
+  /horarios/all:
+    get:
+      summary: Obtener todos los horarios
+      tags: [Horarios]
+      responses:
+        '200':
+          description: Lista de horarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Horarios'
+
+  /horarios/byid:
+    get:
+      summary: Obtener horario por ID
+      tags: [Horarios]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Horario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Horarios'
+        '404':
+          description: Horario no encontrado
+
+  /horarios/create:
+    post:
+      summary: Crear nuevo horario
+      tags: [Horarios]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Horarios'
+      responses:
+        '201':
+          description: Horario creado
+
+  /horarios/update:
+    put:
+      summary: Actualizar horario existente
+      tags: [Horarios]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Horarios'
+      responses:
+        '200':
+          description: Horario actualizado
+        '404':
+          description: Horario no encontrado
+
+  /horarios/validate:
+    patch:
+      summary: Validar horario
+      tags: [Horarios]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Horario validado
+        '400':
+          description: Error de validación
+
+  /horarios/delete:
+    patch:
+      summary: Eliminar horario
+      tags: [Horarios]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Horario validado
+        '400':
+          description: Error de validación
+
+# paths para auth #
+  /auth/login:
+    post:
+      summary: Iniciar sesión
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Sesión iniciada correctamente
+        '401':
+          description: Credenciales inválidas
+
+  /auth/register:
+    post:
+      summary: Registrar nuevo usuario
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Usuario registrado
+        '400':
+          description: Error en los datos de registro
+  /auth/forgotPass:
+    patch:
+      summary: Solicitar recuperación de contraseña
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPassRequest'
+      responses:
+        '200':
+          description: Instrucciones enviadas para recuperación
+        '404':
+          description: Usuario no encontrado
+
+  /auth/activateAccount:
+    patch:
+      summary: Activar cuenta de usuario
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivateAccountRequest'
+      responses:
+        '200':
+          description: Cuenta activada
+        '400':
+          description: Token inválido o expirado
+
+# paths para materiaProfesor #
+  /materiasProfesores/all:
+    get:
+      summary: Obtener todas las relaciones materia–profesor
+      tags: [MateriasProfesores]
+      responses:
+        '200':
+          description: Lista de relaciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MateriaProfesor'
+
+  /materiasProfesores/byid:
+    get:
+      summary: Obtener relación materia–profesor por ID
+      tags: [MateriasProfesores]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Relación encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MateriaProfesor'
+        '404':
+          description: Relación no encontrada
+
+  /materiasProfesores/create:
+    post:
+      summary: Crear nueva relación materia–profesor
+      tags: [MateriasProfesores]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MateriaProfesor'
+      responses:
+        '201':
+          description: Relación creada
+
+  /materiasProfesores/update:
+    put:
+      summary: Actualizar relación materia–profesor existente
+      tags: [MateriasProfesores]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MateriaProfesor'
+      responses:
+        '200':
+          description: Relación actualizada
+        '404':
+          description: Relación no encontrada
+
+  /materiasProfesores/validate:
+    patch:
+      summary: Validar relación materia–profesor
+      tags: [MateriasProfesores]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Relación validada
+        '400':
+          description: Error de validación
+
+  /materiasProfesores/delete:
+    patch:
+      summary: Eliminar relación materia–profesor
+      tags: [MateriasProfesores]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Relación eliminada
+        '404':
+          description: Relación no encontrada
+
+# paths para materias #
+  /materias/all:
+    get:
+      summary: Obtener todas las materias
+      tags: [Materias]
+      responses:
+        '200':
+          description: Lista de materias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Materias'
+
+  /materias/byid:
+    get:
+      summary: Obtener materia por ID
+      tags: [Materias]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Materia encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Materias'
+        '404':
+          description: Materia no encontrada
+
+  /materias/create:
+    post:
+      summary: Crear nueva materia
+      tags: [Materias]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Materias'
+      responses:
+        '201':
+          description: Materia creada
+
+  /materias/update:
+    put:
+      summary: Actualizar materia existente
+      tags: [Materias]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Materias'
+      responses:
+        '200':
+          description: Materia actualizada
+        '404':
+          description: Materia no encontrada
+
+  /materias/validate:
+    patch:
+      summary: Validar materia
+      tags: [Materias]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Materia validada
+        '400':
+          description: Error de validación
+
+  /materias/delete:
+    patch:
+      summary: Eliminar materia
+      tags: [Materias]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Materia eliminada
+        '404':
+          description: Materia no encontrada
+
+# paths para mensajeReceptors #
+  /mensajeReceptors/all:
+    get:
+      summary: Obtener todas las relaciones mensaje–receptor
+      tags: [MensajeReceptors]
+      responses:
+        '200':
+          description: Lista de relaciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MensajeReceptors'
+  /mensajeReceptors/allById:
+    get:
+      summary: Obtener todas las relaciones mensaje–receptor por ID de mensaje
+      tags: [MensajeReceptors]
+      parameters:
+        - name: mensajeId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Relaciones encontradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MensajeReceptors'
+        '404':
+          description: No se encontraron relaciones
+
+  /mensajeReceptors/byId:
+    get:
+      summary: Obtener relación mensaje–receptor por ID
+      tags: [MensajeReceptors]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Relación encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeReceptors'
+        '404':
+          description: Relación no encontrada
+
+  /mensajeReceptors/create:
+    post:
+      summary: Crear nueva relación mensaje–receptor
+      tags: [MensajeReceptors]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MensajeReceptors'
+      responses:
+        '201':
+          description: Relación creada
+
+  /mensajeReceptors/update:
+    put:
+      summary: Actualizar relación mensaje–receptor existente
+      tags: [MensajeReceptors]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MensajeReceptors'
+      responses:
+        '200':
+          description: Relación actualizada
+        '404':
+          description: Relación no encontrada
+
+# paths para mensajes #
+  /mensajes/all:
+    get:
+      summary: Obtener todos los mensajes
+      tags: [Mensajes]
+      responses:
+        '200':
+          description: Lista de mensajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Mensajes'
+
+  /mensajes/byid:
+    get:
+      summary: Obtener mensaje por ID
+      tags: [Mensajes]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Mensaje encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mensajes'
+        '404':
+          description: Mensaje no encontrado
+
+  /mensajes/create:
+    post:
+      summary: Crear nuevo mensaje
+      tags: [Mensajes]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mensajes'
+      responses:
+        '201':
+          description: Mensaje creado
+
+  /mensajes/update:
+    put:
+      summary: Actualizar mensaje existente
+      tags: [Mensajes]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mensajes'
+      responses:
+        '200':
+          description: Mensaje actualizado
+        '404':
+          description: Mensaje no encontrado
+
+  /mensajes/isReaded:
+    patch:
+      summary: Marcar mensaje como leído
+      tags: [Mensajes]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Estado de lectura actualizado
+        '404':
+          description: Mensaje no encontrado
+
+  /mensajes/isArchived:
+    patch:
+      summary: Marcar mensaje como archivado
+      tags: [Mensajes]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Estado de archivado actualizado
+        '404':
+          description: Mensaje no encontrado
+
+  /mensajes/delete:
+    patch:
+      summary: Eliminar mensaje
+      tags: [Mensajes]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Mensaje eliminado
+        '404':
+          description: Mensaje no encontrado
+
+# paths para Notas #
+  /notas/all:
+    get:
+      summary: Obtener todas las notas
+      tags: [Notas]
+      responses:
+        '200':
+          description: Lista de notas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notas'
+  /notas/byid:
+    get:
+      summary: Obtener nota por ID
+      tags: [Notas]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Nota encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notas'
+        '404':
+          description: Nota no encontrada
+
+  /notas/byAlumnoId:
+    get:
+      summary: Obtener notas por ID de alumno
+      tags: [Notas]
+      parameters:
+        - name: alumnoId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Notas encontradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notas'
+        '404':
+          description: No se encontraron notas para el alumno
+
+  /notas/create:
+    post:
+      summary: Crear nueva nota
+      tags: [Notas]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notas'
+      responses:
+        '201':
+          description: Nota creada
+
+  /notas/update:
+    put:
+      summary: Actualizar nota existente
+      tags: [Notas]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notas'
+      responses:
+        '200':
+          description: Nota actualizada
+        '404':
+          description: Nota no encontrada
+
+  /notas/validate:
+    patch:
+      summary: Validar nota
+      tags: [Notas]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Nota validada
+        '400':
+          description: Error de validación
+
+  /notas/delete:
+    patch:
+      summary: Eliminar nota
+      tags: [Notas]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Nota eliminada
+        '404':
+          description: Nota no encontrada
+
+# paths para seccionAlumnos #
+  /seccionAlumnos/all:
+    get:
+      summary: Obtener todas las asignaciones de alumnos a secciones
+      tags: [SeccionAlumnos]
+      responses:
+        '200':
+          description: Lista de asignaciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeccionAlumnos'
+
+  /seccionAlumnos/byid:
+    get:
+      summary: Obtener asignación alumno–sección por ID
+      tags: [SeccionAlumnos]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Asignación encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeccionAlumnos'
+        '404':
+          description: Asignación no encontrada
+
+  /seccionAlumnos/create:
+    post:
+      summary: Crear nueva asignación alumno–sección
+      tags: [SeccionAlumnos]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeccionAlumnos'
+      responses:
+        '201':
+          description: Asignación creada
+
+  /seccionAlumnos/update:
+    put:
+      summary: Actualizar asignación alumno–sección existente
+      tags: [SeccionAlumnos]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeccionAlumnos'
+      responses:
+        '200':
+          description: Asignación actualizada
+        '404':
+          description: Asignación no encontrada
+
+  /seccionAlumnos/validate:
+    patch:
+      summary: Validar asignación alumno–sección
+      tags: [SeccionAlumnos]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Asignación validada
+        '400':
+          description: Error de validación
+
+  /seccionAlumnos/delete:
+    patch:
+      summary: Eliminar asignación alumno–sección
+      tags: [SeccionAlumnos]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Asignación eliminada
+        '404':
+          description: Asignación no encontrada
+
+# paths para secciones #
+  /secciones/all:
+    get:
+      summary: Obtener todas las secciones
+      tags: [Secciones]
+      responses:
+        '200':
+          description: Lista de secciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Secciones'
+
+  /secciones/byid:
+    get:
+      summary: Obtener sección por ID
+      tags: [Secciones]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sección encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Secciones'
+        '404':
+          description: Sección no encontrada
+
+  /secciones/create:
+    post:
+      summary: Crear nueva sección
+      tags: [Secciones]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Secciones'
+      responses:
+        '201':
+          description: Sección creada
+
+  /secciones/update:
+    put:
+      summary: Actualizar sección existente
+      tags: [Secciones]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Secciones'
+      responses:
+        '200':
+          description: Sección actualizada
+        '404':
+          description: Sección no encontrada
+
+  /secciones/validate:
+    patch:
+      summary: Validar sección
+      tags: [Secciones]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sección validada
+        '400':
+          description: Error de validación
+
+  /secciones/delete:
+    patch:
+      summary: Eliminar sección
+      tags: [Secciones]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Horario validado
+        '400':
+          description: Error de validación
+         
+# paths para SeccionProfesor#
+  /seccionProfesor/all:
+    get:
+      summary: Obtener todas las asignaciones de profesores a secciones
+      tags: [SeccionProfesor]
+      responses:
+        '200':
+          description: Lista de asignaciones profesor–sección
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeccionProfesor'
+
+  /seccionProfesor/byid:
+    get:
+      summary: Obtener asignación profesor–sección por ID
+      tags: [SeccionProfesor]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Asignación encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeccionProfesor'
+        '404':
+          description: Asignación no encontrada
+
+  /seccionProfesor/create:
+    post:
+      summary: Crear nueva asignación profesor–sección
+      tags: [SeccionProfesor]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeccionProfesor'
+      responses:
+        '201':
+          description: Asignación creada
+
+  /seccionProfesor/update:
+    put:
+      summary: Actualizar asignación profesor–sección existente
+      tags: [SeccionProfesor]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeccionProfesor'
+      responses:
+        '200':
+          description: Asignación actualizada
+        '404':
+          description: Asignación no encontrada
+
+# paths para usuarios #
+  /user/all:
+    get:
+      summary: Obtener todos los usuarios
+      tags: [User]
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /user/byid:
+    get:
+      summary: Obtener usuario por ID
+      tags: [User]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuario no encontrado
+
+  /user/create:
+    post:
+      summary: Crear nuevo usuario
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Usuario creado
+
+  /user/update:
+    put:
+      summary: Actualizar usuario existente
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Usuario actualizado
+        '404':
+          description: Usuario no encontrado
+
+  /user/validate:
+    patch:
+      summary: Validar usuario
+      tags: [User]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario validado
+        '400':
+          description: Error de validación
+
+  /user/delete:
+    patch:
+      summary: Eliminar usuario
+      tags: [User]
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Usuario eliminado
+        '404':
+          description: Usuario no encontrado
+
 
 components:
-  components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      
   schemas:
+    Actividades:
+      type: object
+      required:
+        - periodo
+        - name
+        - descripcion
+        - userId
+        - estado
+        - fechaInicio
+        - fechaFinal
+        - horaInicio
+        - horaFinal
+        - ubicacion
+        - objetivo
+      properties:
+        periodo:
+          type: string
+        name:
+          type: string
+        descripcion:
+          type: string
+        userId:
+          type: integer
+        estado:
+          type: boolean
+        fechaInicio:
+          type: string
+          format: date
+        fechaFinal:
+          type: string
+          format: date
+        horaInicio:
+          type: string
+          format: time
+        horaFinal:
+          type: string
+          format: time
+        ubicacion:
+          type: string
+        objetivo:
+          type: string
+      example:
+        periodo: "2025-Q1"
+        name: "Taller de Backend"
+        descripcion: "Capacitación intensiva en Node.js y Redis"
+        userId: 12
+        estado: true
+        fechaInicio: "2025-01-15"
+        fechaFinal: "2025-01-20"
+        horaInicio: "09:00:00"
+        horaFinal: "17:00:00"
+        ubicacion: "Sala 3, Centro de Innovación"
+        objetivo: "Mejorar las habilidades de desarrollo backend"
+
+    # Esquema para Asistencia #
+    Asistencia:
+        type: object
+        required:
+          - actividadId
+          - alumnoId
+          - profesorId
+          - estado
+        properties:
+          actividadId:
+            type: integer
+            description: ID de la actividad asociada
+          alumnoId:
+            type: integer
+            description: ID del alumno
+          profesorId:
+            type: integer
+            description: ID del profesor
+          estado:
+            type: string
+            description: Estado de la asistencia (ej. "presente", "ausente", "justificado")
+        example:
+          actividadId: 101
+          alumnoId: 202
+          profesorId: 303
+          estado: "presente"
+
+    # Esquema para Config #
+    Config:
+        type: object
+        required:
+          - clave
+          - valor
+          - tipo
+        properties:
+          clave:
+            type: string
+            description: Clave de configuración
+          valor:
+            type: string
+            description: Valor asociado a la clave
+          tipo:
+            type: string
+            enum: [INTEGER, STRING, BOOLEAN]
+            description: Tipo de dato del valor
+            default: STRING
+        example:
+          clave: "maxUsers"
+          valor: "100"
+          tipo: "INTEGER"
+
+    # Esquema para dataUser #
+    DataUser:
+        type: object
+        required:
+          - firstName
+          - lastName
+          - address
+          - telefono
+        properties:
+          firstName:
+            type: string
+            description: Nombre del usuario
+          lastName:
+            type: string
+            description: Apellido del usuario
+          address:
+            type: string
+            description: Dirección del usuario
+          telefono:
+            type: string
+            description: Teléfono de contacto
+        example:
+          firstName: "Isaac"
+          lastName: "Martínez"
+          address: "Av. Central 123, Grande Prairie"
+          telefono: "+1-780-555-1234"
+
+    # Esquema para EncargadoAlumnos #
+    EncargadoAlumnos:
+        type: object
+        required:
+          - alumnoId
+          - encargadoId
+        properties:
+          alumnoId:
+            type: integer
+            description: ID del alumno asociado
+          encargadoId:
+            type: integer
+            description: ID del encargado asociado
+        example:
+          alumnoId: 15
+          encargadoId: 7
+
+    # Esquema para Horarios #
+    Horarios:
+        type: object
+        required:
+          - periodo
+          - seccionId
+          - profesorId
+          - dia
+          - inicio
+          - final
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico del horario
+          seccionId:
+            type: integer
+            description: ID de la sección asociada
+          profesorId:
+            type: integer
+            description: ID del profesor asignado
+          dia:
+            type: string
+            description: Día de la semana
+          inicio:
+            type: string
+            format: time
+            description: Hora de inicio
+          final:
+            type: string
+            format: time
+            description: Hora de finalización
+        example:
+          periodo: "2025-Q1"
+          seccionId: 12
+          profesorId: 34
+          dia: "Lunes"
+          inicio: "08:00:00"
+          final: "10:00:00"
+      
+    # Esquema para Auth #
+    LoginRequest:
+        type: object
+        required:
+          - userName
+          - pass
+        properties:
+          userName:
+            type: string
+            description: Nombre de usuario
+          pass:
+            type: string
+            format: password
+            description: Contraseña del usuario
+        example:
+          userName: "isaac"
+          pass: "123456"
+
+    RegisterRequest:
+        type: object
+        required:
+          - userName
+          - pass
+          - rol
+        properties:
+          userName:
+            type: string
+          pass:
+            type: string
+            format: password
+          rol:
+            type: string
+            description: Rol del usuario (ej. "guest")
+          email:
+            type: string
+            format: email
+          datosPersonales:
+            $ref: '#/components/schemas/DataUser'
+        example:
+          userName: "isaac"
+          pass: "123456"
+          rol: "guest"
+          email: "isaac@example.com"
+          datosPersonales:
+            firstName: "Isaac"
+            lastName: "Martínez"
+            address: "Av. Central 123"
+            telefono: "+1-780-555-1234"
+
+    RegisterResponse:
+        type: object
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          result:
+            $ref: '#/components/schemas/DataUser'
+        example:
+          message: "En las siguientes 24 horas se enviara un correo para la activacion de su cuenta"
+          success: true
+          result:
+            firstName: "Isaac"
+            lastName: "Martínez"
+            address: "Av. Central 123"
+            telefono: "+1-780-555-1234"
+
+    ForgotPassRequest:
+        type: object
+        required:
+          - id
+          - pass
+          - rol
+        properties:
+          id:
+            type: integer
+          pass:
+            type: string
+            format: password
+          rol:
+            type: string
+        example:
+          id: 1
+          pass: "nuevaClave123"
+          rol: "guest"
+
+    ForgotPassResponse:
+        type: object
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          result:
+            type: object
+            description: Resultado de la actualización
+        example:
+          message: "Contraseña actualizada correctamente"
+          success: true
+          result: { "affectedRows": 1 }
+
+    ActivateAccountRequest:
+        type: object
+        required:
+          - id
+          - rol
+        properties:
+          id:
+            type: integer
+          rol:
+            type: string
+        example:
+          id: 1
+          rol: "guest"
+
+    ActivateAccountResponse:
+        type: object
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          result:
+            type: object
+            description: Resultado de la activación
+        example:
+          message: "cuenta activada correctamente"
+          success: true
+          result: { "affectedRows": 1 }
+
+    GenerateTokenRequest:
+        type: object
+        required:
+          - Token
+        properties:
+          Token:
+            type: string
+            description: Token base para generar accessToken
+        example:
+          Token: "refreshToken123"
+
+    GenerateTokenResponse:
+        type: object
+        properties:
+          accessToken:
+            type: string
+            description: Nuevo access token generado
+        example:
+          accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC..."
+
+    RefreshTokenRequest:
+        type: object
+        required:
+          - refreshToken
+        properties:
+          refreshToken:
+            type: string
+            description: Refresh token válido
+        example:
+          refreshToken: "refreshToken123"
+
+    RefreshTokenResponse:
+        type: object
+        properties:
+          accessToken:
+            type: string
+            description: Nuevo access token generado
+        example:
+          accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC..."
+
+    # Esquema para MateriaProfesor #
+    MateriaProfesor:
+        type: object
+        required:
+          - materiaId
+          - profesorId
+        properties:
+          materiaId:
+            type: integer
+            description: ID de la materia asociada
+          profesorId:
+            type: integer
+            description: ID del profesor asociado
+        example:
+          materiaId: 101
+          profesorId: 202
+
+    # Esquema para Materias #
+    Materias:
+        type: object
+        required:
+          - name
+          - description
+        properties:
+          name:
+            type: string
+            description: Nombre de la materia
+          description:
+            type: string
+            description: Descripción de la materia
+        example:
+          name: "Matemáticas"
+          description: "Curso introductorio de álgebra y geometría"
+
+    # Esquema para MensajeReceptors #
+    MensajeReceptors:
+        type: object
+        required:
+          - mensajeId
+          - receptorId
+          - leido
+        properties:
+          mensajeId:
+            type: integer
+            description: ID del mensaje asociado
+          receptorId:
+            type: integer
+            description: ID del receptor del mensaje
+          leido:
+            type: boolean
+            description: Estado de lectura del mensaje
+          fechaLectura:
+            type: string
+            format: date-time
+            description: Fecha y hora en que el mensaje fue leído
+        example:
+          mensajeId: 501
+          receptorId: 202
+          leido: true
+          fechaLectura: "2025-12-12T23:00:00Z"
+
+    # Esquema para Mensajes #
+    Mensajes:
+        type: object
+        required:
+          - periodo
+          - asunto
+          - mensaje
+          - emisorId
+          - fechaEnvio
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico o temporal del mensaje
+          asunto:
+            type: string
+            description: Asunto del mensaje
+          mensaje:
+            type: string
+            description: Contenido del mensaje
+          emisorId:
+            type: integer
+            description: ID del emisor del mensaje
+          isReaded:
+            type: boolean
+            description: Indica si el mensaje ha sido leído
+          isArchived:
+            type: boolean
+            description: Indica si el mensaje ha sido archivado
+          fechaEnvio:
+            type: string
+            format: date-time
+            description: Fecha y hora de envío del mensaje
+        example:
+          periodo: "2025-Q1"
+          asunto: "Reunión de coordinación"
+          mensaje: "La reunión será el lunes a las 10 AM en la sala principal."
+          emisorId: 12
+          isReaded: false
+          isArchived: false
+          fechaEnvio: "2025-12-12T23:00:00Z"
+
+    # Esquema para Notas #
+    Notas:
+        type: object
+        required:
+          - periodo
+          - alumnoId
+          - materiaId
+          - usuarioId
+          - tipo
+          - nota
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico en el que se registra la nota
+          alumnoId:
+            type: integer
+            description: ID del alumno asociado
+          materiaId:
+            type: integer
+            description: ID de la materia asociada
+          usuarioId:
+            type: integer
+            description: ID del usuario/profesor que registra la nota
+          tipo:
+            type: string
+            description: Tipo de nota (ej. examen, tarea, proyecto)
+          nota:
+            type: number
+            format: decimal
+            description: Valor numérico de la nota
+        example:
+          periodo: "2025-Q1"
+          alumnoId: 15
+          materiaId: 101
+          usuarioId: 34
+          tipo: "Examen Final"
+          nota: 8.5
+
+    # Esquema para SeccionAlumnos #
+    SeccionAlumnos:
+        type: object
+        required:
+          - periodo
+          - seccionId
+          - alumnoId
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico en el que se asigna la sección
+          seccionId:
+            type: integer
+            description: ID de la sección asociada
+          alumnoId:
+            type: integer
+            description: ID del alumno asignado a la sección
+        example:
+          periodo: "2025-Q1"
+          seccionId: 12
+          alumnoId: 45
+
+    # Esquema para Secciones #
+    Secciones:
+        type: object
+        required:
+          - periodo
+          - name
+          - profesorId
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico en el que se crea la sección
+          name:
+            type: string
+            description: Nombre de la sección
+          profesorId:
+            type: integer
+            description: ID del profesor asignado a la sección
+        example:
+          periodo: "2025-Q1"
+          name: "Sección A"
+          profesorId: 34
+
+    # Esquema para  SeccionProfesor#
+    SeccionProfesor:
+        type: object
+        required:
+          - periodo
+          - seccionId
+          - profesorId
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico en el que se asigna la sección
+          seccionId:
+            type: integer
+            description: ID de la sección asociada
+          profesorId:
+            type: integer
+            description: ID del profesor asignado a la sección
+        example:
+          periodo: "2025-Q1"
+          seccionId: 12
+          profesorId: 34
+
+    # Esquema para usuarios #
     User:
       type: object
       required:
-        - userName
-        - pass
-        - email
+          - userName
+          - pass
+          - email
+          - active
+          - roleId
       properties:
-        userName:
-          type: string
-        pass:
-          type: string
-          format: password
-        email:
-          type: string
-        active:
-          type: boolean
-        roleId:
-          type: integer
+          userName:
+            type: string
+            description: Nombre de usuario
+          pass:
+            type: string
+            description: Contraseña del usuario
+          email:
+            type: string
+            format: email
+            description: Correo electrónico del usuario
+          active:
+            type: boolean
+            description: Estado de actividad del usuario
+          roleId:
+            type: integer
+            description: Rol asignado al usuario (por defecto 1)
+            default: 1
       example:
-        username: "mperez"
-        password: "Example3@"
-        email: "mperez@example.com"
-
-
-    DataUser:
-      type: object
-      required:
-        - name
-        - lastname
-        - direccion
-        - telefono
-      properties:
-        name:
-          type: string
-        lastname:
-          type: string
-        direccion:
-          type: string
-        telefono:
-          type: string
+          userName: "isaac_backend"
+          pass: "securePassword123"
+          email: "isaac@example.com"
+          active: true
+          roleId: 1  

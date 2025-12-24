@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const {getAll, getById, create, update, validate, deleteR} = require("../controllers/asistenciaControllers");
+const {getAll, getById, create, update, validate, deleteR} = require("../controllers/actividadesControllers");
 
 router.get("/", (req, res) => {
   res.json({ Actividades: "aqui" });

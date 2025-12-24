@@ -1,0 +1,605 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Actividades:
+      type: object
+      required:
+        - periodo
+        - name
+        - descripcion
+        - userId
+        - estado
+        - fechaInicio
+        - fechaFinal
+        - horaInicio
+        - horaFinal
+        - ubicacion
+        - objetivo
+      properties:
+        periodo:
+          type: string
+        name:
+          type: string
+        descripcion:
+          type: string
+        userId:
+          type: integer
+        estado:
+          type: boolean
+        fechaInicio:
+          type: string
+          format: date
+        fechaFinal:
+          type: string
+          format: date
+        horaInicio:
+          type: string
+          format: time
+        horaFinal:
+          type: string
+          format: time
+        ubicacion:
+          type: string
+        objetivo:
+          type: string
+      example:
+        periodo: "2025-Q1"
+        name: "Taller de Backend"
+        descripcion: "Capacitación intensiva en Node.js y Redis"
+        userId: 12
+        estado: true
+        fechaInicio: "2025-01-15"
+        fechaFinal: "2025-01-20"
+        horaInicio: "09:00:00"
+        horaFinal: "17:00:00"
+        ubicacion: "Sala 3, Centro de Innovación"
+        objetivo: "Mejorar las habilidades de desarrollo backend"
+
+    # Esquema para Asistencia #
+    Asistencia:
+        type: object
+        required:
+          - actividadId
+          - alumnoId
+          - profesorId
+          - estado
+        properties:
+          actividadId:
+            type: integer
+            description: ID de la actividad asociada
+          alumnoId:
+            type: integer
+            description: ID del alumno
+          profesorId:
+            type: integer
+            description: ID del profesor
+          estado:
+            type: string
+            description: Estado de la asistencia (ej. "presente", "ausente", "justificado")
+        example:
+          actividadId: 101
+          alumnoId: 202
+          profesorId: 303
+          estado: "presente"
+
+    # Esquema para Config #
+    Config:
+        type: object
+        required:
+          - clave
+          - valor
+          - tipo
+        properties:
+          clave:
+            type: string
+            description: Clave de configuración
+          valor:
+            type: string
+            description: Valor asociado a la clave
+          tipo:
+            type: string
+            enum: [INTEGER, STRING, BOOLEAN]
+            description: Tipo de dato del valor
+            default: STRING
+        example:
+          clave: "maxUsers"
+          valor: "100"
+          tipo: "INTEGER"
+
+    # Esquema para dataUser #
+    DataUser:
+        type: object
+        required:
+          - firstName
+          - lastName
+          - address
+          - telefono
+        properties:
+          firstName:
+            type: string
+            description: Nombre del usuario
+          lastName:
+            type: string
+            description: Apellido del usuario
+          address:
+            type: string
+            description: Dirección del usuario
+          telefono:
+            type: string
+            description: Teléfono de contacto
+        example:
+          firstName: "Isaac"
+          lastName: "Martínez"
+          address: "Av. Central 123, Grande Prairie"
+          telefono: "+1-780-555-1234"
+
+    # Esquema para EncargadoAlumnos #
+    EncargadoAlumnos:
+        type: object
+        required:
+          - alumnoId
+          - encargadoId
+        properties:
+          alumnoId:
+            type: integer
+            description: ID del alumno asociado
+          encargadoId:
+            type: integer
+            description: ID del encargado asociado
+        example:
+          alumnoId: 15
+          encargadoId: 7
+
+    # Esquema para Horarios #
+    Horarios:
+        type: object
+        required:
+          - periodo
+          - seccionId
+          - profesorId
+          - dia
+          - inicio
+          - final
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico del horario
+          seccionId:
+            type: integer
+            description: ID de la sección asociada
+          profesorId:
+            type: integer
+            description: ID del profesor asignado
+          dia:
+            type: string
+            description: Día de la semana
+          inicio:
+            type: string
+            format: time
+            description: Hora de inicio
+          final:
+            type: string
+            format: time
+            description: Hora de finalización
+        example:
+          periodo: "2025-Q1"
+          seccionId: 12
+          profesorId: 34
+          dia: "Lunes"
+          inicio: "08:00:00"
+          final: "10:00:00"
+      
+    # Esquema para Auth #
+    LoginRequest:
+        type: object
+        required:
+          - userName
+          - pass
+        properties:
+          userName:
+            type: string
+            description: Nombre de usuario
+          pass:
+            type: string
+            format: password
+            description: Contraseña del usuario
+        example:
+          userName: "isaac"
+          pass: "123456"
+
+    RegisterRequest:
+        type: object
+        required:
+          - userName
+          - pass
+          - rol
+        properties:
+          userName:
+            type: string
+          pass:
+            type: string
+            format: password
+          rol:
+            type: string
+            description: Rol del usuario (ej. "guest")
+          email:
+            type: string
+            format: email
+          datosPersonales:
+            $ref: '#/components/schemas/DataUser'
+        example:
+          userName: "isaac"
+          pass: "123456"
+          rol: "guest"
+          email: "isaac@example.com"
+          datosPersonales:
+            firstName: "Isaac"
+            lastName: "Martínez"
+            address: "Av. Central 123"
+            telefono: "+1-780-555-1234"
+
+    RegisterResponse:
+        type: object
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          result:
+            $ref: '#/components/schemas/DataUser'
+        example:
+          message: "En las siguientes 24 horas se enviara un correo para la activacion de su cuenta"
+          success: true
+          result:
+            firstName: "Isaac"
+            lastName: "Martínez"
+            address: "Av. Central 123"
+            telefono: "+1-780-555-1234"
+
+    ForgotPassRequest:
+        type: object
+        required:
+          - id
+          - pass
+          - rol
+        properties:
+          id:
+            type: integer
+          pass:
+            type: string
+            format: password
+          rol:
+            type: string
+        example:
+          id: 1
+          pass: "nuevaClave123"
+          rol: "guest"
+
+    ForgotPassResponse:
+        type: object
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          result:
+            type: object
+            description: Resultado de la actualización
+        example:
+          message: "Contraseña actualizada correctamente"
+          success: true
+          result: { "affectedRows": 1 }
+
+    ActivateAccountRequest:
+        type: object
+        required:
+          - id
+          - rol
+        properties:
+          id:
+            type: integer
+          rol:
+            type: string
+        example:
+          id: 1
+          rol: "guest"
+
+    ActivateAccountResponse:
+        type: object
+        properties:
+          message:
+            type: string
+          success:
+            type: boolean
+          result:
+            type: object
+            description: Resultado de la activación
+        example:
+          message: "cuenta activada correctamente"
+          success: true
+          result: { "affectedRows": 1 }
+
+    GenerateTokenRequest:
+        type: object
+        required:
+          - Token
+        properties:
+          Token:
+            type: string
+            description: Token base para generar accessToken
+        example:
+          Token: "refreshToken123"
+
+    GenerateTokenResponse:
+        type: object
+        properties:
+          accessToken:
+            type: string
+            description: Nuevo access token generado
+        example:
+          accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC..."
+
+    RefreshTokenRequest:
+        type: object
+        required:
+          - refreshToken
+        properties:
+          refreshToken:
+            type: string
+            description: Refresh token válido
+        example:
+          refreshToken: "refreshToken123"
+
+    RefreshTokenResponse:
+        type: object
+        properties:
+          accessToken:
+            type: string
+            description: Nuevo access token generado
+        example:
+          accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC..."
+
+    # Esquema para MateriaProfesor #
+    MateriaProfesor:
+        type: object
+        required:
+          - materiaId
+          - profesorId
+        properties:
+          materiaId:
+            type: integer
+            description: ID de la materia asociada
+          profesorId:
+            type: integer
+            description: ID del profesor asociado
+        example:
+          materiaId: 101
+          profesorId: 202
+
+    # Esquema para Materias #
+    Materias:
+        type: object
+        required:
+          - name
+          - description
+        properties:
+          name:
+            type: string
+            description: Nombre de la materia
+          description:
+            type: string
+            description: Descripción de la materia
+        example:
+          name: "Matemáticas"
+          description: "Curso introductorio de álgebra y geometría"
+
+    # Esquema para MensajeReceptors #
+    MensajeReceptors:
+        type: object
+        required:
+          - mensajeId
+          - receptorId
+          - leido
+        properties:
+          mensajeId:
+            type: integer
+            description: ID del mensaje asociado
+          receptorId:
+            type: integer
+            description: ID del receptor del mensaje
+          leido:
+            type: boolean
+            description: Estado de lectura del mensaje
+          fechaLectura:
+            type: string
+            format: date-time
+            description: Fecha y hora en que el mensaje fue leído
+        example:
+          mensajeId: 501
+          receptorId: 202
+          leido: true
+          fechaLectura: "2025-12-12T23:00:00Z"
+
+    # Esquema para Mensajes #
+    Mensajes:
+        type: object
+        required:
+          - periodo
+          - asunto
+          - mensaje
+          - emisorId
+          - fechaEnvio
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico o temporal del mensaje
+          asunto:
+            type: string
+            description: Asunto del mensaje
+          mensaje:
+            type: string
+            description: Contenido del mensaje
+          emisorId:
+            type: integer
+            description: ID del emisor del mensaje
+          isReaded:
+            type: boolean
+            description: Indica si el mensaje ha sido leído
+          isArchived:
+            type: boolean
+            description: Indica si el mensaje ha sido archivado
+          fechaEnvio:
+            type: string
+            format: date-time
+            description: Fecha y hora de envío del mensaje
+        example:
+          periodo: "2025-Q1"
+          asunto: "Reunión de coordinación"
+          mensaje: "La reunión será el lunes a las 10 AM en la sala principal."
+          emisorId: 12
+          isReaded: false
+          isArchived: false
+          fechaEnvio: "2025-12-12T23:00:00Z"
+
+    # Esquema para Notas #
+    Notas:
+        type: object
+        required:
+          - periodo
+          - alumnoId
+          - materiaId
+          - usuarioId
+          - tipo
+          - nota
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico en el que se registra la nota
+          alumnoId:
+            type: integer
+            description: ID del alumno asociado
+          materiaId:
+            type: integer
+            description: ID de la materia asociada
+          usuarioId:
+            type: integer
+            description: ID del usuario/profesor que registra la nota
+          tipo:
+            type: string
+            description: Tipo de nota (ej. examen, tarea, proyecto)
+          nota:
+            type: number
+            format: decimal
+            description: Valor numérico de la nota
+        example:
+          periodo: "2025-Q1"
+          alumnoId: 15
+          materiaId: 101
+          usuarioId: 34
+          tipo: "Examen Final"
+          nota: 8.5
+
+    # Esquema para SeccionAlumnos #
+    SeccionAlumnos:
+        type: object
+        required:
+          - periodo
+          - seccionId
+          - alumnoId
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico en el que se asigna la sección
+          seccionId:
+            type: integer
+            description: ID de la sección asociada
+          alumnoId:
+            type: integer
+            description: ID del alumno asignado a la sección
+        example:
+          periodo: "2025-Q1"
+          seccionId: 12
+          alumnoId: 45
+
+    # Esquema para Secciones #
+    Secciones:
+        type: object
+        required:
+          - periodo
+          - name
+          - profesorId
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico en el que se crea la sección
+          name:
+            type: string
+            description: Nombre de la sección
+          profesorId:
+            type: integer
+            description: ID del profesor asignado a la sección
+        example:
+          periodo: "2025-Q1"
+          name: "Sección A"
+          profesorId: 34
+
+    # Esquema para  SeccionProfesor#
+    SeccionProfesor:
+        type: object
+        required:
+          - periodo
+          - seccionId
+          - profesorId
+        properties:
+          periodo:
+            type: string
+            description: Periodo académico en el que se asigna la sección
+          seccionId:
+            type: integer
+            description: ID de la sección asociada
+          profesorId:
+            type: integer
+            description: ID del profesor asignado a la sección
+        example:
+          periodo: "2025-Q1"
+          seccionId: 12
+          profesorId: 34
+
+    # Esquema para usuarios #
+    User:
+      type: object
+      required:
+          - userName
+          - pass
+          - email
+          - active
+          - roleId
+      properties:
+          userName:
+            type: string
+            description: Nombre de usuario
+          pass:
+            type: string
+            description: Contraseña del usuario
+          email:
+            type: string
+            format: email
+            description: Correo electrónico del usuario
+          active:
+            type: boolean
+            description: Estado de actividad del usuario
+          roleId:
+            type: integer
+            description: Rol asignado al usuario (por defecto 1)
+            default: 1
+      example:
+          userName: "isaac_backend"
+          pass: "securePassword123"
+          email: "isaac@example.com"
+          active: true
+          roleId: 1

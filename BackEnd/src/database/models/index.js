@@ -7,7 +7,7 @@ const process = require("process");
 const basename = path.basename(__filename);
 
 //Archivo de configuracion
-const config = require("../../config/config.js")
+const config = require("@config/config.js")
 
 //objeto db
 const db = {};

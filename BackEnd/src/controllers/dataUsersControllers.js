@@ -1,5 +1,4 @@
-const { dataUser } = require("../database/models/index");
-const { User } = require("../database/models/index");
+const { dataUser, user } = require("@models/index");
 
 const getAll = async (req, res) => {
   try {
@@ -7,7 +6,7 @@ const getAll = async (req, res) => {
       attributes: { exclude: ["userId", "createdAt", "updatedAt"] },
       include: [
         {
-          model: User,
+          model: user,
           attributes: { exclude: ["pass", "createdAt", "updatedAt"] },
           as: "Usuario",
         },
@@ -15,6 +14,7 @@ const getAll = async (req, res) => {
     });
     res.json(dataUsers);
   } catch (error) {
+    console.log(error);
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,
@@ -25,13 +25,12 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   try {
     const { userId } = req.query;
-    console.log(req.query);
     let dataUsers = await dataUser.findOne({
       where: {userId},
       attributes: { exclude: ["userId", "createdAt", "updatedAt"] },
       include: [
         {
-          model: User,
+          model: user,
           attributes: { exclude: ["id", "pass", "createdAt", "updatedAt"] },
           as: "Usuario",
         },
@@ -48,7 +47,6 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    console.log(req.body);
     const data = req.body;
     let resp = await dataUser.create(data, {
       attributes: { exclude: ["createdAt", "updatedAt"] },
@@ -66,7 +64,6 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const data = req.body;
-    console.log(data);
     let resp = await dataUser.update(data, {
       where: { id: data.id },
     });
