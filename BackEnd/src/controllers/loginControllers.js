@@ -1,11 +1,11 @@
 const { where } = require("sequelize");
-const { User, dataUser } = require("../database/models/index");
+const { user, dataUser } = require("../database/models/index");
 const { refreshAccessToken, auth, validatePassword, hashPassword } = require('@services/auth');
 
 const login = async (req, res) => {
   try {
     const { userName, pass } = req.body;
-    const user = await User.findOne({
+    const resp = await user.findOne({
       where: { userName },
       attributes: ["id", "roleId", "pass"],
       include: [{
@@ -17,11 +17,11 @@ const login = async (req, res) => {
       nest: true
     });
 
-    if (!user) {
+    if (!resp) {
       return res.status(404).json({ error: 'Usuario o Contraseña incorrecto.' });
     }
 
-    const hashedPassword = user?.pass;
+    const hashedPassword = resp?.pass;
     if (!hashedPassword) {
       return res.status(400).json({ error: 'Usuario o Contraseña incorrecto.' });
     }
@@ -31,10 +31,10 @@ const login = async (req, res) => {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    const token = await auth({ id: user.id, roleId: user.roleId });
+    const token = await auth({ id: resp.id, roleId: resp.roleId });
     res.json({
-      id: user.id,
-      datosPersonales: user.datosPersonales,
+      id: resp.id,
+      datosPersonales: resp.datosPersonales,
       token: token
     });
 
@@ -57,7 +57,7 @@ const register = async (req, res) => {
   }
   if (role || role === 'guest') {
     user.pass = await hashPassword(user.pass);
-    let result = await User.create(user);
+    let result = await user.create(user);
     delete result.dataValues.pass;
     delete result.dataValues.roleId;
     delete result.dataValues.id;
@@ -85,7 +85,7 @@ const forgotPass = async (req, res) => {
   }
   if (role || role === 'guest') {
     user.pass = await hashPassword(user.pass);
-    let result = await User.update(user, { where: { id } });
+    let result = await user.update(user, { where: { id } });
     res.status(200).json({
       message: "Contraseña actualizada correctamente",
       success: true,
@@ -104,7 +104,7 @@ const activateAccount = async (req, res) => {
     delete user.roleId;
   }
   if (rol || rol === 'guest') {
-    let result = await User.update(user, { where: { id } });
+    let result = await user.update(user, { where: { id } });
     res.status(200).json({
       message: "cuenta activada correctamente",
       success: true,

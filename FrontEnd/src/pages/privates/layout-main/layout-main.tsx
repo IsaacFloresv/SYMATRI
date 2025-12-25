@@ -11,6 +11,14 @@ type Props = {
 }
 
 export default function LayoutMain({ children }: Props) {
+  const session = JSON.parse(localStorage.getItem("session") || "null");
+
+  if (!session) {
+    return null; // o un loader
+  }
+
+  const { role, datosPersonales } = session;
+  
   return (
     <>
       <SidebarProvider
@@ -21,9 +29,9 @@ export default function LayoutMain({ children }: Props) {
           } as React.CSSProperties
         }
       >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="inset" role={role}/>
       <SidebarInset>
-      <SiteHeader />
+      <SiteHeader datosPersonales={datosPersonales as any}/>
       {children}
       </SidebarInset>
        </SidebarProvider>

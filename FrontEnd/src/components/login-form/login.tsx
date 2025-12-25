@@ -12,14 +12,14 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
 
-  const { form, loginMutation, onSubmit, onError } = useAuth()
+  const { form, loginMutation, onSubmit } = useAuth()
 
   return (
     <div className={cn("total-login flex flex-col gap-6", className)} {...props}>
       <Card className="bg-blur overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <Form {...form}>
-            <form className="p-6 md:p-8" onSubmit={form.handleSubmit(onSubmit, onError)}>
+            <form className="p-6 md:p-8" onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
                   <h1 className="text-2xl font-bold">Bienvenido</h1>
@@ -30,12 +30,12 @@ export function LoginForm({
                 <div className="grid gap-3">
                   <FormField
                     control={form.control}
-                    name="email_user"
+                    name="name_user"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Correo Electronico</FormLabel>
+                        <FormLabel>Usuario</FormLabel>
                         <FormControl>
-                          <Input placeholder="ejemplo@ejemplo.com"{...field} />
+                          <Input placeholder="nombreApellido"{...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -71,7 +71,7 @@ export function LoginForm({
                 <div className="text-center text-sm">
                   No tiene una cuenta?{" "}
                   <a href="#" className="underline underline-offset-4">
-                     Registrate
+                    Registrate
                   </a>
                 </div>
               </div>

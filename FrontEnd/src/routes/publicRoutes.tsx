@@ -1,15 +1,20 @@
-import { Navigate } from "react-router";
+import { Navigate } from "react-router-dom";
 import type { ReactNode } from "react";
 
 type Props = {
-    children : ReactNode;
+    children: ReactNode;
 }
 export function PublicRoutes({ children }: Props) {
-    const user = localStorage.getItem("user");
-    
-    if (user) {
-        return <Navigate to="/dashboard" />;
+    const sessionRaw = localStorage.getItem("session");
+    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+
+    if (session) {
+        return <Navigate to="/login" />;
     }
 
-  return children;
+    return (
+        <>
+            {children}
+        </>
+    )
 }

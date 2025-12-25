@@ -525,7 +525,7 @@ paths:
           description: Error de validación
 
 # paths para auth #
-  /auth/login:
+  /begin/login:
     post:
       summary: Iniciar sesión
       tags: [Auth]
@@ -541,7 +541,7 @@ paths:
         '401':
           description: Credenciales inválidas
 
-  /auth/register:
+  /begin/register:
     post:
       summary: Registrar nuevo usuario
       tags: [Auth]
@@ -556,7 +556,7 @@ paths:
           description: Usuario registrado
         '400':
           description: Error en los datos de registro
-  /auth/forgotPass:
+  /begin/forgotPass:
     patch:
       summary: Solicitar recuperación de contraseña
       tags: [Auth]
@@ -572,7 +572,7 @@ paths:
         '404':
           description: Usuario no encontrado
 
-  /auth/activateAccount:
+  /begin/activateAccount:
     patch:
       summary: Activar cuenta de usuario
       tags: [Auth]

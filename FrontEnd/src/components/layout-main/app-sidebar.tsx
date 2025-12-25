@@ -1,28 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  //IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
-} from "@tabler/icons-react"
-
-//import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/layout-main/nav-main"
-//import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/layout-main/nav-user"
+import * as React from "react";
+import { NavMain } from "@/components/layout-main/nav-main";
+import { NavUser } from "@/components/layout-main/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -31,131 +11,39 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { getMe } from "@/services/authServices"
+} from "@/components/ui/sidebar";
 
-const user = localStorage.getItem("user") || "";
-const dataUser = await getMe(user);
-
-
-const data = {
-  user: {
-    name: dataUser.name,
-    email: dataUser.email,
-    avatar: "../../src/assets/adminis.png",
-  },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
-    },
-    {
-      title: "Calendario",
-      url: "#",
-      icon: IconListDetails,
-    },
-    {
-      title: "Materias",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Profesores",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Secciones",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
-}
+import { moduleMap } from "@/config/moduleMaps";
+import type { ModuleConfig } from "@/config/moduleMaps";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  // Obtener la sesión
+  const sessionRaw = localStorage.getItem("session");
+  const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+
+  // Validar sesión y módulos
+  const modulos = Array.isArray(session?.modulos) ? session.modulos : [];
+  const datos = session?.datosPersonales;
+
+  if (!session || !datos) return null;
+
+  // Construir menú dinámico
+  const navMain = modulos
+    .map((id: number) => moduleMap[id])
+    .filter(Boolean)
+    .map((m: ModuleConfig) => ({
+      title: m.label,
+      url: m.path,
+      icon: m.icon,
+    }));
+
+  // Datos del usuario para el footer
+  const userData = {
+    name: `${datos.firstName} ${datos.lastName}`,
+    email: datos.email || "sin-email",
+    avatar: "/avatar.png", // puedes personalizar esto luego
+  };
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -172,12 +60,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navMain} />
       </SidebarContent>
+
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

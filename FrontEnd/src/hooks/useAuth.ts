@@ -1,49 +1,39 @@
-import { useForm } from "react-hook-form";
-import { loginSchema, type loginData } from "../schemas/authSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { validateLogin } from "../services/authServices";
-import { useNavigate } from "react-router";
 import { useAuthStorage } from "./useAuthStorage";
-
+import { login } from "@/services/authServices";
+import { useForm } from "react-hook-form";
+import type { loginData } from "@/schemas/authSchema";
 
 export const useAuth = () => {
-    const navigate = useNavigate();
-    const { setUser } = useAuthStorage();
+  const navigate = useNavigate();
+  const setUser = useAuthStorage((state) => state.setUser);
 
-    const form = useForm({
-        resolver: zodResolver(loginSchema),
-        defaultValues: {
-            email_user: "",
-            password_user: ""
-        }
-    })
+  const form = useForm<loginData>({
+    defaultValues: { name_user: "", password_user: "" },
+  });
 
-    const loginMutation = useMutation({
-        mutationFn: async (data: loginData) => {
-            const response = await validateLogin(data);
-            localStorage.setItem("user", response.email);
-            navigate("/dashboard/admin");
-            setUser(response.email);
-            return response;
-        },
-        onSuccess: (data: loginData) => { console.log("Login exitoso:", data); },
-        onError: (error) => { console.error("Error en login:", error); }
-    });
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: (fullSession) => {
+      // Guardar sesión completa en Zustand
+      setUser(fullSession);
 
-    const onSubmit = (data: loginData) => {
-        loginMutation.mutate({ email_user: data.email_user, password_user: data.password_user });
-    }
+      // Navegar al dashboard
+      navigate("/dashboard/admin");
+    },
+    onError: (err) => console.error(err),
+  });
 
-    const onError = (errors: unknown) => {
-        console.error("Errores en el formulario:", errors);
-    }
+  const onSubmit = (data: loginData) => loginMutation.mutate(data);
 
-    const onLogout = () => {
-        localStorage.removeItem("user");
-        useAuthStorage.getState().setUser(null);
-        navigate("/login");
-    }
+  const onLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
 
-    return { form, loginMutation, onSubmit, onError, onLogout };
-}
+  return { form, loginMutation, onSubmit, onLogout };
+};

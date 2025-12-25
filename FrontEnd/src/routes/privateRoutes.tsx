@@ -1,25 +1,22 @@
-import { Navigate } from "react-router";
+import { Navigate } from "react-router-dom";
 import type { ReactNode } from "react";
 
 import LayoutMain from "@/pages/privates/layout-main/layout-main";
 
 type Props = {
-    children : ReactNode;
+    children: ReactNode;
 }
 export function PrivateRoutes({ children }: Props) {
-    const user = localStorage.getItem("user");
+    const sessionRaw = localStorage.getItem("session");
+    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
 
-    if (!user) {
-        return 
-                <Navigate to="/" />
-                
+    if (!session) {
+        return <Navigate to="/login" />;
     }
 
-  return (
-            <>
-            <LayoutMain>
-              {children};
-              </LayoutMain>
-       </>
+    return (
+        <LayoutMain>
+            {children}
+        </LayoutMain>
     )
 }
