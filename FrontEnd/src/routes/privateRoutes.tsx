@@ -11,7 +11,7 @@ export function PrivateRoutes({ children }: Props) {
     const session = sessionRaw ? JSON.parse(sessionRaw) : null;
 
     if (!session) {
-        return <Navigate to="/login" />;
+        return <Navigate to="/login" replace />;
     }
 
     return (

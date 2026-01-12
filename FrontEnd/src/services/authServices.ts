@@ -24,6 +24,7 @@ export async function login(credentials: loginData) {
       pass: credentials.password_user,
     }),
   });
+ 
 
   if (!response.ok) {
     throw new Error("Credenciales incorrectas");
@@ -33,7 +34,7 @@ export async function login(credentials: loginData) {
 
   // 2. Obtener rol
   const roleResponse = await fetch(
-    `http://localhost:4321/roles/byId?id=${session.id}`,
+    `http://localhost:4321/roles/byId?id=${session.roleId}`,
     {
       headers: {
         Authorization: `Bearer ${session.token}`,
@@ -51,8 +52,6 @@ export async function login(credentials: loginData) {
     role: roleData.nombre,
     modulos: roleData.modulos, 
   };
-
-  console.log("Full Session:", fullSession);
 
   // 4. Guardar en localStorage
   localStorage.setItem("session", JSON.stringify(fullSession));

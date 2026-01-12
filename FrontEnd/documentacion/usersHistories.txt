@@ -1,0 +1,5 @@
+Profesor
+    1- Dashboard
+        - ventana modal con informacion del evento al que le de click
+        - ventana modal con informacion de la seccion al que le de click
+    2- Ventana de Calificaciones

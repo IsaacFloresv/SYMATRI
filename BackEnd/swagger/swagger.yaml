@@ -1359,7 +1359,7 @@ paths:
           description: Asignación no encontrada
 
 # paths para usuarios #
-  /user/all:
+  /users/all:
     get:
       summary: Obtener todos los usuarios
       tags: [User]
@@ -1373,7 +1373,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
 
-  /user/byid:
+  /users/byid:
     get:
       summary: Obtener usuario por ID
       tags: [User]
@@ -1393,7 +1393,7 @@ paths:
         '404':
           description: Usuario no encontrado
 
-  /user/create:
+  /users/create:
     post:
       summary: Crear nuevo usuario
       tags: [User]
@@ -1407,7 +1407,7 @@ paths:
         '201':
           description: Usuario creado
 
-  /user/update:
+  /users/update:
     put:
       summary: Actualizar usuario existente
       tags: [User]
@@ -1423,7 +1423,7 @@ paths:
         '404':
           description: Usuario no encontrado
 
-  /user/validate:
+  /users/validate:
     patch:
       summary: Validar usuario
       tags: [User]
@@ -1439,7 +1439,7 @@ paths:
         '400':
           description: Error de validación
 
-  /user/delete:
+  /users/delete:
     patch:
       summary: Eliminar usuario
       tags: [User]

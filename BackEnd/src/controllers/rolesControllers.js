@@ -16,7 +16,7 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.query;
     let Rol = await roles.findOne({
       where: {id},
       attributes: {

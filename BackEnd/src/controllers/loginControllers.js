@@ -34,6 +34,7 @@ const login = async (req, res) => {
     const token = await auth({ id: resp.id, roleId: resp.roleId });
     res.json({
       id: resp.id,
+      roleId: resp.roleId,
       datosPersonales: resp.datosPersonales,
       token: token
     });

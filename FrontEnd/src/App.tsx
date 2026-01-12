@@ -7,8 +7,6 @@ import { router } from './routes/routes.tsx';
 // Styles
 import './App.css'
 
-//hooks and services
-
 function App() {
 
   return (

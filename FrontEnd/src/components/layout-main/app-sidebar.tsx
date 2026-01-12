@@ -41,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const userData = {
     name: `${datos.firstName} ${datos.lastName}`,
     email: datos.email || "sin-email",
-    avatar: "/avatar.png", // puedes personalizar esto luego
+    avatar: "../../src/assets/adminis.png", // puedes personalizar esto luego
   };
 
   return (

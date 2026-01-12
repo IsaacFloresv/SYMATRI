@@ -18,9 +18,13 @@ export const useAuth = () => {
     onSuccess: (fullSession) => {
       // Guardar sesión completa en Zustand
       setUser(fullSession);
+      let role = fullSession.role.toLowerCase();
+      if(role === "admin1") role = "admin";
+      if(role === "admin2") role = "admin";
+      if(role === "alumno") role = "student";
 
       // Navegar al dashboard
-      navigate("/dashboard/admin");
+      navigate(`/dashboard/${role}`);
     },
     onError: (err) => console.error(err),
   });
