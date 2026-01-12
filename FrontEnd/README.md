@@ -8,3 +8,9 @@ Instruccion para guardar en GIT
   6- Enter
   7- comando => git push origin main
   8- Enter
+
+Nota:
+Trabajar sobre el archivo prueba.html para ir eliminando las lineas innecesariar de los archivos del stich:
+https://stitch.withgoogle.com/projects/13471705697108548936
+
+si alguna ventana esta repetida, agregar una nota en el archivo userHistories.txt de la carpeta FrontEnd/documentacion, la nota puede decir solo ventana 'X' repetida
