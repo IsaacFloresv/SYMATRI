@@ -1,3 +1,15 @@
+Notas para la creacion de los archivos de ventana:
+  1- En el archivo creado colocar esto:
+       export default function ModalEvent() {
+            return (
+                codigo html del stitch
+            )}
+  2- El archivo de la ventana principal se llama page.tsx y los demas colocar nombreDescriptivo.tsx
+  3- No olvidar despues de pegar todo el codigo, click derecho formatear documento y cambiar con 
+        el atajo ctrl+s en Spanish y en ingles es ctrl+f para reemplazar la palabra class a className.
+
+Historias:
+
 Profesor
     1- Dashboard
         - ventana modal con informacion del evento al que le de click
