@@ -8,10 +8,21 @@ Notas para la creacion de los archivos de ventana:
   3- No olvidar despues de pegar todo el codigo, click derecho formatear documento y cambiar con 
         el atajo ctrl+s en Spanish y en ingles es ctrl+f para reemplazar la palabra class a className.
 
-Historias:
+Historias: 
 
 Profesor
     1- Dashboard
         - ventana modal con informacion del evento al que le de click
         - ventana modal con informacion de la seccion al que le de click
     2- Ventana de Calificaciones
+    3- Ventana comunicados
+        - lectura comunicado
+    4- Gestion Eventos
+    5- Informe Profesor
+    6- Notas alumnos 
+    7- registro asistencia
+
+Alumno    
+    1. Dashboard
+    
+    
