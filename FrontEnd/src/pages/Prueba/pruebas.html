@@ -1,9 +1,12 @@
 <!DOCTYPE html>
+
 <html class="dark" lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Gestión de Eventos</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -15,10 +18,6 @@
             "primary": "#1176d4",
             "background-light": "#f6f7f8",
             "background-dark": "#101922",
-            "card-dark": "#192733",
-            "border-dark": "#324d67",
-            "text-dark-primary": "#ffffff",
-            "text-dark-secondary": "#92aec9",
           },
           fontFamily: {
             "display": ["Lexend", "sans-serif"]
@@ -33,208 +32,138 @@
       },
     }
   </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display">
-
-<main class="flex-1 p-8">
-<div class="mx-auto max-w-7xl">
-<div class="flex flex-wrap items-start justify-between gap-4">
-<div class="flex flex-col gap-2">
-<h1 class="text-white text-3xl font-bold tracking-tight">Gestión de Eventos</h1>
-<p class="text-[#92aec9] text-base font-normal leading-normal">Visualiza y gestiona todos los eventos escolares.</p>
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<div class="flex h-full grow flex-col">
+<div class="flex flex-1 justify-center p-4 sm:p-6 lg:p-8">
+<div class="flex w-full max-w-7xl flex-col">
+<!-- Breadcrumbs and Page Heading -->
+<div class="mb-8">
+<div class="mt-2 flex flex-wrap justify-between gap-3">
+<p class="text-gray-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Administrar Eventos de Biología 101</p>
 </div>
 </div>
-<div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2">
-<div class="bg-card-dark rounded-xl p-4">
-<div class="flex items-center justify-between text-white">
-<button class="p-1"><span class="material-symbols-outlined">chevron_left</span></button>
-<h2 class="text-lg font-semibold">Octubre 2024</h2>
-<button class="p-1"><span class="material-symbols-outlined">chevron_right</span></button>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: Form -->
+<div class="lg:col-span-1 flex flex-col gap-6 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-6">
+<h2 class="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Crear Nuevo Evento</h2>
+<form class="flex flex-col gap-4">
+<label class="flex flex-col w-full">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Nombre del Evento</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324d67] bg-background-light dark:bg-[#192733] h-14 placeholder:text-gray-400 dark:placeholder:text-[#92aec9] p-[15px] text-base font-normal leading-normal" placeholder="Ej. Examen Parcial 1" value=""/>
+</label>
+<div class="flex flex-col sm:flex-row gap-4">
+<label class="flex flex-col min-w-0 flex-1">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Fecha</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324d67] bg-background-light dark:bg-[#192733] h-14 placeholder:text-gray-400 dark:placeholder:text-[#92aec9] p-[15px] text-base font-normal leading-normal" type="date"/>
+</label>
+<label class="flex flex-col min-w-0 flex-1">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Hora</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324d67] bg-background-light dark:bg-[#192733] h-14 placeholder:text-gray-400 dark:placeholder:text-[#92aec9] p-[15px] text-base font-normal leading-normal" type="time"/>
+</label>
 </div>
-<div class="mt-4 grid grid-cols-7 gap-2 text-center text-sm text-text-dark-secondary">
-<div>Do</div>
-<div>Lu</div>
-<div>Ma</div>
-<div>Mi</div>
-<div>Ju</div>
-<div>Vi</div>
-<div>Sá</div>
+<label class="flex flex-col w-full">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Descripción</p>
+<textarea class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324d67] bg-background-light dark:bg-[#192733] min-h-32 placeholder:text-gray-400 dark:placeholder:text-[#92aec9] p-[15px] text-base font-normal leading-normal" placeholder="Añade detalles adicionales sobre el evento..."></textarea>
+</label>
+<label class="flex flex-col w-full">
+<p class="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Sección</p>
+<div class="relative">
+<select class="form-select appearance-none flex w-full min-w-0 flex-1 overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324d67] bg-background-light dark:bg-[#192733] h-14 p-[15px] text-base font-normal leading-normal">
+<option>Toda la clase</option>
+<option>Sección A</option>
+<option>Sección B</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">expand_more</span>
 </div>
-<div class="mt-2 grid grid-cols-7 gap-1 text-center text-sm text-white">
-<div class="text-text-dark-secondary"></div>
-<div class="text-text-dark-secondary"></div>
-<div>1</div>
-<div>2</div>
-<div>3</div>
-<div>4</div>
-<div>5</div>
-<div>6</div>
-<div>7</div>
-<div>8</div>
-<div>9</div>
-<div>10</div>
-<div>11</div>
-<div>12</div>
-<div>13</div>
-<div>14</div>
-<div>15</div>
-<div>16</div>
-<div>17</div>
-<div>18</div>
-<div>19</div>
-<div>20</div>
-<div>21</div>
-<div>22</div>
-<div>23</div>
-<div>24</div>
-<div class="relative"><span class="bg-primary rounded-full size-8 flex items-center justify-center">25</span>
-<div class="absolute bottom-0 left-1/2 -translate-x-1/2 size-1 bg-yellow-400 rounded-full"></div>
+</label>
+<div class="flex flex-col sm:flex-row gap-3 pt-4">
+<button class="flex h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-gray-200 dark:bg-white/10 px-6 text-base font-semibold text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20" type="button">Cancelar</button>
+<button class="flex h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-primary px-6 text-base font-semibold text-white hover:bg-primary/90" type="submit">Guardar Evento</button>
 </div>
-<div>26</div>
-<div>27</div>
-<div>28</div>
-<div>29</div>
-<div>30</div>
-<div>31</div>
+</form>
 </div>
+<!-- Right Column: Events List -->
+<div class="lg:col-span-2 flex flex-col gap-4">
+<h2 class="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4">Próximos Eventos</h2>
+<div class="flex flex-col gap-3">
+<!-- Event Card 1 -->
+<div class="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-4 transition-all hover:shadow-md dark:hover:bg-[#192733]">
+<div class="flex flex-col items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 p-3 text-primary dark:text-blue-300">
+<span class="text-sm font-bold uppercase">OCT</span>
+<span class="text-2xl font-black">25</span>
 </div>
-<div class="bg-card-dark rounded-xl p-4">
-<div class="flex items-center justify-between text-white">
-<button class="p-1"><span class="material-symbols-outlined">chevron_left</span></button>
-<h2 class="text-lg font-semibold">Noviembre 2024</h2>
-<button class="p-1"><span class="material-symbols-outlined">chevron_right</span></button>
+<div class="flex-1">
+<p class="font-bold text-lg text-gray-900 dark:text-white">Examen Parcial 1</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">10:00 AM - Toda la clase</p>
 </div>
-<div class="mt-4 grid grid-cols-7 gap-2 text-center text-sm text-text-dark-secondary">
-<div>Do</div>
-<div>Lu</div>
-<div>Ma</div>
-<div>Mi</div>
-<div>Ju</div>
-<div>Vi</div>
-<div>Sá</div>
-</div>
-<div class="mt-2 grid grid-cols-7 gap-1 text-center text-sm text-white">
-<div class="text-text-dark-secondary"></div>
-<div class="text-text-dark-secondary"></div>
-<div class="text-text-dark-secondary"></div>
-<div class="text-text-dark-secondary"></div>
-<div class="text-text-dark-secondary"></div>
-<div>1</div>
-<div>2</div>
-<div>3</div>
-<div>4</div>
-<div>5</div>
-<div>6</div>
-<div>7</div>
-<div>8</div>
-<div>9</div>
-<div>10</div>
-<div>11</div>
-<div>12</div>
-<div>13</div>
-<div>14</div>
-<div class="relative"><span class="border border-primary rounded-full size-8 flex items-center justify-center">15</span>
-<div class="absolute bottom-0 left-1/2 -translate-x-1/2 size-1 bg-yellow-400 rounded-full"></div>
-</div>
-<div>16</div>
-<div>17</div>
-<div>18</div>
-<div>19</div>
-<div>20</div>
-<div>21</div>
-<div>22</div>
-<div>23</div>
-<div>24</div>
-<div>25</div>
-<div>26</div>
-<div>27</div>
-<div>28</div>
-<div>29</div>
-<div>30</div>
+<div class="flex items-center gap-2">
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-red-500/80 hover:bg-red-500/10 hover:text-red-500">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
 </div>
 </div>
+<!-- Event Card 2 -->
+<div class="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-4 transition-all hover:shadow-md dark:hover:bg-[#192733]">
+<div class="flex flex-col items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 p-3 text-primary dark:text-blue-300">
+<span class="text-sm font-bold uppercase">NOV</span>
+<span class="text-2xl font-black">12</span>
 </div>
-<div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
-<div class="lg:col-span-2">
-<div class="overflow-x-auto bg-card-dark rounded-xl">
-<table class="w-full text-left text-sm text-text-dark-secondary">
-<thead class="text-xs uppercase text-text-dark-secondary/70">
-<tr>
-<th class="px-6 py-3" scope="col">Título del Evento</th>
-<th class="px-6 py-3" scope="col">Tipo</th>
-<th class="px-6 py-3" scope="col">Fecha</th>
-</tr>
-</thead>
-<tbody>
-<tr class="cursor-pointer border-t border-border-dark bg-primary/20 text-text-dark-primary">
-<td class="px-6 py-4 font-medium">Reunión de Padres y Maestros</td>
-<td class="px-6 py-4">Reunión</td>
-<td class="px-6 py-4">25 de Oct, 2024</td>
-</tr>
-<tr class="cursor-pointer border-t border-border-dark hover:bg-card-dark/50">
-<td class="px-6 py-4 font-medium text-text-dark-primary">Feria de Ciencias Anual</td>
-<td class="px-6 py-4">Académico</td>
-<td class="px-6 py-4">15 de Nov, 2024</td>
-</tr>
-<tr class="cursor-pointer border-t border-border-dark hover:bg-card-dark/50">
-<td class="px-6 py-4 font-medium text-text-dark-primary">Torneo de Fútbol Interescolar</td>
-<td class="px-6 py-4">Deportivo</td>
-<td class="px-6 py-4">28 de Sep, 2024</td>
-</tr>
-<tr class="cursor-pointer border-t border-border-dark hover:bg-card-dark/50">
-<td class="px-6 py-4 font-medium text-text-dark-primary">Concierto de Invierno</td>
-<td class="px-6 py-4">Cultural</td>
-<td class="px-6 py-4">12 de Dic, 2024</td>
-</tr>
-</tbody>
-</table>
+<div class="flex-1">
+<p class="font-bold text-lg text-gray-900 dark:text-white">Entrega de Proyecto Final</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">11:59 PM - Sección A</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-red-500/80 hover:bg-red-500/10 hover:text-red-500">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
 </div>
 </div>
-<div class="bg-card-dark rounded-xl p-6">
-<div class="flex items-center justify-between">
-<h3 class="text-xl font-bold text-white">Detalles del Evento</h3>
-<div class="flex gap-2">
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-white/10 text-text-dark-secondary"><span class="material-symbols-outlined text-xl">edit</span></button>
-<button class="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-white/10 text-text-dark-secondary"><span class="material-symbols-outlined text-xl">delete</span></button>
+<!-- Event Card 3 -->
+<div class="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-4 transition-all hover:shadow-md dark:hover:bg-[#192733]">
+<div class="flex flex-col items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 p-3 text-primary dark:text-blue-300">
+<span class="text-sm font-bold uppercase">NOV</span>
+<span class="text-2xl font-black">20</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-lg text-gray-900 dark:text-white">Salida al Museo de Ciencias</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">08:00 AM - Toda la clase</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-red-500/80 hover:bg-red-500/10 hover:text-red-500">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
 </div>
 </div>
-<div class="mt-4 border-t border-border-dark pt-4">
-<h4 class="text-lg font-semibold text-white">Reunión de Padres y Maestros</h4>
-<p class="mt-2 text-sm text-text-dark-secondary">Reunión trimestral para discutir el progreso de los estudiantes y los próximos eventos escolares.</p>
-<div class="mt-6 space-y-4 text-sm">
-<div class="flex items-start">
-<span class="material-symbols-outlined text-primary mr-3 mt-0.5 text-lg">calendar_today</span>
-<div>
-<p class="font-medium text-white">Fecha y Hora</p>
-<p class="text-text-dark-secondary">25 de Octubre, 2024 - 6:00 PM</p>
-</div>
-</div>
-<div class="flex items-start">
-<span class="material-symbols-outlined text-primary mr-3 mt-0.5 text-lg">location_on</span>
-<div>
-<p class="font-medium text-white">Ubicación</p>
-<p class="text-text-dark-secondary">Auditorio Principal</p>
-</div>
-</div>
-<div class="flex items-start">
-<span class="material-symbols-outlined text-primary mr-3 mt-0.5 text-lg">groups</span>
-<div>
-<p class="font-medium text-white">Público Objetivo</p>
-<p class="text-text-dark-secondary">Padres</p>
-</div>
-</div>
-<div class="flex items-start">
-<span class="material-symbols-outlined text-primary mr-3 mt-0.5 text-lg">label</span>
-<div>
-<p class="font-medium text-white">Tipo de Evento</p>
-<p class="text-text-dark-secondary">Reunión</p>
-</div>
-</div>
-<div class="flex items-start">
-<span class="material-symbols-outlined text-primary mr-3 mt-0.5 text-lg">task_alt</span>
-<div>
-<p class="font-medium text-white">Estado</p>
-<p class="text-text-dark-secondary">Confirmado</p>
+<!-- Empty State -->
+<!-- Uncomment this block to see the empty state -->
+<!-- 
+                  <div class="flex flex-col items-center justify-center text-center rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 p-12 mt-4">
+                    <span class="material-symbols-outlined text-6xl text-gray-400 dark:text-gray-500 mb-4">event_busy</span>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">No hay eventos programados</p>
+                    <p class="text-gray-500 dark:text-gray-400">Aún no hay eventos para esta clase. ¡Crea el primero usando el formulario!</p>
+                  </div>
+                  -->
 </div>
 </div>
 </div>
@@ -242,7 +171,4 @@
 </div>
 </div>
 </div>
-</main>
-</div>
-
 </body></html>

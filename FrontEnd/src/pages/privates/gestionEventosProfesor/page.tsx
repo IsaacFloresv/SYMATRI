@@ -1,183 +1,180 @@
-export default function GestionClase() {
-  const eventos = [
-    {
-      mes: "OCT",
-      dia: "25",
-      titulo: "Examen Parcial 1",
-      detalle: "10:00 AM - Toda la clase",
-    },
-    {
-      mes: "NOV",
-      dia: "12",
-      titulo: "Entrega de Proyecto Final",
-      detalle: "11:59 PM - Sección A",
-    },
-    {
-      mes: "NOV",
-      dia: "20",
-      titulo: "Salida al Museo de Ciencias",
-      detalle: "08:00 AM - Toda la clase",
-    },
-  ]
+export default function gestion EventosProfesor() {
+    return (
 
-  return (
-    <main className="flex-1 p-6 lg:p-10">
-      <div className="mx-auto max-w-7xl">
+< !DOCTYPE html >
 
-        <div className="mb-8">
-          <div className="flex flex-wrap gap-2 text-gray-500 dark:text-[#92aec9]">
-            <span>Mis Clases</span>
-            <span>/</span>
-            <span>Biología 101</span>
-            <span>/</span>
-            <span className="text-gray-900 dark:text-white">Eventos</span>
-          </div>
-
-          <h1 className="mt-2 text-4xl font-black tracking-[-0.033em] text-gray-900 dark:text-white">
-            Administrar Eventos de Biología 101
-          </h1>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-          {/* Panel izquierdo: Crear evento */}
-          <div className="lg:col-span-1 bg-white dark:bg-[#192733]/50 rounded-xl border border-gray-200 dark:border-[#324d67] p-6">
-            <h2 className="text-[22px] font-bold mb-6 text-gray-900 dark:text-white">
-              Crear Nuevo Evento
-            </h2>
-
-            <form className="flex flex-col gap-4">
-              <Input label="Nombre del Evento" placeholder="Ej. Examen Parcial 1" />
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Input label="Fecha" type="date" />
-                <Input label="Hora" type="time" />
+  <html className="dark" lang="es"><head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gestión de Eventos</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "className",
+      theme: {
+        extend: {
+        colors: {
+        "primary": "#1176d4",
+      "background-light": "#f6f7f8",
+      "background-dark": "#101922",
+          },
+      fontFamily: {
+        "display": ["Lexend", "sans-serif"]
+          },
+      borderRadius: {
+        "DEFAULT": "0.25rem",
+      "lg": "0.5rem",
+      "xl": "0.75rem",
+      "full": "9999px"
+          },
+        },
+      },
+    }
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font - variation - settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+    </style>
+  </head>
+    <body className="bg-background-light dark:bg-background-dark font-display">
+      <div className="relative flex h-auto min-h-screen w-full flex-col">
+        <div className="flex h-full grow flex-col">
+          <div className="flex flex-1 justify-center p-4 sm:p-6 lg:p-8">
+            <div className="flex w-full max-w-7xl flex-col">
+              <!-- Breadcrumbs and Page Heading -->
+              <div className="mb-8">
+                <div className="mt-2 flex flex-wrap justify-between gap-3">
+                  <p className="text-gray-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Administrar Eventos de Biología 101</p>
+                </div>
               </div>
-
-              <Textarea
-                label="Descripción"
-                placeholder="Añade detalles adicionales sobre el evento..."
-              />
-
-              <Select label="Sección">
-                <option>Toda la clase</option>
-                <option>Sección A</option>
-                <option>Sección B</option>
-              </Select>
-
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <button
-                  type="button"
-                  className="flex-1 h-12 rounded-lg bg-gray-200 dark:bg-white/10 text-gray-700 dark:text-white font-semibold hover:bg-gray-300 dark:hover:bg-white/20"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 h-12 rounded-lg bg-primary text-white font-semibold hover:bg-primary/90"
-                >
-
-                </button>
+              <!-- Main Content Grid -->
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Column: Form -->
+                <div className="lg:col-span-1 flex flex-col gap-6 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-6">
+                  <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Crear Nuevo Evento</h2>
+                  <form className="flex flex-col gap-4">
+                    <label className="flex flex-col w-full">
+                      <p className="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Nombre del Evento</p>
+                      <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324d67] bg-background-light dark:bg-[#192733] h-14 placeholder:text-gray-400 dark:placeholder:text-[#92aec9] p-[15px] text-base font-normal leading-normal" placeholder="Ej. Examen Parcial 1" value="" />
+                    </label>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <label className="flex flex-col min-w-0 flex-1">
+                        <p className="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Fecha</p>
+                        <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324d67] bg-background-light dark:bg-[#192733] h-14 placeholder:text-gray-400 dark:placeholder:text-[#92aec9] p-[15px] text-base font-normal leading-normal" type="date" />
+                      </label>
+                      <label className="flex flex-col min-w-0 flex-1">
+                        <p className="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Hora</p>
+                        <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324d67] bg-background-light dark:bg-[#192733] h-14 placeholder:text-gray-400 dark:placeholder:text-[#92aec9] p-[15px] text-base font-normal leading-normal" type="time" />
+                      </label>
+                    </div>
+                    <label className="flex flex-col w-full">
+                      <p className="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Descripción</p>
+                      <textarea className="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324d67] bg-background-light dark:bg-[#192733] min-h-32 placeholder:text-gray-400 dark:placeholder:text-[#92aec9] p-[15px] text-base font-normal leading-normal" placeholder="Añade detalles adicionales sobre el evento..."></textarea>
+                    </label>
+                    <label className="flex flex-col w-full">
+                      <p className="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Sección</p>
+                      <div className="relative">
+                        <select className="form-select appearance-none flex w-full min-w-0 flex-1 overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#324d67] bg-background-light dark:bg-[#192733] h-14 p-[15px] text-base font-normal leading-normal">
+                          <option>Toda la clase</option>
+                          <option>Sección A</option>
+                          <option>Sección B</option>
+                        </select>
+                        <span className="material-symbols-outlined pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">expand_more</span>
+                      </div>
+                    </label>
+                    <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                      <button className="flex h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-gray-200 dark:bg-white/10 px-6 text-base font-semibold text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20" type="button">Cancelar</button>
+                      <button className="flex h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-primary px-6 text-base font-semibold text-white hover:bg-primary/90" type="submit">Guardar Evento</button>
+                    </div>
+                  </form>
+                </div>
+                <!-- Right Column: Events List -->
+                <div className="lg:col-span-2 flex flex-col gap-4">
+                  <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4">Próximos Eventos</h2>
+                  <div className="flex flex-col gap-3">
+                    <!-- Event Card 1 -->
+                    <div className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-4 transition-all hover:shadow-md dark:hover:bg-[#192733]">
+                      <div className="flex flex-col items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 p-3 text-primary dark:text-blue-300">
+                        <span className="text-sm font-bold uppercase">OCT</span>
+                        <span className="text-2xl font-black">25</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-bold text-lg text-gray-900 dark:text-white">Examen Parcial 1</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">10:00 AM - Toda la clase</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button className="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10">
+                          <span className="material-symbols-outlined text-xl">edit</span>
+                        </button>
+                        <button className="flex h-10 w-10 items-center justify-center rounded-full text-red-500/80 hover:bg-red-500/10 hover:text-red-500">
+                          <span className="material-symbols-outlined text-xl">delete</span>
+                        </button>
+                      </div>
+                    </div>
+                    <!-- Event Card 2 -->
+                    <div className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-4 transition-all hover:shadow-md dark:hover:bg-[#192733]">
+                      <div className="flex flex-col items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 p-3 text-primary dark:text-blue-300">
+                        <span className="text-sm font-bold uppercase">NOV</span>
+                        <span className="text-2xl font-black">12</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-bold text-lg text-gray-900 dark:text-white">Entrega de Proyecto Final</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">11:59 PM - Sección A</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button className="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10">
+                          <span className="material-symbols-outlined text-xl">edit</span>
+                        </button>
+                        <button className="flex h-10 w-10 items-center justify-center rounded-full text-red-500/80 hover:bg-red-500/10 hover:text-red-500">
+                          <span className="material-symbols-outlined text-xl">delete</span>
+                        </button>
+                      </div>
+                    </div>
+                    <!-- Event Card 3 -->
+                    <div className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-4 transition-all hover:shadow-md dark:hover:bg-[#192733]">
+                      <div className="flex flex-col items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 p-3 text-primary dark:text-blue-300">
+                        <span className="text-sm font-bold uppercase">NOV</span>
+                        <span className="text-2xl font-black">20</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-bold text-lg text-gray-900 dark:text-white">Salida al Museo de Ciencias</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">08:00 AM - Toda la clase</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button className="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10">
+                          <span className="material-symbols-outlined text-xl">edit</span>
+                        </button>
+                        <button className="flex h-10 w-10 items-center justify-center rounded-full text-red-500/80 hover:bg-red-500/10 hover:text-red-500">
+                          <span className="material-symbols-outlined text-xl">delete</span>
+                        </button>
+                      </div>
+                    </div>
+                    <!-- Empty State -->
+                    <!-- Uncomment this block to see the empty state -->
+                    <!--
+                    <div className="flex flex-col items-center justify-center text-center rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 p-12 mt-4">
+                      <span className="material-symbols-outlined text-6xl text-gray-400 dark:text-gray-500 mb-4">event_busy</span>
+                      <p className="text-lg font-semibold text-gray-900 dark:text-white">No hay eventos programados</p>
+                      <p className="text-gray-500 dark:text-gray-400">Aún no hay eventos para esta clase. ¡Crea el primero usando el formulario!</p>
+                    </div>
+                  -->
+                  </div>
+                </div>
               </div>
-            </form>
-          </div>
-
-          <div className="lg:col-span-2">
-            <h2 className="text-[22px] font-bold mb-4 px-1 text-gray-900 dark:text-white">
-              Próximos Eventos
-            </h2>
-
-            <div className="flex flex-col gap-3">
-              {eventos.map((evento, index) => (
-                <EventCard key={index} evento={evento} />
-              ))}
             </div>
           </div>
-
         </div>
       </div>
-    </main>
-  )
-}
-
-function Input({ label, type = "text", placeholder }) {
-  return (
-    <label className="flex flex-col gap-2">
-      <span className="font-medium text-gray-900 dark:text-white">
-        {label}
-      </span>
-      <input
-        type={type}
-        placeholder={placeholder}
-        className="h-14 rounded-lg border border-gray-300 dark:border-[#324d67] bg-gray-50 dark:bg-[#192733] px-4 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary/50"
-      />
-    </label>
-  )
-}
-
-function Textarea({ label, placeholder }) {
-  return (
-    <label className="flex flex-col gap-2">
-      <span className="font-medium text-gray-900 dark:text-white">
-        {label}
-      </span>
-      <textarea
-        placeholder={placeholder}
-        className="min-h-32 rounded-lg border border-gray-300 dark:border-[#324d67] bg-gray-50 dark:bg-[#192733] px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary/50"
-      />
-    </label>
-  )
-}
-
-function Select({ label, children }) {
-  return (
-    <label className="flex flex-col gap-2">
-      <span className="font-medium text-gray-900 dark:text-white">
-        {label}
-      </span>
-      <select className="h-14 rounded-lg border border-gray-300 dark:border-[#324d67] bg-gray-50 dark:bg-[#192733] px-4 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary/50">
-        {children}
-      </select>
-    </label>
-  )
-}
-
-function EventCard({ evento }) {
-  return (
-    <div className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-4 hover:shadow-md transition">
-      
-      <div className="flex flex-col items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 p-3 text-primary dark:text-blue-300 w-16">
-        <span className="text-sm font-bold uppercase">{evento.mes}</span>
-        <span className="text-2xl font-black">{evento.dia}</span>
-      </div>
-
-      <div className="flex-1">
-        <p className="text-lg font-bold text-gray-900 dark:text-white">
-          {evento.titulo}
-        </p>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {evento.detalle}
-        </p>
-      </div>
-
-      <div className="flex gap-2">
-        <IconButton icon="edit" />
-        <IconButton icon="delete" danger />
-      </div>
-    </div>
-  )
-}
-
-function IconButton({ icon, danger }) {
-  return (
-    <button
-      className={`h-10 w-10 flex items-center justify-center rounded-full transition-colors ${
-        danger
-          ? "text-red-500 hover:bg-red-500/10"
-          : "text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10"
-      }`}
-    >
-      <span className="material-symbols-outlined text-xl">{icon}</span>
-    </button>
-  )
-}
+    </body></html>
+    )
+  }     
+  
