@@ -4,6 +4,7 @@ import { useAuthStorage } from "./useAuthStorage";
 import { login } from "@/services/authServices";
 import { useForm } from "react-hook-form";
 import type { loginData } from "@/schemas/authSchema";
+import { removeSession } from "@/lib/authStorage";
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -32,10 +33,15 @@ export const useAuth = () => {
   const onSubmit = (data: loginData) => loginMutation.mutate(data);
 
   const onLogout = () => {
+    // Eliminar la sesión canónica y limpiar estado en memoria
+    removeSession();
+    setUser(null);
+
+    // Limpiar claves legacy por compatibilidad
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("user");
-    setUser(null);
+
     navigate("/login");
   };
 

@@ -1,4 +1,4 @@
-export default function VistaSecciones() {
+export default function VistaSeccionesProfesor() {
   return (
     <main className="flex-1 p-6 lg:p-10">
       <div className="mx-auto max-w-7xl">

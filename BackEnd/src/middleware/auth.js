@@ -15,7 +15,7 @@ function verifyToken(req, res, next) {
 
  function  authorizeRole (...rolesPermitidos) {
   return async (req, res, next) => {    
-    let rol = req.body?.rol
+    let role = req.body?.role
 
     /* if(!rol) {
       let token = req.headers['authorization']?.split(' ')[1];

@@ -50,7 +50,7 @@ export default function lecturaComunicado() {
               <input className="w-full bg-background-light dark:bg-background-dark border-gray-300 dark:border-gray-700 rounded-DEFAULT pl-10 focus:ring-primary focus:border-primary text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400" placeholder="Buscar por nombre..." type="text" />
             </div>
             <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-gray-600 dark:text-gray-300 shrink-0" for="filter">Filtrar por:</label>
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300 shrink-0" htmlFor="filter">Filtrar por:</label>
               <select className="bg-background-light dark:bg-background-dark border-gray-300 dark:border-gray-700 rounded-DEFAULT focus:ring-primary focus:border-primary text-gray-900 dark:text-white text-sm" id="filter">
                 <option>Todos</option>
                 <option>Alumnos</option>

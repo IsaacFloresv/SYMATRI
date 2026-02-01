@@ -36,9 +36,9 @@ const PORT = config.aport
 
 
 //Rutas
-app.use(`/`, router)
+app.use(`/api/v1`, router)
 
 app.listen(PORT, function(){
-    console.log(`La app esta escuchando por http://localhost:${PORT}`)
+    console.log(`La app esta escuchando por http://localhost/api/v1:${PORT}`)
     console.log(`Swagger disponible en http://localhost:${PORT}/api-docs`);
 })

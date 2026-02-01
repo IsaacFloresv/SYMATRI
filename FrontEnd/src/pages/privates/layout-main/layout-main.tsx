@@ -10,8 +10,10 @@ type Props = {
   children: ReactNode;
 }
 
+import { useAuthStorage } from "@/hooks/useAuthStorage";
+
 export default function LayoutMain({ children }: Props) {
-  const session = JSON.parse(localStorage.getItem("session") || "null");
+  const session = useAuthStorage((s) => s.user);
 
   if (!session) {
     return null; // o un loader

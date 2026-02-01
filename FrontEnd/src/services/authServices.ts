@@ -1,5 +1,6 @@
 // authServices.ts
 import type { loginData } from "@/schemas/authSchema";
+import { setSession } from "@/lib/authStorage";
 
 export type LoginResponse = {
   id: number;
@@ -50,11 +51,11 @@ export async function login(credentials: loginData) {
     token: session.token,
     datosPersonales: session.datosPersonales,
     role: roleData.nombre,
-    modulos: roleData.modulos, 
+    modulos: roleData.modulos,
   };
 
-  // 4. Guardar en localStorage
-  localStorage.setItem("session", JSON.stringify(fullSession));
+  // 4. Guardar en localStorage usando el utilitario central
+  setSession(fullSession);
 
   return fullSession;
 }
