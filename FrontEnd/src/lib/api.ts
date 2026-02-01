@@ -1,9 +1,12 @@
+import { getToken, removeSession } from "@/lib/authStorage";
+import { useAuthStorage } from "@/hooks/useAuthStorage";
+
 export const api = {
   baseUrl: import.meta.env.VITE_API_URL || "http://localhost:4000/api",
   timeout: 5000,
-  token: localStorage.getItem("user") || null,
+  // token dinámico leído desde el utilitario
+  token: getToken(),
 };
-
 
 
 export async function fetchUsers() {
@@ -22,14 +25,15 @@ export async function fetchUsers() {
 }
 
 function handleErrors(response: any) {
-/*     response => response, 
-    response => {*/
-      if (
-        response.status === 401 &&
-        response.status === "Not valid token"
-      ) {
-        localStorage.removeItem("user");
-        localStorage.getState().setUser(null);
-      }
-    //}
+  // Si la API responde 401 entonces la sesión dejó de ser válida
+  if (response?.status === 401) {
+    removeSession();
+    // Resetear estado en memoria (Zustand)
+    try {
+      useAuthStorage.getState().setUser(null);
+    } catch (e) {
+      // no crítico
+      console.warn('No se pudo resetear el store de auth', e);
+    }
+  }
 }

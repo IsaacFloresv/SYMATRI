@@ -5,9 +5,10 @@ const { refreshAccessToken, auth, validatePassword, hashPassword } = require('@s
 const login = async (req, res) => {
   try {
     const { userName, pass } = req.body;
+    console.log("Login attempt for user:", userName, pass);
     const resp = await user.findOne({
       where: { userName },
-      attributes: ["id", "roleId", "pass"],
+      attributes: ["id", "roleid", "pass"],
       include: [{
         model: dataUser,
         attributes: { exclude: ["id", "userId", "createdAt", "updatedAt"] },
@@ -16,6 +17,8 @@ const login = async (req, res) => {
       raw: true,
       nest: true
     });
+
+    console.log("User found:", resp);
 
     if (!resp) {
       return res.status(404).json({ error: 'Usuario o Contraseña incorrecto.' });

@@ -1,64 +1,16 @@
-export default function gestion EventosProfesor() {
+export default function gestionEventosProfesor() {
     return (
-
-< !DOCTYPE html >
-
-  <html className="dark" lang="es"><head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Gestión de Eventos</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "className",
-      theme: {
-        extend: {
-        colors: {
-        "primary": "#1176d4",
-      "background-light": "#f6f7f8",
-      "background-dark": "#101922",
-          },
-      fontFamily: {
-        "display": ["Lexend", "sans-serif"]
-          },
-      borderRadius: {
-        "DEFAULT": "0.25rem",
-      "lg": "0.5rem",
-      "xl": "0.75rem",
-      "full": "9999px"
-          },
-        },
-      },
-    }
-    </script>
-    <style>
-      .material-symbols-outlined {
-        font - variation - settings:
-      'FILL' 0,
-      'wght' 400,
-      'GRAD' 0,
-      'opsz' 24
-    }
-    </style>
-  </head>
-    <body className="bg-background-light dark:bg-background-dark font-display">
-      <div className="relative flex h-auto min-h-screen w-full flex-col">
-        <div className="flex h-full grow flex-col">
-          <div className="flex flex-1 justify-center p-4 sm:p-6 lg:p-8">
-            <div className="flex w-full max-w-7xl flex-col">
-              <!-- Breadcrumbs and Page Heading -->
-              <div className="mb-8">
-                <div className="mt-2 flex flex-wrap justify-between gap-3">
-                  <p className="text-gray-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Administrar Eventos de Biología 101</p>
-                </div>
-              </div>
-              <!-- Main Content Grid -->
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Left Column: Form -->
+    <main className="flex-1 p-6 lg:p-8">
+      <div className="mx-auto max-w-7xl">
+        {/* Breadcrumbs and Page Heading */}
+        <div className="mb-8">
+          <div className="mt-2 flex flex-wrap justify-between gap-3">
+            <p className="text-gray-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Administrar Eventos de Biología 101</p>
+          </div>
+        </div>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left Column: Form */}
                 <div className="lg:col-span-1 flex flex-col gap-6 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-6">
                   <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Crear Nuevo Evento</h2>
                   <form className="flex flex-col gap-4">
@@ -97,11 +49,11 @@ export default function gestion EventosProfesor() {
                     </div>
                   </form>
                 </div>
-                <!-- Right Column: Events List -->
+                {/* Right Column: Events List */}
                 <div className="lg:col-span-2 flex flex-col gap-4">
                   <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4">Próximos Eventos</h2>
                   <div className="flex flex-col gap-3">
-                    <!-- Event Card 1 -->
+                    {/* Event Card 1 */}
                     <div className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-4 transition-all hover:shadow-md dark:hover:bg-[#192733]">
                       <div className="flex flex-col items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 p-3 text-primary dark:text-blue-300">
                         <span className="text-sm font-bold uppercase">OCT</span>
@@ -120,7 +72,7 @@ export default function gestion EventosProfesor() {
                         </button>
                       </div>
                     </div>
-                    <!-- Event Card 2 -->
+                    {/* Event Card 2 */}
                     <div className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-4 transition-all hover:shadow-md dark:hover:bg-[#192733]">
                       <div className="flex flex-col items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 p-3 text-primary dark:text-blue-300">
                         <span className="text-sm font-bold uppercase">NOV</span>
@@ -139,7 +91,7 @@ export default function gestion EventosProfesor() {
                         </button>
                       </div>
                     </div>
-                    <!-- Event Card 3 -->
+                    {/* Event Card 3 */}
                     <div className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#192733]/50 p-4 transition-all hover:shadow-md dark:hover:bg-[#192733]">
                       <div className="flex flex-col items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 p-3 text-primary dark:text-blue-300">
                         <span className="text-sm font-bold uppercase">NOV</span>
@@ -158,23 +110,18 @@ export default function gestion EventosProfesor() {
                         </button>
                       </div>
                     </div>
-                    <!-- Empty State -->
-                    <!-- Uncomment this block to see the empty state -->
-                    <!--
+                    {/* Empty State - Commented out */}
+                    {/* 
                     <div className="flex flex-col items-center justify-center text-center rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 p-12 mt-4">
                       <span className="material-symbols-outlined text-6xl text-gray-400 dark:text-gray-500 mb-4">event_busy</span>
                       <p className="text-lg font-semibold text-gray-900 dark:text-white">No hay eventos programados</p>
                       <p className="text-gray-500 dark:text-gray-400">Aún no hay eventos para esta clase. ¡Crea el primero usando el formulario!</p>
                     </div>
-                  -->
-                  </div>
+                    */}
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </body></html>
+    </main>
     )
-  }     
-  
+  }

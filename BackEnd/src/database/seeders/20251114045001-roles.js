@@ -4,31 +4,31 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('roles', [
       {
-        nombre: 'Alumno',
+        nombre: 'alumno',
         modulos: JSON.stringify([1, 2, 3, 4]),
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        nombre: 'Encargado',
+        nombre: 'encargado',
         modulos: JSON.stringify([1, 2, 3, 4, 5]),
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        nombre: 'Admin2',
+        nombre: 'profesor',
         modulos: JSON.stringify([1, 2, 3, 4, 5, 6]),
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        nombre: 'Admin1',
+        nombre: 'admin1',
         modulos: JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8]),
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        nombre: 'Admin007',
+        nombre: 'admin007',
         modulos: JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
         createdAt: new Date(),
         updatedAt: new Date()

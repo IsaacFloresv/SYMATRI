@@ -3,11 +3,11 @@ export default function notasAlumnosProfesor() {
 
     <main className="flex-1 p-8">
       <div className="flex flex-col max-w-7xl mx-auto gap-6">
-        <!-- Page Heading -->
+        {/* Page Heading */}
         <div className="flex flex-wrap justify-between items-center gap-4">
           <h1 className="text-gray-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Gestión de Calificaciones</h1>
         </div>
-        <!-- Filters (Dropdowns) -->
+        {/* Filters (Dropdowns) */}
         <div className="flex flex-wrap items-end gap-4 p-4 rounded-xl bg-white dark:bg-[#111a22] border border-gray-200 dark:border-[#324d67]">
           <label className="flex flex-col min-w-40 flex-1">
             <p className="text-gray-900 dark:text-white text-base font-medium leading-normal pb-2">Seleccionar Sección</p>
@@ -26,7 +26,7 @@ export default function notasAlumnosProfesor() {
             </select>
           </label>
         </div>
-        <!-- Table -->
+        {/* Table */}
         <div className="flex flex-col overflow-hidden rounded-xl border border-gray-200 dark:border-[#324d67] bg-white dark:bg-[#111a22]">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -85,7 +85,7 @@ export default function notasAlumnosProfesor() {
             </table>
           </div>
         </div>
-        <!-- Action Buttons -->
+        {/* Action Buttons */}
         <div className="flex justify-end gap-3 flex-wrap">
           <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-gray-200 dark:bg-[#233648] text-gray-800 dark:text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-gray-300 dark:hover:bg-[#324d67]">
             <span className="truncate">Cancelar</span>

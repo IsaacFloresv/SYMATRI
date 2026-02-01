@@ -15,11 +15,11 @@ import {
 
 import { moduleMap } from "@/config/moduleMaps";
 import type { ModuleConfig } from "@/config/moduleMaps";
+import { useAuthStorage } from "@/hooks/useAuthStorage";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // Obtener la sesión
-  const sessionRaw = localStorage.getItem("session");
-  const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+  // Obtener la sesión desde el store (Zustand)
+  const session = useAuthStorage((s) => s.user);
 
   // Validar sesión y módulos
   const modulos = Array.isArray(session?.modulos) ? session.modulos : [];

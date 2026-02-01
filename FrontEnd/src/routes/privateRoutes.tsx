@@ -6,9 +6,9 @@ import LayoutMain from "@/pages/privates/layout-main/layout-main";
 type Props = {
     children: ReactNode;
 }
+import { useAuthStorage } from "@/hooks/useAuthStorage";
 export function PrivateRoutes({ children }: Props) {
-    const sessionRaw = localStorage.getItem("session");
-    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+    const session = useAuthStorage((s) => s.user);
 
     if (!session) {
         return <Navigate to="/login" replace />;

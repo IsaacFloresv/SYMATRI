@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 type Props = {
     children: ReactNode;
 }
+import { useAuthStorage } from "@/hooks/useAuthStorage";
 export function PublicRoutes({ children }: Props) {
-    const sessionRaw = localStorage.getItem("session");
-    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+    const session = useAuthStorage((s) => s.user);
 
     if (!session) {
         return <Navigate to="/login" replace />;

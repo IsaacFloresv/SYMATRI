@@ -1,12 +1,17 @@
-import type { User } from "@/schemas/userSchema"
-import {create} from "zustand"
+import type { Session } from "@/lib/authStorage";
+import { create } from "zustand";
+import { getSession, setSession, removeSession } from "@/lib/authStorage";
 
 type AuthState = {
-    user: User | null;
-    setUser: (user: User | null) => void;
-}
+  user: Session | null;
+  setUser: (user: Session | null) => void;
+};
 
 export const useAuthStorage = create<AuthState>((set) => ({
-    user: null,
-    setUser: (user) => set({user})
-}))
+  user: getSession(),
+  setUser: (user) => {
+    set({ user });
+    if (user) setSession(user);
+    else removeSession();
+  },
+}));

@@ -1,6 +1,5 @@
 export default function comunicadosProfesor() {
   return (
-
     <main className="flex-1 overflow-y-auto">
       <div className="p-8 max-w-7xl mx-auto">
         <div className="flex flex-wrap justify-between gap-3 mb-8">
@@ -17,24 +16,24 @@ export default function comunicadosProfesor() {
               <div className="flex flex-wrap gap-x-6 gap-y-3 p-3 border border-gray-300 dark:border-gray-700 rounded-DEFAULT bg-background-light dark:bg-background-dark">
                 <div className="flex items-center">
                   <input className="w-4 h-4 text-primary bg-gray-200 border-gray-400 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-background-dark focus:ring-2 dark:bg-gray-700 dark:border-gray-600" id="dest-5a-alumnos" type="checkbox" />
-                  <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="dest-5a-alumnos">Clase 5A</label>
+                  <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" htmlFor="dest-5a-alumnos">Clase 5A</label>
                 </div>
                 <div className="flex items-center">
                   <input className="w-4 h-4 text-primary bg-gray-200 border-gray-400 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-background-dark focus:ring-2 dark:bg-gray-700 dark:border-gray-600" id="dest-5b-alumnos" type="checkbox" />
-                  <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="dest-5b-alumnos">Clase 5B</label>
+                  <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" htmlFor="dest-5b-alumnos">Clase 5B</label>
                 </div>
                 <div className="flex items-center">
                   <input className="w-4 h-4 text-primary bg-gray-200 border-gray-400 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-background-dark focus:ring-2 dark:bg-gray-700 dark:border-gray-600" id="dest-todos" type="checkbox" />
-                  <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="dest-todos">Todas mis clases</label>
+                  <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300" htmlFor="dest-todos">Todas mis clases</label>
                 </div>
               </div>
             </div>
             <div className="flex flex-col gap-2 mb-4">
-              <label className="text-gray-800 dark:text-gray-200 text-base font-normal leading-normal" for="subject">Asunto:</label>
+              <label className="text-gray-800 dark:text-gray-200 text-base font-normal leading-normal" htmlFor="subject">Asunto:</label>
               <input className="w-full bg-background-light dark:bg-background-dark border-gray-300 dark:border-gray-700 rounded-DEFAULT focus:ring-primary focus:border-primary text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400" id="subject" placeholder="Ej: Recordatorio de excursión" type="text" />
             </div>
             <div className="flex flex-col gap-2 mb-6">
-              <label className="text-gray-800 dark:text-gray-200 text-base font-normal leading-normal" for="message">Mensaje:</label>
+              <label className="text-gray-800 dark:text-gray-200 text-base font-normal leading-normal" htmlFor="message">Mensaje:</label>
               <div className="w-full bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-DEFAULT">
                 <div className="flex p-2 border-b border-gray-300 dark:border-gray-700 gap-2">
                   <button className="p-1 rounded-DEFAULT hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"><span className="material-symbols-outlined !text-xl">format_bold</span></button>
@@ -42,7 +41,7 @@ export default function comunicadosProfesor() {
                   <button className="p-1 rounded-DEFAULT hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"><span className="material-symbols-outlined !text-xl">format_list_bulleted</span></button>
                   <button className="p-1 rounded-DEFAULT hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"><span className="material-symbols-outlined !text-xl">format_list_numbered</span></button>
                 </div>
-                <textarea className="w-full p-3 bg-transparent border-none focus:ring-0 resize-y text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400" id="message" placeholder="Escribe tu mensaje aquí..." rows="8"></textarea>
+                <textarea className="w-full p-3 bg-transparent border-none focus:ring-0 resize-y text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400" id="message" placeholder="Escribe tu mensaje aquí..." rows={8}></textarea>
               </div>
             </div>
             <div className="flex items-center justify-between">
@@ -79,7 +78,7 @@ export default function comunicadosProfesor() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined !text-base text-gray-500 dark:text-gray-400" style="font-variation-settings: 'FILL' 1;">visibility</span>
+                    <span className="material-symbols-outlined !text-base text-gray-500 dark:text-gray-400" style={{ fontVariationSettings: "'FILL' 1" }}>visibility</span>
                     <span className="text-xs font-medium text-gray-600 dark:text-gray-300">95% leído</span>
                   </div>
                 </div>
@@ -101,7 +100,7 @@ export default function comunicadosProfesor() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined !text-base text-gray-500 dark:text-gray-400" style="font-variation-settings: 'FILL' 1;">visibility</span>
+                    <span className="material-symbols-outlined !text-base text-gray-500 dark:text-gray-400" style={{ fontVariationSettings: "'FILL' 1" }}>visibility</span>
                     <span className="text-xs font-medium text-gray-600 dark:text-gray-300">100% leído</span>
                   </div>
                 </div>
@@ -155,6 +154,5 @@ export default function comunicadosProfesor() {
         </div>
       </div>
     </main>
-
   )
 }
