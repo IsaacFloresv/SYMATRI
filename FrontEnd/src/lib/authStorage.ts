@@ -2,11 +2,12 @@ export type Session = {
   id: number;
   token: string;
   role: string;
+  email?: string;
   datosPersonales: {
     firstName: string;
     lastName: string;
     name_user?: string;
-    email?: string;
+    
   };
   modulos?: number[];
 };

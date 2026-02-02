@@ -5,30 +5,35 @@ module.exports = {
     await queryInterface.bulkInsert('roles', [
       {
         nombre: 'alumno',
+        descripcion: 'alumno',
         modulos: JSON.stringify([1, 2, 3, 4]),
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         nombre: 'encargado',
+        descripcion: 'encargado',
         modulos: JSON.stringify([1, 2, 3, 4, 5]),
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         nombre: 'profesor',
+        descripcion: 'profesor',
         modulos: JSON.stringify([1, 2, 3, 4, 5, 6]),
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         nombre: 'admin1',
+        descripcion: 'administrador',
         modulos: JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8]),
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         nombre: 'admin007',
+        descripcion: 'soporte',
         modulos: JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
         createdAt: new Date(),
         updatedAt: new Date()

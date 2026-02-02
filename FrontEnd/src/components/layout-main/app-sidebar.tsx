@@ -24,6 +24,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // Validar sesión y módulos
   const modulos = Array.isArray(session?.modulos) ? session.modulos : [];
   const datos = session?.datosPersonales;
+  const email = session?.email;
 
   if (!session || !datos) return null;
 
@@ -40,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // Datos del usuario para el footer
   const userData = {
     name: `${datos.firstName} ${datos.lastName}`,
-    email: datos.email || "sin-email",
+    email: email || "sin-email",
     avatar: "../../src/assets/adminis.png", // puedes personalizar esto luego
   };
 

@@ -8,8 +8,9 @@ import { useAuthStorage } from "@/hooks/useAuthStorage";
 export function PublicRoutes({ children }: Props) {
     const session = useAuthStorage((s) => s.user);
 
-    if (!session) {
-        return <Navigate to="/login" replace />;
+    // Si ya hay sesión, redirigir al dashboard (no mostrar rutas públicas como /login)
+    if (session) {
+        return <Navigate to="/dashboard" replace />;
     }
 
     return (

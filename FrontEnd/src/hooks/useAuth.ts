@@ -19,13 +19,23 @@ export const useAuth = () => {
     onSuccess: (fullSession) => {
       // Guardar sesión completa en Zustand
       setUser(fullSession);
-      let role = fullSession.role.toLowerCase();
-      if(role === "admin1") role = "admin";
-      if(role === "admin2") role = "admin";
-      if(role === "alumno") role = "student";
+      const rawRole = fullSession.role ? String(fullSession.role).toLowerCase() : "guest";
 
-      // Navegar al dashboard
-      navigate(`/dashboard/${role}`);
+      // Mapear roles a rutas existentes
+      const roleToPath = (r: string) => {
+        if (r.includes("soporte")) return "/dashboard";
+        if (r.includes("admin")) return "/dashboard/admin";
+        if (r === "student" || r === "alumno") return "/dashboard/student";
+        if (r === "profesor" || r === "teacher") return "/profesor/dashboard";
+        if (r === "asistente") return "/asistente/dashboard";
+        if (r === "encargado") return "/encargado/dashboard";
+        // guest u otros -> ruta genérica
+        return "/dashboard";
+      };
+
+      const redirectPath = roleToPath(rawRole);
+      // Navegar al dashboard correspondiente
+      navigate(redirectPath);
     },
     onError: (err) => console.error(err),
   });

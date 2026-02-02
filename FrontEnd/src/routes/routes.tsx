@@ -54,6 +54,10 @@ import GestionMatricula from "@/pages/privates/encargado/gestionMatricula/page";
 import VistaCalificacionesMateriasEncargado from "@/pages/privates/encargado/vistaCalificacionesMaterias/page";
 import VistaEventosEncargado from "@/pages/privates/encargado/vistaEventos/page";
 
+// Encargado Pages
+import DashBoard from "@/pages/privates/dashboard/page";
+
+
 export const router = createBrowserRouter([
   {
     path: "*",
@@ -180,6 +184,14 @@ export const router = createBrowserRouter([
     path: "/dashboard/student",
     element: <PrivateRoutes>
       <DashBoardStudent />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  // Ruta genérica de dashboard (para guest y fallback)
+  {
+    path: "/dashboard",
+    element: <PrivateRoutes>
+      <DashBoard />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },

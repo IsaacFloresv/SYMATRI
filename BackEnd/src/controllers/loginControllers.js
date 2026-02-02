@@ -5,10 +5,9 @@ const { refreshAccessToken, auth, validatePassword, hashPassword } = require('@s
 const login = async (req, res) => {
   try {
     const { userName, pass } = req.body;
-    console.log("Login attempt for user:", userName, pass);
     const resp = await user.findOne({
       where: { userName },
-      attributes: ["id", "roleid", "pass"],
+      attributes: ["id", "roleid","email", "pass"],
       include: [{
         model: dataUser,
         attributes: { exclude: ["id", "userId", "createdAt", "updatedAt"] },
@@ -17,8 +16,6 @@ const login = async (req, res) => {
       raw: true,
       nest: true
     });
-
-    console.log("User found:", resp);
 
     if (!resp) {
       return res.status(404).json({ error: 'Usuario o Contraseña incorrecto.' });
@@ -34,14 +31,14 @@ const login = async (req, res) => {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    const token = await auth({ id: resp.id, roleId: resp.roleId });
-    res.json({
+    const token = await auth({ id: resp.id, roleId: resp.roleid });
+    return res.status(200).json({
       id: resp.id,
-      roleId: resp.roleId,
+      roleId: resp.roleid,
+      email: resp.email,
       datosPersonales: resp.datosPersonales,
       token: token
     });
-
   } catch (error) {
     console.log(error)
     res.status(500).json({
