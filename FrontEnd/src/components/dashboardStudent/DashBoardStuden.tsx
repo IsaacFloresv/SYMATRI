@@ -1,183 +1,311 @@
 "use client"
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { useAuthStorage } from "@/hooks/useAuthStorage"
+
+interface Subject {
+  name: string
+  currentAverage: number
+  previousAverage: number
+  change: number
+  trend: number[]
+}
+
+interface Event {
+  id: number
+  title: string
+  date: string
+  location: string
+  type: "Próximo" | "Feriado"
+}
+
+interface Message {
+  id: number
+  sender: string
+  preview: string
+  time: string
+}
+
+const subjects: Subject[] = [
+  { name: "Matemáticas", currentAverage: 93.5, previousAverage: 92.0, change: 1.63, trend: [90, 92, 93.5] },
+  { name: "Lengua Española", currentAverage: 89.0, previousAverage: 90.0, change: -1.11, trend: [91, 90, 89] },
+  { name: "Ciencias Naturales", currentAverage: 80.5, previousAverage: 81.0, change: -0.62, trend: [78, 81, 80.5] },
+  { name: "Educación Física", currentAverage: 75.0, previousAverage: 68.0, change: 10.29, trend: [72, 68, 75] },
+  { name: "Historia", currentAverage: 64.5, previousAverage: 65.0, change: -0.77, trend: [62, 65, 64.5] },
+]
+
+const events: Event[] = [
+  { id: 1, title: "Feria de Ciencias", date: "18 Nov", location: "Gimnasio, 09:00 - 15:00", type: "Próximo" },
+  { id: 2, title: "Día Festivo", date: "20 Nov", location: "Sin actividades escolares", type: "Feriado" },
+  { id: 3, title: "Torneo de Fútbol", date: "22 Nov", location: "Campo Principal, 16:00", type: "Próximo" },
+]
+
+const messages: Message[] = [
+  { id: 1, sender: "Prof. Martínez", preview: "Material para el examen final...", time: "Hace 1h" },
+  { id: 2, sender: "Coordinación", preview: "Nuevas reglas de laboratorio", time: "Ayer" },
+  { id: 3, sender: "Bibliotecaria", preview: "Libro pendiente de entrega", time: "2 días" },
+]
+
+// Datos de ausencias para cálculo dinámico
+const absenceData = {
+  weekly: 1,
+  monthly: 2,
+  previousWeek: 0.5,
+  previousMonth: 1.5,
+}
+
+function AbsenceTrend() {
+  const weeklyIncrease = absenceData.weekly > absenceData.previousWeek
+  const monthlyIncrease = absenceData.monthly > absenceData.previousMonth
+  const trendUp = weeklyIncrease || monthlyIncrease
+  
+  return (
+    <div className="flex items-center gap-2 text-sm text-muted-foreground pt-2 border-t border-border/30">
+      <span className={`material-symbols-outlined text-lg ${trendUp ? "text-red-500" : "text-green-500"}`}>
+        {trendUp ? "trending_up" : "trending_down"}
+      </span>
+      <p>
+        Tendencia: <span className={trendUp ? "text-red-500" : "text-green-500"}>
+          {trendUp ? "En aumento" : "En disminución"}
+        </span>
+      </p>
+    </div>
+  )
+}
+
+function TrendBar({ values }: { values: number[] }) {
+  const maxValue = Math.max(...values, 100) // Asegurar que el máximo sea al menos 100 para proporción correcta
+  
+  return (
+    <div className="flex items-end h-8 w-16 gap-1">
+      {values.map((value, index) => {
+        const heightPercentage = (value / maxValue) * 100
+        let color = "bg-red-500"
+        
+        if (value >= 80 && value <= 100) {
+          color = "bg-green-500"
+        } else if (value >= 65 && value < 80) {
+          color = "bg-yellow-500"
+        } else if (value < 65) {
+          color = "bg-red-500"
+        }
+        
+        return (
+          <div
+            key={index}
+            className={`w-1/3 rounded-sm ${color}`}
+            style={{ height: `${heightPercentage}%` }}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+function EventIcon({ type }: { type: string }) {
+  const iconMap: Record<string, string> = {
+    "Feria de Ciencias": "event",
+    "Día Festivo": "school",
+    "Torneo de Fútbol": "sports_soccer",
+  }
+  
+  return (
+    <span className="material-symbols-outlined text-lg">
+      {iconMap[type] || "event"}
+    </span>
+  )
+}
+
+function MessageIcon({ sender }: { sender: string }) {
+  const iconMap: Record<string, string> = {
+    "Prof. Martínez": "mail",
+    "Coordinación": "campaign",
+    "Bibliotecaria": "edit_note",
+  }
+  
+  return (
+    <span className="material-symbols-outlined text-lg">
+      {iconMap[sender] || "mail"}
+    </span>
+  )
+}
 
 export default function StudentDashBoard() {
+  const user = useAuthStorage((state) => state.user)
+  const userName = user?.datosPersonales?.firstName || "Usuario"
+
   return (
-    <main className="flex-1 p-8">
-      <header className="mb-10">
-        <h1 className="text-4xl font-bold text-white font-display">
-          Panel de Control del Estudiante
-        </h1>
+    <main className="flex-1 px-16 py-4 bg-background">
+      <header className="mb-8 text-left">
+        <h1 className="text-4xl font-bold tracking-tight text-foreground mb-2">Resumen Académico</h1>
+        <p className="text-muted-foreground text-lg">Bienvenid@ de nuevo, {userName}.</p>
       </header>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Columna izquierda */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Progreso */}
-          <Card className="bg-card text-white">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold mb-4">Progreso General</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg font-semibold mb-2">
-                Progreso en el Curso: 75%
-              </p>
-              <Progress value={75} className="h-4" />
+      
+      <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-4">
+            <div className="px-1 flex justify-start">
+              <h2 className="text-2xl font-bold text-foreground">Tabla de Rendimiento Académico</h2>
+            </div>
+          <div className="bg-card border rounded-xl overflow-hidden">
+            <CardContent className="p-4">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-base font-semibold min-w-[100px] px-3">Materia</TableHead>
+                      <TableHead className="text-base font-semibold min-w-[60px] px-2 hidden sm:table-cell">
+                        <div className="space-y-1">
+                          <div>Promedio</div>
+                          <div>Actual</div>
+                        </div>
+                      </TableHead>
+                      <TableHead className="text-base font-semibold min-w-[60px] px-2 hidden md:table-cell">
+                        <div className="space-y-1">
+                          <div>Promedio</div>
+                          <div>Anterior</div>
+                        </div>
+                      </TableHead>
+                      <TableHead className="text-base font-semibold min-w-[50px] px-2">
+                        <div className="space-y-1">
+                          <div>Cambio</div>
+                          <div>(%)</div>
+                        </div>
+                      </TableHead>
+                      <TableHead className="text-base font-semibold min-w-[50px] px-2">Tendencia</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {subjects.map((subject, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="text-white font-medium px-3">
+                          <div className="sm:hidden">
+                            <div className="text-white font-medium">{subject.name}</div>
+                            <div className="text-white/70 text-xs mt-1">
+                              {subject.currentAverage} ({subject.change > 0 ? "+" : ""}{subject.change}%)
+                            </div>
+                          </div>
+                          <span className="hidden sm:inline text-white">{subject.name}</span>
+                        </TableCell>
+                        <TableCell className="text-white font-bold hidden sm:table-cell px-2">{subject.currentAverage}</TableCell>
+                        <TableCell className="text-white/60 hidden md:table-cell px-2">{subject.previousAverage}</TableCell>
+                        <TableCell className={`${subject.change > 0 ? "text-green-500" : "text-red-500"} font-medium px-2`}>
+                          <span className="hidden sm:inline">{subject.change > 0 ? "+" : ""}{subject.change}%</span>
+                          <span className="sm:hidden">
+                            {subject.change > 0 ? "↑" : "↓"} {Math.abs(subject.change)}%
+                          </span>
+                        </TableCell>
+                        <TableCell className="px-2">
+                          <TrendBar values={subject.trend} />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </CardContent>
-          </Card>
+          </div>
 
-          {/* Resumen de Tareas */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-white">Resumen de Tareas</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="divide-y divide-border-dark">
-                <li className="p-4 flex items-center gap-4">
-                  <div className="bg-primary/10 text-primary p-3 rounded-lg">
-                    📘
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Mis Ausencias</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-2xl text-yellow-500">event_note</span>
+                    <p className="text-base text-foreground">Semanal:</p>
                   </div>
-                  <div className="text-white">
-                    <p className="font-semibold">
-                      Completar el cuestionario de álgebra
-                    </p>
-                    <p className="text-sm">
-                      Matemáticas - Fecha de entrega: 15 de mayo
-                    </p>
+                  <p className="text-xl font-semibold text-foreground">{absenceData.weekly}</p>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-2xl text-yellow-500">calendar_month</span>
+                    <p className="text-base text-foreground">Mensual:</p>
                   </div>
-                  <Badge className="ml-auto bg-green-500">Completado</Badge>
-                </li>
-                <li className="p-4 flex items-center gap-4">
-                  <div className="bg-primary/10 text-primary p-3 rounded-lg">
-                    📖
-                  </div>
-                  <div>
-                    <p className="font-semibold text-text-light">
-                      Investigar sobre la Revolución Francesa
-                    </p>
-                    <p className="text-sm text-text-dark">
-                      Historia - Fecha de entrega: 18 de mayo
-                    </p>
-                  </div>
-                  <Badge className="ml-auto bg-yellow-500">Pendiente</Badge>
-                </li>
-                <li className="p-4 flex items-center gap-4">
-                  <div className="bg-primary/10 text-primary p-3 rounded-lg">
-                    🌌
-                  </div>
-                  <div>
-                    <p className="font-semibold text-text-light">
-                      Preparar presentación sobre el sistema solar
-                    </p>
-                    <p className="text-sm text-text-dark">
-                      Ciencias - Fecha de entrega: 20 de mayo
-                    </p>
-                  </div>
-                  <Badge className="ml-auto bg-red-500">Cancelado</Badge>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
+                  <p className="text-xl font-semibold text-foreground">{absenceData.monthly}</p>
+                </div>
+                <AbsenceTrend />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Mi Conducta</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-2 text-foreground">
+                  <span className="material-symbols-outlined text-2xl text-green-500">sentiment_satisfied</span>
+                  <p className="text-base">Estado: <span className="font-semibold text-green-500">Excelente</span></p>
+                </div>
+                <p className="text-sm text-muted-foreground">Has mantenido un comportamiento ejemplar en todas tus clases. ¡Sigue así, Sofía!</p>
+                <Button variant="link" className="p-0 h-auto text-primary">
+                  Ver méritos y deméritos
+                  <span className="material-symbols-outlined text-lg ml-1">arrow_right_alt</span>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
-        {/* Columna derecha */}
-        <div className="space-y-8">
-          {/* Logros */}
+        <div className="lg:col-span-1 flex flex-col space-y-8">
           <Card>
             <CardHeader>
-              <CardTitle className="text-white">Logros y Badges</CardTitle>
+              <CardTitle>Próximos Eventos</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center text-white text-3xl mb-2">
-                    🏆
-                  </div>
-                  <p className="text-sm text-text-light font-semibold">
-                    Estudiante del Mes
-                  </p>
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white text-3xl mb-2">
-                    🌟
-                  </div>
-                  <p className="text-sm text-text-light font-semibold">
-                    10 Tareas Completadas
-                  </p>
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center text-white text-3xl mb-2">
-                    🧠
-                  </div>
-                  <p className="text-sm text-text-light font-semibold">
-                    Genio Matemático
-                  </p>
-                </div>
+            <CardContent className="p-0">
+              <div className="max-h-[350px] overflow-y-auto">
+                <ul className="divide-y divide-border-dark">
+                  {events.map((event) => (
+                    <li key={event.id} className="p-4 flex items-center justify-between hover:bg-card-dark/50 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <div className="bg-primary/20 text-primary rounded-full size-8 flex items-center justify-center">
+                          <EventIcon type={event.title} />
+                        </div>
+                        <div>
+                          <p className="font-medium text-foreground text-sm">{event.date}: {event.title}</p>
+                          <p className="text-xs text-muted-foreground">{event.location}</p>
+                        </div>
+                      </div>
+                      <Badge 
+                        variant={event.type === "Próximo" ? "default" : "secondary"}
+                        className="text-[10px]"
+                      >
+                        {event.type}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </CardContent>
           </Card>
 
-          {/* Próximos Eventos */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-white">Próximos Eventos</CardTitle>
+              <CardTitle>Mensajes No Leídos</CardTitle>
             </CardHeader>
-            <CardContent>
-              <ul className="divide-y divide-border-dark">
-                <li className="p-4 flex items-start gap-4">
-                  <div className="bg-primary/10 text-primary p-3 rounded-lg mt-1">
-                    📅
-                  </div>
-                  <div>
-                    <p className="font-semibold text-text-light">
-                      Examen parcial de Matemáticas
-                    </p>
-                    <p className="text-sm text-text-dark">
-                      16 de mayo, 10:00 AM
-                    </p>
-                  </div>
-                </li>
-                <li className="p-4 flex items-start gap-4">
-                  <div className="bg-primary/10 text-primary p-3 rounded-lg mt-1">
-                    👨‍👩‍👧‍👦
-                  </div>
-                  <div>
-                    <p className="font-semibold text-text-light">
-                      Reunión de padres y maestros
-                    </p>
-                    <p className="text-sm text-text-dark">
-                      19 de mayo, 2:00 PM
-                    </p>
-                  </div>
-                </li>
-                <li className="p-4 flex items-start gap-4">
-                  <div className="bg-primary/10 text-primary p-3 rounded-lg mt-1">
-                    🔬
-                  </div>
-                  <div>
-                    <p className="font-semibold text-text-light">
-                      Presentación de proyectos de Ciencias
-                    </p>
-                    <p className="text-sm text-text-dark">
-                      22 de mayo, 9:00 AM
-                    </p>
-                  </div>
-                </li>
-              </ul>
+            <CardContent className="p-0">
+              <div className="max-h-[350px] overflow-y-auto">
+                <ul className="divide-y divide-border-dark">
+                  {messages.map((message) => (
+                    <li key={message.id} className="p-4 flex items-center gap-3 hover:bg-card-dark/50 transition-colors">
+                      <div className="bg-primary/20 text-primary rounded-full size-8 flex items-center justify-center flex-shrink-0">
+                        <MessageIcon sender={message.sender} />
+                      </div>
+                      <div className="overflow-hidden flex-1">
+                        <p className="font-medium text-foreground text-sm truncate">{message.sender}</p>
+                        <p className="text-xs text-muted-foreground truncate">{message.preview}</p>
+                      </div>
+                      <span className="ml-auto text-[10px] text-muted-foreground whitespace-nowrap">{message.time}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </CardContent>
           </Card>
-
-          {/* Acceso Rápido */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button className="flex-1">Ver Calificaciones</Button>
-            <Button variant="outline" className="flex-1">
-              Ver Horario de Clases
-            </Button>
-          </div>
         </div>
       </div>
     </main>

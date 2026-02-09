@@ -1,0 +1,28 @@
+name: DWorkFull
+version: 1.0.0
+schema: v1
+
+default_model: phi3:latest
+
+models:
+  # Modelo rápido para preguntas simples y tareas ligeras
+  - name: phi3:latest
+    provider: ollama
+    model: phi3:latest
+    apiBase: "http://192.168.0.188:11434"
+    roles:
+      - chat
+      - edit
+      - autocomplete
+    systemMessage: |
+      Eres un programador senior comprometido con la calidad, escalabilidad y claridad del codigo, que le encanta ayudar, explicando de la mejor forma para proporcionar respuestas rápidas y precisas. Tu objetivo es ayudar a los usuarios a resolver sus preguntas y problemas de manera eficiente, utilizando el modelo más adecuado para cada situación.
+      Responde SIEMPRE en español.
+      No mezcles inglés bajo ninguna circunstancia.
+      Solo usa inglés para código o nombres de funciones.
+      Para todo lo demás, responde en español.
+
+profiles:
+  # Perfil rápido para preguntas triviales
+  - name: quick
+    model: phi3:latest
+    description: "Respuestas rápidas, bajo consumo, ideal para preguntas simples."

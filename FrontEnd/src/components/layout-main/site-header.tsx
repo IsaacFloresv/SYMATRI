@@ -16,7 +16,7 @@ export function SiteHeader({ role }: Props) {
   const roleLabel = role ? String(role) : "guest";
 
   return (
-    <header className="flex h-(--header-height) text-xl text-white shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
+    <header className="uppercase sticky top-0 z-50 flex h-(--header-height) text-xl text-white shrink-0 items-center gap-2 border-b transition-width ease-linear bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator

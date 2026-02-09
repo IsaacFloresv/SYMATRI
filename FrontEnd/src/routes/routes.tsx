@@ -181,7 +181,7 @@ export const router = createBrowserRouter([
   },
   // Alumno Routes
   {
-    path: "/dashboard/student",
+    path: "/alumno/dashboard",
     element: <PrivateRoutes>
       <DashBoardStudent />
     </PrivateRoutes>,
@@ -196,7 +196,7 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
   },
   {
-    path: "/alumno/dashboard",
+    path: "/alumnos/dashboard",
     element: <PrivateRoutes>
       <DashBoardAlumno />
     </PrivateRoutes>,
