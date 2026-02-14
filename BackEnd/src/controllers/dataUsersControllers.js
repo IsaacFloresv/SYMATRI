@@ -64,9 +64,12 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const data = req.body;
-    let resp = await dataUser.update(data, {
-      where: { id: data.id },
-    });
+
+    // Delegar autorización al middleware; aquí aplicamos los cambios enviados
+    const where = data.id ? { id: data.id } : data.userId ? { userId: data.userId } : null;
+    if (!where) return res.json([0]);
+
+    let resp = await dataUser.update(data, { where });
     res.json(resp);
   } catch (error) {
     res.json({

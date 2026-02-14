@@ -3,6 +3,7 @@ import { queryClient } from '../lib/queryCLI.ts'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { RouterProvider } from "react-router-dom";
 import { router } from './routes/routes.tsx';
+import { Toaster } from 'sonner'
 
 // Styles
 import './App.css'
@@ -12,6 +13,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      {/* Sonner Toaster — muestra todos los `toast()` de la app */}
+      <Toaster position="top-right" richColors />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )

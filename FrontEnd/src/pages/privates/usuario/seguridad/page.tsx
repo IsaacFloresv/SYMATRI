@@ -1,19 +1,8 @@
 export default function SeguridadPage() {
     return (
         <main className="flex-1 overflow-y-auto">
-            <header className="h-16 border-b border-slate-200 dark:border-zinc-800 flex items-center justify-between px-8 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-md sticky top-0 z-10">
-                <div className="flex items-center gap-2">
-                    <span className="text-slate-400 dark:text-zinc-500">Ajustes</span>
-                    <span className="material-symbols-outlined text-sm text-slate-400 dark:text-zinc-500">chevron_right</span>
-                    <span className="font-medium">Seguridad</span>
-                </div>
-                <button className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-zinc-900 text-slate-500 transition-colors">
-                    <span className="material-symbols-outlined">notifications</span>
-                </button>
-            </header>
             <div className="max-w-4xl mx-auto py-10 px-8">
                 <div className="mb-10">
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Seguridad de la Cuenta</h1>
                     <p className="text-slate-500 dark:text-zinc-400 mt-2">Gestiona tus credenciales y procesos de verificación de identidad.</p>
                 </div>
                 <div className="space-y-8">
@@ -27,7 +16,7 @@ export default function SeguridadPage() {
                                 <div className="flex flex-col gap-4">
                                     <div className="flex items-end gap-3 flex-wrap md:flex-nowrap">
                                         <div className="flex-1 min-w-[240px] space-y-2">
-                                            <label className="text-sm font-medium text-slate-700 dark:text-zinc-300" for="verificationCode">Código de Verificación</label>
+                                            <label className="text-sm font-medium text-slate-700 dark:text-zinc-300" htmlFor="verificationCode">Código de Verificación</label>
                                             <input className="w-full bg-slate-50 dark:bg-zinc-950 border-red-500 dark:border-red-900/80 rounded-lg px-4 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all outline-none text-red-600 dark:text-red-400" id="verificationCode" placeholder="Ingresa el código" type="text" value="123456" />
                                         </div>
                                         <button className="px-5 py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-slate-900 dark:text-zinc-100 text-sm font-medium rounded-lg border border-slate-200 dark:border-zinc-700 transition-all flex items-center gap-2" type="button">
@@ -52,17 +41,17 @@ export default function SeguridadPage() {
                                 <div className="h-px bg-slate-200 dark:bg-zinc-800 my-2"></div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-slate-700 dark:text-zinc-300" for="newPassword">Nueva Contraseña</label>
-                                        <input className="w-full bg-slate-50 dark:bg-zinc-950 border-slate-200 dark:border-zinc-800 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" disabled="" id="newPassword" placeholder="••••••••••••" type="password" />
+                                        <label className="text-sm font-medium text-slate-700 dark:text-zinc-300" htmlFor="newPassword">Nueva Contraseña</label>
+                                        <input className="w-full bg-slate-50 dark:bg-zinc-950 border-slate-200 dark:border-zinc-800 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" disabled id="newPassword" placeholder="••••••••••••" type="password" />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-slate-700 dark:text-zinc-300" for="confirmPassword">Confirmar Nueva Contraseña</label>
-                                        <input className="w-full bg-slate-50 dark:bg-zinc-950 border-slate-200 dark:border-zinc-800 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" disabled="" id="confirmPassword" placeholder="••••••••••••" type="password" />
+                                        <label className="text-sm font-medium text-slate-700 dark:text-zinc-300" htmlFor="confirmPassword">Confirmar Nueva Contraseña</label>
+                                        <input className="w-full bg-slate-50 dark:bg-zinc-950 border-slate-200 dark:border-zinc-800 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" disabled id="confirmPassword" placeholder="••••••••••••" type="password" />
                                     </div>
                                 </div>
                             </div>
                             <div className="flex justify-end border-t border-slate-200 dark:border-zinc-800 pt-6">
-                                <button className="px-6 py-2.5 bg-primary hover:bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-lg shadow-blue-500/20 transition-all transform active:scale-[0.98]" disabled="" type="submit">
+                                <button className="px-6 py-2.5 bg-primary hover:bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-lg shadow-blue-500/20 transition-all transform active:scale-[0.98]" disabled type="submit">
                                     Actualizar Contraseña
                                 </button>
                             </div>
@@ -79,21 +68,21 @@ export default function SeguridadPage() {
                         <div className="p-6 space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-slate-700 dark:text-zinc-300" for="recoveryEmail">Correo Electrónico</label>
+                                    <label className="text-sm font-medium text-slate-700 dark:text-zinc-300" htmlFor="recoveryEmail">Correo Electrónico</label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <span className="material-symbols-outlined text-sm text-slate-400 dark:text-zinc-600">lock</span>
                                         </div>
-                                        <input className="w-full bg-slate-100 dark:bg-zinc-900/50 border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-500 rounded-lg pl-10 pr-4 py-2 cursor-not-allowed italic" id="recoveryEmail" readonly="" type="email" value="soporte@example.com" />
+                                        <input className="w-full bg-slate-100 dark:bg-zinc-900/50 border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-500 rounded-lg pl-10 pr-4 py-2 cursor-not-allowed italic" id="recoveryEmail" readOnly type="email" value="soporte@example.com" />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-slate-700 dark:text-zinc-300" for="recoveryPhone">Teléfono de Recuperación</label>
+                                    <label className="text-sm font-medium text-slate-700 dark:text-zinc-300" htmlFor="recoveryPhone">Teléfono de Recuperación</label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <span className="material-symbols-outlined text-sm text-slate-400 dark:text-zinc-600">lock</span>
                                         </div>
-                                        <input className="w-full bg-slate-100 dark:bg-zinc-900/50 border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-500 rounded-lg pl-10 pr-4 py-2 cursor-not-allowed italic" id="recoveryPhone" readonly="" type="tel" value="+34 600 000 000" />
+                                        <input className="w-full bg-slate-100 dark:bg-zinc-900/50 border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-500 rounded-lg pl-10 pr-4 py-2 cursor-not-allowed italic" id="recoveryPhone" readOnly type="tel" value="+34 600 000 000" />
                                     </div>
                                 </div>
                             </div>

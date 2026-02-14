@@ -22,6 +22,11 @@ import VistaEventos from "@/pages/privates/administrador/vistaEventos/page";
 import VistaInformes from "@/pages/privates/administrador/vistaInformes/page";
 import VistaSecciones from "@/pages/privates/administrador/vistaSecciones/page";
 
+// Usuario Pages
+import PerfilPage from "@/pages/privates/usuario/perfil/page";
+import SeguridadPage from "@/pages/privates/usuario/seguridad/page";
+import NotificacionesPage from "@/pages/privates/usuario/notificaciones/page";
+
 // Alumno Pages
 import DashBoardStudent from "@/pages/privates/alumno/dashboardStudent/page";
 import DashBoardAlumno from "@/pages/privates/alumno/dashboardAlumno/page";
@@ -220,6 +225,28 @@ export const router = createBrowserRouter([
     path: "/alumno/eventos",
     element: <PrivateRoutes>
       <VistaEventosAlumno />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  // Usuario Routes
+  {
+    path: "/usuario/perfil",
+    element: <PrivateRoutes>
+      <PerfilPage />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/usuario/seguridad",
+    element: <PrivateRoutes>
+      <SeguridadPage />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/usuario/notificaciones",
+    element: <PrivateRoutes>
+      <NotificacionesPage />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },

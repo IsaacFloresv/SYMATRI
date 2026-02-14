@@ -4,8 +4,9 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { Sun, Moon, Monitor, Circle } from "lucide-react"
+import { Sun, Moon, Monitor, Circle, ArrowLeft } from "lucide-react"
 import { applyTheme, getStoredTheme, type Theme } from "@/lib/theme"
+import { useUiStore } from "@/hooks/useUiStore"
 
 type Props = {
   datosPersonales?: {
@@ -27,6 +28,7 @@ const THEMES: { id: Theme; label: string; icon: any }[] = [
 export function SiteHeader({ role }: Props) {
   const roleLabel = role ? String(role) : "guest"
   const [theme, setTheme] = useState<Theme>(() => (getStoredTheme() as Theme) || "system")
+  const activeUserPage = useUiStore((s) => s.activeUserPage)
 
   useEffect(() => {
     // keep local state in sync with persisted value (other tabs)
@@ -52,7 +54,16 @@ export function SiteHeader({ role }: Props) {
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
         />
-        <h1 className="font-medium">Dashboard</h1>
+        {activeUserPage ? (
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="h-9 w-9 p-0" onClick={() => useUiStore.getState().clearActiveUserPage()}>
+              <ArrowLeft className="size-4" />
+            </Button>
+            <h1 className="font-medium">{activeUserPage === 'perfil' ? 'Mi Perfil' : activeUserPage === 'seguridad' ? 'Seguridad' : 'Notificaciones'}</h1>
+          </div>
+        ) : (
+          <h1 className="font-medium">Dashboard</h1>
+        )}
         <div className="ml-auto flex items-center gap-2">
           <div className="text-sm text-muted-foreground">
             <div className="text-base font-semibold">{roleLabel}</div>

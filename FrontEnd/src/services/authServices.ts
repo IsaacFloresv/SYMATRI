@@ -80,11 +80,17 @@ export async function login(credentials: loginData) {
   }
 
   // 4. Construir sesión completa
+  const datosPersonalesFromResponse = session.datosPersonales || {};
+  // si el backend devolvió userName como campo superior, colocarlo también en datosPersonales.name_user
+  if (!datosPersonalesFromResponse.name_user && session.userName) {
+    datosPersonalesFromResponse.name_user = session.userName;
+  }
+
   const fullSession = {
     id: session.id,
     token: session.token,
     email: session.email,
-    datosPersonales: session.datosPersonales,
+    datosPersonales: datosPersonalesFromResponse,
     role: roleDescripcion,
     modulos,
   };

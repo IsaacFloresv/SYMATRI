@@ -501,7 +501,7 @@ export default function eventosAlumnos() {
             <div className="w-full">
                 <div className="mb-6">
                     <Badge variant="secondary" className="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-primary/20 text-primary border border-primary/30">
-                        {eventTypeLabel[selectedEventData.type]}
+                        {eventTypeLabel[(selectedEventData.type as keyof typeof eventTypeLabel)] ?? selectedEventData.type}
                     </Badge>
                     <h4 className="text-3xl font-bold text-white mt-4">{selectedEventData.title}</h4>
                     {selectedEventData.description && (

@@ -72,13 +72,18 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const user = req.body;
-    if (user.pass) {
-      user.pass = await hashPassword(user.pass);
+    const payload = req.body;
+
+    // si se envía pass, la hasheamos antes de guardar
+    if (payload.pass) {
+      payload.pass = await hashPassword(payload.pass);
     }
-    let users = await user.update(user, {
-      where: { id: user.id },
+
+    // Delegar control de autorización al middleware; aquí sólo actualizamos con el payload recibido
+    const users = await user.update(payload, {
+      where: { id: payload.id },
     });
+
     res.json(users);
   } catch (error) {
     res.json({

@@ -29,6 +29,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/hooks/useAuth"
+import { useUiStore } from "@/hooks/useUiStore"
 
 export function NavUser({
   user,
@@ -86,15 +87,15 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => useUiStore.getState().setActiveUserPage('perfil')}>
                 <IconUserCircle />
                 Mi Perfil
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => useUiStore.getState().setActiveUserPage('seguridad')}>
                 <IconShieldLock />
                 Seguridad
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => useUiStore.getState().setActiveUserPage('notificaciones')}>
                 <IconNotification />
                 Notificaciones
               </DropdownMenuItem>
