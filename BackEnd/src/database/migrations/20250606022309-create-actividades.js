@@ -18,6 +18,9 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER
       },
+      seccionesId: {
+        type: Sequelize.JSON
+      },
       estado: {
         type: Sequelize.BOOLEAN
       },

@@ -103,6 +103,13 @@ module.exports = {
           address: "Calle sin salida #2",
           telefono: "78945612",
           userId: 14
+        },
+        {
+          firstName: "Abigail",
+          lastName: "Rodríguez",
+          address: "Av. Central #22",
+          telefono: "78945699",
+          userId: 15
         }
 
       ],

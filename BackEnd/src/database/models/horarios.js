@@ -5,13 +5,13 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class horarios extends Model {
     static associate(models) {
-      // Relación con secciones
+      // Relación con secciones: `seccionId` es la FK numérica que apunta a `secciones.id`
       horarios.belongsTo(models.secciones, {
         foreignKey: 'seccionId',
         as: 'seccion',
       });
 
-      // Relación con profesor (User)
+      // Relación con profesor (User): `profesorId` refiere al usuario que imparte la clase
       horarios.belongsTo(models.user, {
         foreignKey: 'profesorId',
         as: 'profesor',

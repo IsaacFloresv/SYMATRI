@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
         as: 'materia',
       });
 
+      // Relación con tipoNotas
+      notas.belongsTo(models.tipoNotas, {
+        foreignKey: 'tipoId',
+        as: 'tipoNota',
+      });
+
     }
   }
   notas.init({
@@ -30,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     alumnoId: DataTypes.INTEGER,
     materiaId: DataTypes.INTEGER,
     usuarioId: DataTypes.INTEGER,
-    tipo: DataTypes.STRING,
+    tipoId: DataTypes.INTEGER,
     nota: DataTypes.DECIMAL
   }, {
     sequelize,

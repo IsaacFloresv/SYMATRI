@@ -3,36 +3,20 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('actividades', [
-      {
-        periodo: "2024",
-        name: 'Taller de liderazgo',
-        descripcion: 'Sesión interactiva sobre habilidades de liderazgo.',
-        userId: 1,
-        estado: true,
-        fechaInicio: new Date('2025-11-20'),
-        fechaFinal: new Date('2025-11-20'),
-        horaInicio: '09:00:00',
-        horaFinal: '12:00:00',
-        ubicacion: 'Sala 3, Edificio A',
-        objetivo: 'Fomentar el liderazgo entre los participantes.',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        periodo: "2024",
-        name: 'Charla técnica',
-        descripcion: 'Presentación sobre nuevas tecnologías en desarrollo web.',
-        userId: 2,
-        estado: true,
-        fechaInicio: new Date('2025-11-22'),
-        fechaFinal: new Date('2025-11-22'),
-        horaInicio: '14:00:00',
-        horaFinal: '16:00:00',
-        ubicacion: 'Auditorio principal',
-        objetivo: 'Actualizar conocimientos técnicos del equipo.',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
+      { periodo: '2024', name: 'Taller de liderazgo', descripcion: 'Sesión interactiva sobre habilidades de liderazgo.', userId: 1, estado: true, fechaInicio: new Date('2025-11-20'), fechaFinal: new Date('2025-11-20'), horaInicio: '09:00:00', horaFinal: '12:00:00', ubicacion: 'Sala 3, Edificio A', objetivo: 'Fomentar el liderazgo entre los participantes.', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Charla técnica', descripcion: 'Presentación sobre nuevas tecnologías en desarrollo web.', userId: 2, estado: true, fechaInicio: new Date('2025-11-22'), fechaFinal: new Date('2025-11-22'), horaInicio: '14:00:00', horaFinal: '16:00:00', ubicacion: 'Auditorio principal', objetivo: 'Actualizar conocimientos técnicos del equipo.', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Feria de Ciencias', descripcion: 'Exposición de proyectos estudiantiles.', userId: 6, estado: true, fechaInicio: new Date('2024-08-25'), fechaFinal: new Date('2024-08-25'), horaInicio: '09:00:00', horaFinal: '13:00:00', ubicacion: 'Gimnasio', objetivo: 'Mostrar proyectos', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Reunión de Padres', descripcion: 'Reunión trimestral', userId: 7, estado: true, fechaInicio: new Date('2024-09-15'), fechaFinal: new Date('2024-09-15'), horaInicio: '18:00:00', horaFinal: '20:00:00', ubicacion: 'Salón de Actos', objetivo: 'Coordinar padres y maestros', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Competencia Deportiva', descripcion: 'Jornada deportiva intersecciones', userId: 6, estado: true, fechaInicio: new Date('2024-10-05'), fechaFinal: new Date('2024-10-05'), horaInicio: '08:00:00', horaFinal: '12:00:00', ubicacion: 'Campo Deportivo', objetivo: 'Promover actividad física', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Taller de Teatro', descripcion: 'Taller extracurricular', userId: 3, estado: true, fechaInicio: new Date('2024-10-12'), fechaFinal: new Date('2024-10-12'), horaInicio: '15:00:00', horaFinal: '17:00:00', ubicacion: 'Sala Cultural', objetivo: 'Expresión artística', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Simulacro de Evacuación', descripcion: 'Simulacro anual', userId: 4, estado: true, fechaInicio: new Date('2024-09-01'), fechaFinal: new Date('2024-09-01'), horaInicio: '10:00:00', horaFinal: '10:30:00', ubicacion: 'Campus', objetivo: 'Seguridad', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Feria de Lectura', descripcion: 'Promover lectura', userId: 6, estado: true, fechaInicio: new Date('2024-11-05'), fechaFinal: new Date('2024-11-05'), horaInicio: '09:00:00', horaFinal: '12:00:00', ubicacion: 'Biblioteca', objetivo: 'Fomentar lectura', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Viaje Educativo', descripcion: 'Visita al museo', userId: 7, estado: true, fechaInicio: new Date('2024-12-10'), fechaFinal: new Date('2024-12-10'), horaInicio: '08:00:00', horaFinal: '16:00:00', ubicacion: 'Museo Nacional', objetivo: 'Aprendizaje fuera de aula', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Jornada de Salud', descripcion: 'Chequeos y charlas', userId: 6, estado: true, fechaInicio: new Date('2024-09-20'), fechaFinal: new Date('2024-09-20'), horaInicio: '09:00:00', horaFinal: '13:00:00', ubicacion: 'Salón Múltiple', objetivo: 'Promover salud', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Campaña de Donación', descripcion: 'Recolección solidaria', userId: 2, estado: true, fechaInicio: new Date('2024-10-20'), fechaFinal: new Date('2024-10-20'), horaInicio: '09:00:00', horaFinal: '14:00:00', ubicacion: 'Entrada Principal', objetivo: 'Solidaridad', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Taller de Robótica', descripcion: 'Introducción a robótica', userId: 3, estado: true, fechaInicio: new Date('2024-11-12'), fechaFinal: new Date('2024-11-12'), horaInicio: '14:00:00', horaFinal: '17:00:00', ubicacion: 'Laboratorio', objetivo: 'STEM', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Feria Ambiental', descripcion: 'Proyectos ambientales', userId: 6, estado: true, fechaInicio: new Date('2024-10-30'), fechaFinal: new Date('2024-10-30'), horaInicio: '09:00:00', horaFinal: '12:00:00', ubicacion: 'Patio Central', objetivo: 'Conciencia ambiental', createdAt: new Date(), updatedAt: new Date() },
+      { periodo: '2024', name: 'Competencia Matemática', descripcion: 'Olimpiada matemática interna', userId: 6, estado: true, fechaInicio: new Date('2024-09-28'), fechaFinal: new Date('2024-09-28'), horaInicio: '08:00:00', horaFinal: '11:00:00', ubicacion: 'Aula 201', objetivo: 'Evaluación', createdAt: new Date(), updatedAt: new Date() }
     ], {});
   },
 

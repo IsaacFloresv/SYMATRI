@@ -474,7 +474,7 @@ components:
           - alumnoId
           - materiaId
           - usuarioId
-          - tipo
+          - tipoId
           - nota
         properties:
           periodo:
@@ -489,9 +489,9 @@ components:
           usuarioId:
             type: integer
             description: ID del usuario/profesor que registra la nota
-          tipo:
-            type: string
-            description: Tipo de nota (ej. examen, tarea, proyecto)
+          tipoId:
+            type: integer
+            description: ID del tipo de nota (ver `TipoNotas`)
           nota:
             type: number
             format: decimal
@@ -501,8 +501,28 @@ components:
           alumnoId: 15
           materiaId: 101
           usuarioId: 34
-          tipo: "Examen Final"
+          tipoId: 3
           nota: 8.5
+
+    # Esquema para TipoNotas #
+    TipoNotas:
+        type: object
+        required:
+          - nombre
+        properties:
+          id:
+            type: integer
+            description: ID del tipo de nota
+          nombre:
+            type: string
+            description: Nombre del tipo de nota
+          descripcion:
+            type: string
+            description: Descripción opcional del tipo de nota
+        example:
+          id: 3
+          nombre: "Examen Final"
+          descripcion: "Examen de fin de curso"
 
     # Esquema para SeccionAlumnos #
     SeccionAlumnos:

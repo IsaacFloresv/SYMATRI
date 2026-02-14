@@ -9,14 +9,14 @@ module.exports = {
           userName: "soporte",
           pass: "$2b$10$6O4QVIqOXhvWkyO33u35/uL.6HvyFwYCXXFyuCcFr2sSqpt/yAaq2", //1234
           email: "soporte@example.com",
-          roleId: 0,
+          roleId: 5,
           active: true
         },
         {
           userName: "leloo",
           pass: "$2b$10$eTdJ6wo2uMDxXadSDYL26OvlUb72LJw4serGRVBuTZcDMAJen9eR6", //1234
           email: "leloo@example.com",
-          roleId: 2,
+          roleId: 3,
           active: true
         },
         {
@@ -72,28 +72,28 @@ module.exports = {
           userName: "alumno1",
           pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
           email: "alumno1@example.com",
-          roleId: 4,
+          roleId: 1,
           active: true
         },
         {
           userName: "alumno2",
           pass: "$2b$10$L7JHumqFI1q2TLjx674.mOu40Otz79quDqmwRrg8QKtubwTYjz67y", //1234
           email: "alumno2@example.com",
-          roleId: 4,
+          roleId: 1,
           active: true
         },
         {
           userName: "alumno3",
           pass: "$2b$10$L.nNHB8G7I3EEUsvpTMdqeUfiUF5nHCGn15j2t4ywknQjlkJsTLSy", //1234
           email: "alumno3@example.com",
-          roleId: 4,
+          roleId: 1,
           active: true
         },
         {
           userName: "alumno4",
           pass: "$2b$10$a0Hing0zeoUW8jnhBHgfTeQNxA.8q5tEyNDMLFEBr3ClPG1ATDISK", //1234
           email: "alumno4@example.com",
-          roleId: 4,
+          roleId: 1,
           active: true
         },
         {
@@ -114,7 +114,7 @@ module.exports = {
           userName: "isflores",
           pass: "$2b$10$UXoXzxLOplCJuEsZq0ARYOGV5F8oPgJCbxWaBzp9.7ayUaWC9eJK2", //1234
           email: "isflores@example.com",
-          roleId: 1,
+          roleId: 2,
           active: true
         },
       ],

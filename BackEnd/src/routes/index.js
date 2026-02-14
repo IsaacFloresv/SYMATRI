@@ -20,6 +20,7 @@ const rolesRoutes = require("./rolesRoutes")
 const seccionAlumnosRoutes = require("./seccionAlumnosRoutes")
 const seccionesRoutes = require("./seccionesRoutes")
 const seccionProfesorRoutes = require("./seccionProfesorRoutes")
+const eventosRoutes = require("./eventosRoutes")
 const userRoutes = require("./usersRoutes")
 
 //asegurador de rutas, verificador de token
@@ -75,6 +76,7 @@ router.use(`/roles`, verifyToken, authorizeRole('admin1'), rolesRoutes)
 router.use(`/seccionAlumnos`, verifyToken, authorizeRole('admin1', 'admin2', 'profesor'), seccionAlumnosRoutes)
 router.use(`/secciones`, verifyToken, authorizeRole('admin1', 'admin2'), seccionesRoutes)
 router.use(`/seccionProfesor`, verifyToken, authorizeRole('admin1', 'admin2'), seccionProfesorRoutes)
+router.use(`/eventos`, verifyToken, authorizeRole('admin1', 'admin2', 'alumno', 'encargado', 'profesor'), eventosRoutes)
 router.use(`/users`, verifyToken, authorizeRole('admin1'), userRoutes)
 
 module.exports =  router;

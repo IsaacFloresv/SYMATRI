@@ -26,6 +26,17 @@ module.exports = {
           seccionId: "2",
           alumnoId: 4,
         },
+        { periodo: '2024', seccionId: '3', alumnoId: 5 },
+        { periodo: '2024', seccionId: '3', alumnoId: 6 },
+        { periodo: '2024', seccionId: '4', alumnoId: 7 },
+        { periodo: '2024', seccionId: '4', alumnoId: 8 },
+        { periodo: '2024', seccionId: '5', alumnoId: 9 },
+        { periodo: '2024', seccionId: '5', alumnoId: 10 },
+        { periodo: '2024', seccionId: '6', alumnoId: 11 },
+        { periodo: '2024', seccionId: '6', alumnoId: 12 },
+        { periodo: '2024', seccionId: '7', alumnoId: 13 },
+        { periodo: '2024', seccionId: '8', alumnoId: 14 },
+        { periodo: '2024', seccionId: '9', alumnoId: 15 }
       ],
       {}
     );

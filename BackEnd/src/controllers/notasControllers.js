@@ -1,4 +1,4 @@
-const { notas, user, dataUser, materias } = require("../database/models/index");
+const { notas, user, dataUser, materias, tipoNotas } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
@@ -9,6 +9,11 @@ const getAll = async (req, res) => {
           model: materias,
           attributes: ["name"],
           as: "materia",          
+        },
+        {
+          model: tipoNotas,
+          attributes: ["id", "nombre"],
+          as: "tipoNota",
         },
        {
           model: user,
@@ -57,6 +62,11 @@ const getById = async (req, res) => {
           attributes: ["name"],
           as: "materia",          
         },
+        {
+          model: tipoNotas,
+          attributes: ["id", "nombre"],
+          as: "tipoNota",
+        },
        {
           model: user,
           attributes: ["id"],
@@ -104,6 +114,11 @@ const getByAlumnoId = async (req, res) => {
           attributes: ["name"],
           as: "materia",          
         },
+        {
+          model: tipoNotas,
+          attributes: ["id", "nombre"],
+          as: "tipoNota",
+        },
        {
           model: user,
           attributes: ["id"],
@@ -144,10 +159,27 @@ const getByAlumnoId = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const registroN  = req.body;
-    let Nota = await notas.bulkCreate(registroN, {
-      //attributes: { exclude: ["createdAt", "updatedAt"] },
-    });
+    const registroN = req.body;
+
+    const ensureTipo = async (item) => {
+      if (!item) return;
+      if (item.tipoId) return; // already provided
+      if (item.tipo) {
+        // buscar o crear tipoNota
+        const [t] = await tipoNotas.findOrCreate({ where: { nombre: item.tipo }, defaults: { descripcion: null } });
+        item.tipoId = t.id;
+        delete item.tipo;
+      }
+    };
+
+    if (Array.isArray(registroN)) {
+      await Promise.all(registroN.map(ensureTipo));
+      const Nota = await notas.bulkCreate(registroN);
+      return res.json(Nota);
+    }
+
+    await ensureTipo(registroN);
+    const Nota = await notas.create(registroN);
     res.json(Nota);
   } catch (error) {
     res.json({
@@ -161,6 +193,13 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const registroU = req.body;
+
+    if (registroU.tipo && !registroU.tipoId) {
+      const tipo = await tipoNotas.findOne({ where: { nombre: registroU.tipo } });
+      if (tipo) registroU.tipoId = tipo.id;
+      delete registroU.tipo;
+    }
+
     let Nota = await notas.update(registroU, {
       where: { id: registroU.id },
     });

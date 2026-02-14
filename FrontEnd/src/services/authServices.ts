@@ -60,7 +60,16 @@ export async function login(credentials: loginData) {
        // La API es la fuente definitiva: si devuelve nombre lo usamos, y siempre intentamos leer modulos
         roleName = roleData.nombre || roleName;
         roleDescripcion = roleData.descripcion || "";
-        modulos = Array.isArray(roleData.modulos) ? roleData.modulos : [];
+        // soportar modulos como array o como JSON-string (compatibilidad con datos antiguos)
+        let rawModulos: any = roleData.modulos ?? [];
+        if (typeof rawModulos === 'string') {
+          try { rawModulos = JSON.parse(rawModulos); } catch (e) { rawModulos = []; }
+        }
+        if (Array.isArray(rawModulos)) {
+          modulos = rawModulos.map((m: any) => Number(m)).filter((n: number) => !Number.isNaN(n));
+        } else {
+          modulos = [];
+        }
       } else {
         // no crítico: mantener role obtenido de session o datos personales
         console.warn("No se pudo obtener role desde roles/byId, usando role de usuario o guest", await roleRes.text().catch(() => ""));

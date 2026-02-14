@@ -2,7 +2,7 @@ import { getToken, removeSession } from "@/lib/authStorage";
 import { useAuthStorage } from "@/hooks/useAuthStorage";
 
 export const api = {
-  baseUrl: import.meta.env.VITE_API_URL || "http://localhost:4000/api",
+  baseUrl: import.meta.env.VITE_API_URL || "http://localhost:4321/api/v1",
   timeout: 5000,
   // token dinámico leído desde el utilitario
   token: getToken(),

@@ -43,7 +43,7 @@ export function NavUser({
   const { onLogout } = useAuth()
 
   return (
-    <SidebarMenu>
+    <SidebarMenu className="dark">
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

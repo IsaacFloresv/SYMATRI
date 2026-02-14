@@ -23,6 +23,16 @@ const getById = async (req, res) => {
         exclude: ["createdAt", "updatedAt"],
       }
     });
+
+    // Asegurar que `modulos` sea un array (algunas filas antiguas pueden tener JSON string)
+    if (Rol && typeof Rol.modulos === 'string') {
+      try {
+        Rol.modulos = JSON.parse(Rol.modulos);
+      } catch (e) {
+        // si no es parseable, dejar como está y devolver vacío en frontend si corresponde
+      }
+    }
+
     res.json(Rol);
   } catch (error) {
     res.json({

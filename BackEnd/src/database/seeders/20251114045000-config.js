@@ -30,7 +30,18 @@ module.exports = {
         tipo: 'STRING',
         createdAt: new Date(),
         updatedAt: new Date()
-      }
+      },
+      { clave: 'timezone', valor: 'UTC-5', tipo: 'STRING', createdAt: new Date(), updatedAt: new Date() },
+      { clave: 'schoolYearStart', valor: '2024-08-01', tipo: 'STRING', createdAt: new Date(), updatedAt: new Date() },
+      { clave: 'signupOpen', valor: 'true', tipo: 'STRING', createdAt: new Date(), updatedAt: new Date() },
+      { clave: 'maxClassSize', valor: '30', tipo: 'INTEGER', createdAt: new Date(), updatedAt: new Date() },
+      { clave: 'minClassSize', valor: '10', tipo: 'INTEGER', createdAt: new Date(), updatedAt: new Date() },
+      { clave: 'maxSubjectsPerStudent', valor: '8', tipo: 'INTEGER', createdAt: new Date(), updatedAt: new Date() },
+      { clave: 'supportEmail', valor: 'soporte@example.com', tipo: 'STRING', createdAt: new Date(), updatedAt: new Date() },
+      { clave: 'defaultLanguage', valor: 'es', tipo: 'STRING', createdAt: new Date(), updatedAt: new Date() },
+      { clave: 'dateFormat', valor: 'DD/MM/YYYY', tipo: 'STRING', createdAt: new Date(), updatedAt: new Date() },
+      { clave: 'gradingScale', valor: '100', tipo: 'INTEGER', createdAt: new Date(), updatedAt: new Date() },
+      { clave: 'attendanceThreshold', valor: '75', tipo: 'INTEGER', createdAt: new Date(), updatedAt: new Date() }
     ], {});
   },
 

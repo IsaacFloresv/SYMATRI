@@ -1,18 +1,25 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { useAuthStorage } from "@/hooks/useAuthStorage"
+import { api } from "@/lib/api"
+import { getToken } from "@/lib/authStorage"
 
 interface Event {
     id: string
     title: string
     time: string
     date: string
-    type: "meeting" | "class" | "exam" | "assignment"
+    type: "meeting" | "class" | "exam" | "assignment" | string
     location?: string
     description?: string
+    sourceId?: number | string
+    startAt?: string
+    endAt?: string
+    meta?: any
 }
 
 interface DayEvents {
@@ -52,12 +59,138 @@ const examsData = [
 ]
 
 export default function eventosAlumnos() {
+    // Inicializar con la fecha actual para que el calendario muestre el mes actual + siguiente
+    const _now = new Date()
+    const _todayYMD = `${_now.getFullYear()}-${String(_now.getMonth() + 1).padStart(2, '0')}-${String(_now.getDate()).padStart(2, '0')}`
+
     const [selectedEvent, setSelectedEvent] = useState<string | null>(null)
-    const [selectedDate, setSelectedDate] = useState<string | null>(null)
-    const [currentMonth, setCurrentMonth] = useState({
-        year: 2024,
-        month: 8 // Agosto
-    })
+    const [selectedDate, setSelectedDate] = useState<string | null>(_todayYMD)
+    const [currentMonth, setCurrentMonth] = useState(() => ({
+        year: _now.getFullYear(),
+        month: _now.getMonth() + 1
+    }))
+
+    // unified events state (fetched from API; local sample data kept as fallback)
+    const [events, setEvents] = useState<Event[]>([])
+    const [loadingEvents, setLoadingEvents] = useState(false)
+    const [eventsError, setEventsError] = useState<string | null>(null)
+    const session = useAuthStorage((s) => s.user)
+
+    // utilitario: fecha local en formato YYYY-MM-DD (evita desfases por UTC)
+    const formatYMD = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            setLoadingEvents(true)
+            setEventsError(null)
+            try {
+                // range: first day of *previous* month -> last day of next month (cubre las celdas visibles prev/cur/next)
+                const prevMonth = currentMonth.month === 1 ? 12 : currentMonth.month - 1
+                const prevMonthYear = currentMonth.month === 1 ? currentMonth.year - 1 : currentMonth.year
+                const start = `${prevMonthYear}-${String(prevMonth).padStart(2, '0')}-01`
+                const nextMonthYear = currentMonth.month === 12 ? currentMonth.year + 1 : currentMonth.year
+                const nextMonth = currentMonth.month === 12 ? 1 : currentMonth.month + 1
+                const end = `${nextMonthYear}-${String(nextMonth).padStart(2, '0')}-${String(getDaysInMonth(nextMonthYear, nextMonth)).padStart(2, '0')}`
+
+                // no session -> keep local demo data
+                if (!session?.id) {
+                    const fromEventsData: Event[] = Object.values(eventsData).flat()
+                    const fromTasks: Event[] = tasksData.map(t => ({
+                        id: t.id,
+                        title: t.title,
+                        time: t.dueIn,
+                        date: formatYMD(new Date()),
+                        type: 'assignment' as const,
+                        description: `Tarea pendiente — vencimiento: ${t.dueIn}`
+                    }))
+                    const fromExams: Event[] = examsData.map(e => ({
+                        id: e.id,
+                        title: e.title,
+                        time: e.date,
+                        date: formatYMD(new Date()),
+                        type: 'exam' as const,
+                        description: `Tema: ${e.topic}`
+                    }))
+                    setEvents([...fromEventsData, ...fromTasks, ...fromExams])
+                    setLoadingEvents(false)
+                    return
+                }
+
+                const token = getToken()
+                const urlParams = new URLSearchParams(window.location.search)
+                const seccionFromUrl = urlParams.get('seccionId')
+                const seccionFromSession = (session as any)?.datosPersonales?.seccionId || (session as any)?.seccionId || null
+                const seccionToUse = seccionFromUrl || seccionFromSession
+                const paramsObj: Record<string, string> = { start, end }
+                if (seccionToUse) paramsObj.seccionId = String(seccionToUse)
+                else paramsObj.userId = String(session.id)
+                const params = new URLSearchParams(paramsObj)
+                const res = await fetch(`${api.baseUrl}/eventos/search?${params.toString()}`, {
+                    headers: token ? { Authorization: `Bearer ${token}` } : undefined
+                })
+                if (!res.ok) throw new Error('Error fetching events')
+                const json = await res.json()
+                const fetched = (json.events || []).map((ev: any) => ({
+                    id: ev.id,
+                    title: ev.title,
+                    time: ev.time || (ev.startAt ? ev.startAt.split('T')[1] : ''),
+                    date: ev.date,
+                    type: ev.type as any,
+                    location: ev.location,
+                    description: ev.description,
+                    sourceId: ev.sourceId,
+                    startAt: ev.startAt,
+                    endAt: ev.endAt,
+                    meta: ev.meta
+                }))
+
+                const fromTasks: Event[] = tasksData.map(t => ({
+                    id: t.id,
+                    title: t.title,
+                    time: t.dueIn,
+                    date: formatYMD(new Date()),
+                    type: 'assignment' as const,
+                    description: `Tarea pendiente — vencimiento: ${t.dueIn}`
+                }))
+                const fromExams: Event[] = examsData.map(e => ({
+                    id: e.id,
+                    title: e.title,
+                    time: e.date,
+                    date: formatYMD(new Date()),
+                    type: 'exam' as const,
+                    description: `Tema: ${e.topic}`
+                }))
+
+                setEvents([...fetched, ...fromTasks, ...fromExams])
+            } catch (err) {
+                console.error('Failed to load events', err)
+                setEventsError('No fue posible cargar eventos')
+                // fallback to local data
+                const fromEventsData: Event[] = Object.values(eventsData).flat()
+                const fromTasks: Event[] = tasksData.map(t => ({
+                    id: t.id,
+                    title: t.title,
+                    time: t.dueIn,
+                    date: formatYMD(new Date()),
+                    type: 'assignment' as const,
+                    description: `Tarea pendiente — vencimiento: ${t.dueIn}`
+                }))
+                const fromExams: Event[] = examsData.map(e => ({
+                    id: e.id,
+                    title: e.title,
+                    time: e.date,
+                    date: formatYMD(new Date()),
+                    type: 'exam' as const,
+                    description: `Tema: ${e.topic}`
+                }))
+                setEvents([...fromEventsData, ...fromTasks, ...fromExams])
+            } finally {
+                setLoadingEvents(false)
+            }
+        }
+
+        fetchEvents()
+    }, [currentMonth.year, currentMonth.month, session?.id])
 
     const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
     const weekDays = ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"]
@@ -127,11 +260,9 @@ export default function eventosAlumnos() {
         return days
     }
 
-    const handleDateClick = (date: string, isCurrentMonth: boolean) => {
-        if (isCurrentMonth) {
-            setSelectedDate(date)
-            setSelectedEvent(null) // Reset event selection when date changes
-        }
+    const handleDateClick = (date: string) => {
+        setSelectedDate(date)
+        setSelectedEvent(null) // Reset event selection when date changes
     }
 
     const getSelectedDateInfo = () => {
@@ -145,18 +276,18 @@ export default function eventosAlumnos() {
                 month: 'long',
                 day: 'numeric'
             }),
-            events: eventsData[selectedDate] || []
+            events: events.filter(e => e.date === selectedDate)
         }
     }
 
     const getTodayEvents = () => {
-        const today = new Date().toISOString().split('T')[0]
-        return eventsData[today] || []
+        const today = formatYMD(new Date())
+        return events.filter(e => e.date === today)
     }
 
     const getSelectedDateEvents = () => {
         if (!selectedDate) return []
-        return eventsData[selectedDate] || []
+        return events.filter(e => e.date === selectedDate)
     }
 
     const Calendar = ({ year, month, isMain = false }: { year: number, month: number, isMain?: boolean }) => {
@@ -165,31 +296,38 @@ export default function eventosAlumnos() {
         return (
             <Card>
                 <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between text-white">
-                        <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                            <span className="material-symbols-outlined text-primary">event</span>
-                            {monthNames[month - 1]} {year}
-                        </CardTitle>
-                        <div className="flex gap-2">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="p-1 hover:bg-white/10 rounded"
-                                onClick={() => isMain ? getPreviousMonth() : null}
-                                disabled={!isMain}
-                            >
-                                <span className="material-symbols-outlined">chevron_left</span>
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="p-1 hover:bg-white/10 rounded"
-                                onClick={() => isMain ? getNextMonth() : null}
-                                disabled={!isMain}
-                            >
-                                <span className="material-symbols-outlined">chevron_right</span>
-                            </Button>
-                        </div>
+                    <div className="flex items-center justify-center gap-6 text-white w-full">
+                        {isMain ? (
+                            <>
+                                <div className="flex justify-between w-[90%] text-white mb-1">
+                                    <Button className="bg-transparent hover:bg-white/10 flex items-center gap-05 p-4 text-sm text-[#717171] hover:text-white transition-colors" onClick={getPreviousMonth} aria-label="Mes anterior">
+                                        <span className="material-symbols-outlined text-lg">chevron_left</span>
+                                        Mes anterior
+                                    </Button>
+                                    <div className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-2xl text-white">calendar_month</span>
+                                        <CardTitle className="text-lg font-semibold">
+                                            {monthNames[month - 1]} {year}
+                                        </CardTitle>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="flex justify-between w-[90%] text-white mb-1">                                    
+                                    <div className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-2xl text-white">calendar_month</span>
+                                        <CardTitle className="text-lg font-semibold">
+                                            {monthNames[month - 1]} {year}
+                                        </CardTitle>
+                                    </div>
+                                    <Button className="flex items-cente justify-end bg-transparent hover:bg-white/10 gap-05 p-4 text-sm text-[#717171] hover:text-white transition-colors" onClick={getNextMonth} aria-label="Mes siguiente">
+                                        Mes Siguiente
+                                        <span className="material-symbols-outlined text-lg">chevron_right</span>
+                                    </Button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -198,26 +336,31 @@ export default function eventosAlumnos() {
                     </div>
                     <div className="calendar-grid grid grid-cols-7 gap-1 text-center text-sm text-white">
                         {days.map((dayInfo, index) => {
-                            const hasEvents = eventsData[dayInfo.date] && eventsData[dayInfo.date].length > 0
+                            const foundEvent = events.find(e => e.date === dayInfo.date)
+                            const hasEvents = !!foundEvent
                             const isSelected = dayInfo.date === selectedDate
-                            const isToday = dayInfo.date === new Date().toISOString().split('T')[0]
+                            const isToday = dayInfo.date === formatYMD(new Date())
+
+                            // El contenedor del día (no solo el número) recibe fondo azul + texto blanco para hoy y para la fecha seleccionada.
+                            // No usamos bordes para evitar deformaciones del grid.
+                            // Usamos un azul explícito para garantizar contraste en modo claro y oscuro.
+                            const containerClass = isSelected || isToday ? 'bg-blue-600 text-white dark:bg-blue-500 dark:text-white' : ''
+                            const numberClass = isSelected || isToday ? 'text-white font-bold' : ''
 
                             return (
                                 <div
                                     key={index}
-                                    className={`relative cursor-pointer transition-colors ${!dayInfo.isCurrentMonth ? 'text-text-dark-secondary/30' : ''
-                                        } ${isSelected ? 'bg-primary text-white' : ''} ${isToday ? 'bg-primary/20 text-primary font-bold' : ''
-                                        } ${dayInfo.isCurrentMonth && !isSelected && !isToday ? 'hover:bg-white/10' : ''}`}
-                                    onClick={() => handleDateClick(dayInfo.date, dayInfo.isCurrentMonth)}
+                                    className={`relative cursor-pointer transition-colors ${!dayInfo.isCurrentMonth ? 'text-text-dark-secondary/30' : ''} ${containerClass} ${dayInfo.isCurrentMonth && !isSelected && !isToday ? 'hover:bg-white/10' : ''}`}
+                                    onClick={() => handleDateClick(dayInfo.date)}
                                 >
-                                    <span className={isToday && !isSelected ? 'bg-primary rounded-full size-8 flex items-center justify-center' : ''}>
+                                    <span className={numberClass}>
                                         {dayInfo.day}
                                     </span>
                                     {hasEvents && dayInfo.isCurrentMonth && (
-                                        <div className={`absolute bottom-1 left-1/2 -translate-x-1/2 size-1 rounded-full ${eventsData[dayInfo.date]![0].type === 'meeting' ? 'bg-yellow-400' :
-                                                eventsData[dayInfo.date]![0].type === 'exam' ? 'bg-red-400' :
-                                                    eventsData[dayInfo.date]![0].type === 'class' ? 'bg-blue-400' :
-                                                        'bg-green-400'
+                                        <div className={`absolute bottom-1 left-1/2 -translate-x-1/2 size-1 rounded-full ${foundEvent!.type === 'meeting' ? 'bg-yellow-400' :
+                                            foundEvent!.type === 'exam' ? 'bg-red-400' :
+                                                foundEvent!.type === 'class' ? 'bg-blue-400' :
+                                                    'bg-green-400'
                                             }`} />
                                     )}
                                 </div>
@@ -248,16 +391,16 @@ export default function eventosAlumnos() {
                             <div
                                 key={event.id}
                                 className={`p-3 rounded-lg border-l-4 cursor-pointer transition-colors ${selectedEvent === event.id
-                                        ? "bg-blue-400/20 border-blue-400"
-                                        : `bg-${event.type === 'meeting' ? 'primary/10 border-primary' :
-                                            event.type === 'exam' ? 'red-400/10 border-red-400' :
-                                                event.type === 'class' ? 'blue-400/10 border-blue-400' :
-                                                    'green-400/10 border-green-400'
-                                        } hover:bg-${event.type === 'meeting' ? 'primary/20' :
-                                            event.type === 'exam' ? 'red-400/20' :
-                                                event.type === 'class' ? 'blue-400/20' :
-                                                    'green-400/20'
-                                        }`
+                                    ? "bg-blue-400/20 border-blue-400"
+                                    : `bg-${event.type === 'meeting' ? 'primary/10 border-primary' :
+                                        event.type === 'exam' ? 'red-400/10 border-red-400' :
+                                            event.type === 'class' ? 'blue-400/10 border-blue-400' :
+                                                'green-400/10 border-green-400'
+                                    } hover:bg-${event.type === 'meeting' ? 'primary/20' :
+                                        event.type === 'exam' ? 'red-400/20' :
+                                            event.type === 'class' ? 'blue-400/20' :
+                                                'green-400/20'
+                                    }`
                                     }`}
                                 onClick={() => setSelectedEvent(selectedEvent === event.id ? null : event.id)}
                             >
@@ -278,17 +421,63 @@ export default function eventosAlumnos() {
         let selectedEventData: Event | null = null
 
         if (selectedEvent) {
-            // Find event by id
-            for (const date in eventsData) {
-                const event = eventsData[date].find(e => e.id === selectedEvent)
-                if (event) {
-                    selectedEventData = event
-                    break
+            // Prefer events from the unified `events` state (API) first
+            selectedEventData = events.find(e => e.id === selectedEvent) || null
+
+            // fallback to legacy local lists
+            if (!selectedEventData) {
+                for (const date in eventsData) {
+                    const event = eventsData[date].find(e => e.id === selectedEvent)
+                    if (event) {
+                        selectedEventData = event
+                        break
+                    }
                 }
             }
-        } else if (selectedDate && eventsData[selectedDate]?.length > 0) {
-            // Show first event of selected date
-            selectedEventData = eventsData[selectedDate][0]
+
+            if (!selectedEventData) {
+                const task = tasksData.find(t => t.id === selectedEvent)
+                if (task) {
+                    selectedEventData = {
+                        id: task.id,
+                        title: task.title,
+                        time: task.dueIn,
+                        date: formatYMD(new Date()),
+                        type: 'assignment',
+                        description: `Tarea pendiente — vencimiento: ${task.dueIn}`
+                    }
+                }
+            }
+
+            if (!selectedEventData) {
+                const exam = examsData.find(e => e.id === selectedEvent)
+                if (exam) {
+                    selectedEventData = {
+                        id: exam.id,
+                        title: exam.title,
+                        time: exam.date,
+                        date: formatYMD(new Date()),
+                        type: 'exam',
+                        description: `Tema: ${exam.topic}`
+                    }
+                }
+            }
+
+            if (!selectedEventData && selectedEvent === 'clase-refuerzo') {
+                selectedEventData = {
+                    id: 'clase-refuerzo',
+                    title: 'Clase de Refuerzo',
+                    time: '16:30 PM',
+                    date: formatYMD(new Date()),
+                    type: 'class',
+                    description: 'Sesión de refuerzo programada para el grupo.'
+                }
+            }
+        } else if (selectedDate) {
+            // prefer events from state, then fallback to local eventsData
+            const ev = events.find(e => e.date === selectedDate)
+            if (ev) selectedEventData = ev
+            else if (eventsData[selectedDate]?.length > 0) selectedEventData = eventsData[selectedDate][0]
         }
 
         if (!selectedEventData) {
@@ -309,7 +498,7 @@ export default function eventosAlumnos() {
         }
 
         return (
-            <div className="max-w-3xl">
+            <div className="w-full">
                 <div className="mb-6">
                     <Badge variant="secondary" className="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-primary/20 text-primary border border-primary/30">
                         {eventTypeLabel[selectedEventData.type]}
@@ -398,22 +587,23 @@ export default function eventosAlumnos() {
                 </div>
                 <div className="grid grid-cols-1 gap-6 max-sm:grid-cols-1 mb-8 sm:grid-cols-2">
                     <Calendar year={currentMonth.year} month={currentMonth.month} isMain={true} />
-                    <Calendar 
-                        year={currentMonth.month === 12 ? currentMonth.year + 1 : currentMonth.year} 
-                        month={currentMonth.month === 12 ? 1 : currentMonth.month + 1} 
-                        isMain={false} 
+                    <Calendar
+                        year={currentMonth.month === 12 ? currentMonth.year + 1 : currentMonth.year}
+                        month={currentMonth.month === 12 ? 1 : currentMonth.month + 1}
+                        isMain={false}
                     />
                 </div>
-                <div className="grid grid-cols-1 gap-4 max-sm:grid-cols-1 sm:grid-cols-12">
-                    <div className="sm:col-span-4 flex flex-col gap-6">
+                <div className="events-layout grid grid-cols-[1fr_2fr] gap-4 items-start max-[300px]:grid-cols-1">
+                    <div className="events-left min-w-0 flex flex-col gap-6">
                         {selectedDate && getSelectedDateEvents().length > 0 && <SelectedDateInfo />}
-                        
+
                         <Card>
                             <CardHeader className="px-4 py-1 bg-white/5 border-b">
                                 <div className="flex items-center justify-between">
                                     <CardTitle className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2 flex-shrink-0">
                                         <span className="material-symbols-outlined text-blue-400 text-lg">event_upcoming</span>
                                         {selectedDate ? 'Eventos del día' : 'Eventos hoy'}
+                                        {loadingEvents && <span className="text-[10px] text-text-dark-secondary ml-2">Cargando...</span>}
                                     </CardTitle>
                                     <Badge variant="secondary" className="text-[9px] bg-blue-400/20 text-blue-400 px-2 py-0.5 rounded-full font-bold whitespace-nowrap">
                                         {(selectedDate ? getSelectedDateEvents() : getTodayEvents()).length} EVENTOS
@@ -422,16 +612,15 @@ export default function eventosAlumnos() {
                             </CardHeader>
                             <CardContent className="p-3 space-y-3">
                                 {(selectedDate ? getSelectedDateEvents() : getTodayEvents()).map(event => (
-                                    <div 
+                                    <div
                                         key={event.id}
-                                        className={`p-3 rounded-lg border-l-4 cursor-pointer transition-colors ${
-                                            selectedEvent === event.id 
-                                                ? "bg-blue-400/20 border-blue-400" 
-                                                : event.type === 'meeting' ? "bg-primary/10 border-primary hover:bg-primary/20" :
+                                        className={`p-3 rounded-lg border-l-4 cursor-pointer transition-colors ${selectedEvent === event.id
+                                            ? "bg-blue-400/20 border-blue-400"
+                                            : event.type === 'meeting' ? "bg-primary/10 border-primary hover:bg-primary/20" :
                                                 event.type === 'exam' ? "bg-red-400/10 border-red-400 hover:bg-red-400/20" :
-                                                event.type === 'class' ? "bg-blue-400/10 border-blue-400 hover:bg-blue-400/20" :
-                                                "bg-green-400/10 border-green-400 hover:bg-green-400/20"
-                                        }`}
+                                                    event.type === 'class' ? "bg-blue-400/10 border-blue-400 hover:bg-blue-400/20" :
+                                                        "bg-green-400/10 border-green-400 hover:bg-green-400/20"
+                                            }`}
                                         onClick={() => setSelectedEvent(selectedEvent === event.id ? null : event.id)}
                                     >
                                         <h4 className="text-sm font-semibold text-white truncate">{event.title}</h4>
@@ -441,11 +630,25 @@ export default function eventosAlumnos() {
                                         </div>
                                     </div>
                                 ))}
-                                {(!selectedDate ? getTodayEvents() : getSelectedDateEvents()).length === 0 && (
+                                {(selectedDate ? getSelectedDateEvents() : getTodayEvents()).length === 0 && (
                                     <p className="text-center text-text-dark-secondary py-4">
                                         {selectedDate ? 'No hay eventos para esta fecha' : 'No hay eventos hoy'}
                                     </p>
                                 )}
+                                {eventsError && <p className="text-xs text-red-400 mt-2 text-center">{eventsError}</p>}
+                                <div
+                                    className={`p-3 rounded-lg border-l-4 cursor-pointer transition-colors ${selectedEvent === "clase-refuerzo"
+                                        ? "bg-blue-400/20 border-blue-400"
+                                        : "bg-white/5 border-gray-500 hover:bg-white/10"
+                                        }`}
+                                    onClick={() => setSelectedEvent(selectedEvent === "clase-refuerzo" ? null : "clase-refuerzo")}
+                                >
+                                    <h4 className="text-sm font-semibold text-white truncate">Clase de Refuerzo</h4>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <span className="material-symbols-outlined text-[14px] text-text-dark-secondary">schedule</span>
+                                        <span className="text-xs text-text-dark-secondary">16:30 PM</span>
+                                    </div>
+                                </div>
                             </CardContent>
                         </Card>
                         <Card>
@@ -459,14 +662,13 @@ export default function eventosAlumnos() {
                                 </div>
                             </CardHeader>
                             <CardContent className="p-3 space-y-2">
-                                {tasksData.map(task => (
-                                    <div key={task.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
+                                {events.filter(e => e.type === 'assignment').map(task => (
+                                    <div key={task.id} onClick={() => { setSelectedEvent(task.id); setSelectedDate(null); }} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
                                         <span className="material-symbols-outlined text-text-dark-secondary group-hover:text-primary">check_box_outline_blank</span>
                                         <div className="flex-1 min-w-0">
                                             <p className="text-sm font-medium text-white truncate">{task.title}</p>
-                                            <p className={`text-[10px] font-medium ${
-                                                task.type === 'urgent' ? 'text-red-400' : 'text-text-dark-secondary'
-                                            }`}>{task.dueIn}</p>
+                                            <p className={`text-[10px] font-medium ${task.time.includes('hora') || task.time.includes('mañana') ? 'text-red-400' : 'text-text-dark-secondary'
+                                                }`}>{task.time}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -483,127 +685,49 @@ export default function eventosAlumnos() {
                                 </div>
                             </CardHeader>
                             <CardContent className="p-3 space-y-3">
-                                {examsData.map(exam => (
-                                    <div 
+                                {events.filter(e => e.type === 'exam').map(exam => (
+                                    <div
                                         key={exam.id}
-                                        className={`p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-colors ${
-                                            exam.urgency === 'high' 
-                                                ? 'bg-red-400/10 border border-red-400/30 hover:bg-red-400/20' 
-                                                : 'bg-white/5 border border-border-dark'
-                                        }`}
+                                        onClick={() => { setSelectedEvent(exam.id); setSelectedDate(null); }}
+                                        className={`p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-colors ${exam.time.includes('Mañana') || exam.time.includes('high') ? 'bg-red-400/10 border border-red-400/30 hover:bg-red-400/20' : 'bg-white/5 border border-border-dark'}`}
                                     >
                                         <h4 className="text-sm font-semibold text-white truncate">{exam.title}</h4>
-                                        <p className={`text-[10px] mt-1 ${
-                                            exam.urgency === 'high' ? 'text-red-400' : 'text-text-dark-secondary'
-                                        }`}>{exam.date} - {exam.topic}</p>
+                                        <p className={`text-[10px] mt-1 ${exam.time.includes('Mañana') ? 'text-red-400' : 'text-text-dark-secondary'}`}>{exam.time} {exam.description ? `- ${exam.description.replace('Tema: ', '')}` : ''}</p>
                                     </div>
                                 ))}
                             </CardContent>
                         </Card>
                     </div>
-                                </div>
-                                <div 
-                                    className={`p-3 rounded-lg border-l-4 cursor-pointer transition-colors ${
-                                        selectedEvent === "clase-refuerzo" 
-                                            ? "bg-blue-400/20 border-blue-400" 
-                                            : "bg-white/5 border-gray-500 hover:bg-white/10"
-                                    }`}
-                                    onClick={() => setSelectedEvent(selectedEvent === "clase-refuerzo" ? null : "clase-refuerzo")}
-                                >
-                                    <h4 className="text-sm font-semibold text-white truncate">Clase de Refuerzo</h4>
-                                    <div className="flex items-center gap-2 mt-1">
-                                        <span className="material-symbols-outlined text-[14px] text-text-dark-secondary">schedule</span>
-                                        <span className="text-xs text-text-dark-secondary">16:30 PM</span>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        <Card className="py-0">
-                            <CardHeader className="px-4 py-5 bg-white/5 border-b">
+                    <div className="events-right min-w-0">
+                        <Card className="flex flex-col h-full min-h-[500px]">
+                            <CardHeader className="p-6 border-b">
                                 <div className="flex items-center justify-between">
-                                    <CardTitle className="text-xs font-bold text-white tracking-wider flex items-center gap-2 flex-shrink-0">
-                                        <span className="material-symbols-outlined text-yellow-400 text-lg">assignment_late</span>
-                                        Tareas Pendientes
-                                    </CardTitle>
-                                    <Badge variant="secondary" className="text-[9px] bg-yellow-400/20 text-yellow-400 px-2 py-0.5 rounded-full font-bold whitespace-nowrap">3 HOY</Badge>
+                                    <div className="flex items-center gap-4">
+                                        <div className="bg-primary/20 p-3 rounded-xl">
+                                            <span className="material-symbols-outlined text-primary text-3xl">event_available</span>
+                                        </div>
+                                        <div>
+                                            <CardTitle className="text-2xl font-bold text-white">Detalles del Evento</CardTitle>
+                                            <p className="text-sm text-text-dark-secondary">Información completa del elemento seleccionado</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <Button variant="outline" size="icon" className="h-10 w-10 border-border-dark hover:bg-white/5 text-text-dark-secondary">
+                                            <span className="material-symbols-outlined text-xl">share</span>
+                                        </Button>
+                                        <Button variant="outline" size="icon" className="h-10 w-10 border-border-dark hover:bg-white/5 text-text-dark-secondary">
+                                            <span className="material-symbols-outlined text-xl">bookmark</span>
+                                        </Button>
+                                    </div>
                                 </div>
                             </CardHeader>
-                            <CardContent className="p-3 space-y-2">
-                                <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
-                                    <span className="material-symbols-outlined text-text-dark-secondary group-hover:text-primary">check_box_outline_blank</span>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium text-white truncate">Proyecto de Ciencias</p>
-                                        <p className="text-[10px] text-red-400 font-medium">Vence en 2 horas</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
-                                    <span className="material-symbols-outlined text-text-dark-secondary group-hover:text-primary">check_box_outline_blank</span>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium text-white truncate">Ensayo de Historia</p>
-                                        <p className="text-[10px] text-text-dark-secondary">Vence mañana</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
-                                    <span className="material-symbols-outlined text-text-dark-secondary group-hover:text-primary">check_box_outline_blank</span>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium text-white truncate">Ejercicios de Cálculo</p>
-                                        <p className="text-[10px] text-text-dark-secondary">Vence en 3 días</p>
-                                    </div>
-                                </div>
+                            <CardContent className="p-6 sm:p-8 flex-1">
+                                <EventDetails />
                             </CardContent>
                         </Card>
-                        <Card className="py-0">
-                            <CardHeader className="px-4 py-5 bg-white/5 border-b">
-                                <div className="flex items-center justify-between gap-2">
-                                    <CardTitle className="text-[11px] font-bold text-white tracking-tight flex items-center gap-1.5 flex-1 min-w-0">
-                                        <span className="material-symbols-outlined text-red-400 text-[18px] flex-shrink-0">school</span>
-                                        <span className="truncate">Próximos Exámenes</span>
-                                    </CardTitle>
-                                    <Badge variant="destructive" className="text-[9px] bg-red-400/20 text-red-400 px-2 py-0.5 rounded-full font-extrabold whitespace-nowrap flex-shrink-0">2 PRONTO</Badge>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="p-3 space-y-3">
-                                <div className="p-3 rounded-lg bg-red-400/10 border border-red-400/30 cursor-pointer hover:bg-red-400/20 transition-colors">
-                                    <h4 className="text-sm font-semibold text-white truncate">Examen de Matemáticas</h4>
-                                    <p className="text-[10px] text-red-400 font-medium mt-1">Mañana - Álgebra Avanzada</p>
-                                </div>
-                                <div className="p-3 rounded-lg bg-white/5 border border-border-dark cursor-pointer hover:bg-white/10 transition-colors">
-                                    <h4 className="text-sm font-semibold text-white truncate">Parcial de Literatura</h4>
-                                    <p className="text-[10px] text-text-dark-secondary mt-1">Viernes - Análisis de Textos</p>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div >
-        <div className="sm:col-span-8">
-            <Card className="flex flex-col h-full min-h-[500px]">
-                <CardHeader className="p-6 border-b">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="bg-primary/20 p-3 rounded-xl">
-                                <span className="material-symbols-outlined text-primary text-3xl">event_available</span>
-                            </div>
-                            <div>
-                                <CardTitle className="text-2xl font-bold text-white">Detalles del Evento</CardTitle>
-                                <p className="text-sm text-text-dark-secondary">Información completa del elemento seleccionado</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-2">
-                            <Button variant="outline" size="icon" className="h-10 w-10 border-border-dark hover:bg-white/5 text-text-dark-secondary">
-                                <span className="material-symbols-outlined text-xl">share</span>
-                            </Button>
-                            <Button variant="outline" size="icon" className="h-10 w-10 border-border-dark hover:bg-white/5 text-text-dark-secondary">
-                                <span className="material-symbols-outlined text-xl">bookmark</span>
-                            </Button>
-                        </div>
                     </div>
-                </CardHeader>
-                <CardContent className="p-8 flex-1">
-                    <EventDetails />
-                </CardContent>
-            </Card>
-        </div>
-                </div >
-            </div >
-        </main >
+                </div>
+            </div>
+        </main>
     )
 }       

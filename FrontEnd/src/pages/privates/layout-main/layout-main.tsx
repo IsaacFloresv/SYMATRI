@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { AppSidebar } from "@/components/layout-main/app-sidebar"
 import { SiteHeader } from "@/components/layout-main/site-header"
 import {
@@ -5,6 +6,8 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import type { ReactNode } from "react";
+
+import { getStoredTheme, type Theme } from "@/lib/theme"
 
 type Props = {
   children: ReactNode;
@@ -21,9 +24,18 @@ export default function LayoutMain({ children }: Props) {
   }
 
   const { role } = session;
+  const [theme, setTheme] = useState<Theme>(() => (typeof window !== "undefined" ? (getStoredTheme() as Theme) || "system" : "system"))
+
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "app.theme") setTheme((e.newValue as Theme) || "system")
+    }
+    window.addEventListener("storage", onStorage)
+    return () => window.removeEventListener("storage", onStorage)
+  }, [])
 
   return (
-    <>
+    <div className={`${theme === 'dark' ? 'dark' : ''} ${theme === 'dim' ? 'dim' : ''}`}>
       <SidebarProvider
         style={
           {
@@ -41,7 +53,7 @@ export default function LayoutMain({ children }: Props) {
 
       {/* global forbidden modal for 403 redirects */}
       <ForbiddenModal />
-    </>
+    </div>
   )
 
 }
