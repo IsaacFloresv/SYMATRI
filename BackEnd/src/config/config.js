@@ -10,4 +10,5 @@ module.exports = {
   aport: process.env.DB_APORT || "4321",
   jwtSecret: process.env.JWT_SECRET || "3staN0EsMiClav3SecretaJWT",
   apptoken: process.env.APP_TOKEN || "M1s3cret0Nue5tro5ecret0",
+  serviceEmailURL: process.env.serviceEmailURL || "http://localhost:3050"
 };

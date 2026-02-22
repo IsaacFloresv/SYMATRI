@@ -14,7 +14,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
       {/* Sonner Toaster — muestra todos los `toast()` de la app */}
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-right" richColors toastOptions={{ duration: 1000 }} />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
