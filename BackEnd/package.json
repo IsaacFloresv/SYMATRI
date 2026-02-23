@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
+    "dev": "node --watch server.js",
     "start": "node --watch server.js",
     "migrate": "npx sequelize-cli db:migrate",
     "umigrate": "npx sequelize-cli db:migrate:undo:all",

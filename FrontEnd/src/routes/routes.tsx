@@ -10,6 +10,7 @@ import NotFoundPage from "@/pages/public/404/NotFoundPage";
 // Administrador Pages
 import DashBoardAdmin from "@/pages/privates/administrador/dashboardAdmin/page";
 import DatosColegio from "@/pages/privates/administrador/datosColegio/page";
+import EditDatosColegio from "@/pages/privates/administrador/datosColegio/pageEdit";
 import GestionAlumnos from "@/pages/privates/administrador/gestionAlumnos/page";
 import GestionEventos from "@/pages/privates/administrador/gestionEventos/page";
 import GestionGrados from "@/pages/privates/administrador/gestionGrados/page";
@@ -65,13 +66,6 @@ import DashBoard from "@/pages/privates/dashboard/page";
 
 export const router = createBrowserRouter([
   {
-    path: "*",
-    element: <PublicRoutes>
-      <NotFoundPage />
-    </PublicRoutes>,
-    errorElement: <NotFoundPage />,
-  },
-  {
     path: "/",
     element: <PublicRoutes>
       <LoginPage />
@@ -100,10 +94,25 @@ export const router = createBrowserRouter([
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },
+  // alias so links using alternate path don't 404
+  {
+    path: "/admin/dashboard",
+    element: <PrivateRoutes>
+      <DashBoardAdmin />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
   {
     path: "/admin/datos-colegio",
     element: <PrivateRoutes>
       <DatosColegio />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/datos-colegio/editar",
+    element: <PrivateRoutes>
+      <EditDatosColegio />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },
@@ -384,6 +393,14 @@ export const router = createBrowserRouter([
     element: <PrivateRoutes>
       <VistaEventosEncargado />
     </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  // catch-all must come last
+  {
+    path: "*",
+    element: <PublicRoutes>
+      <NotFoundPage />
+    </PublicRoutes>,
     errorElement: <NotFoundPage />,
   },
 ]);

@@ -5,8 +5,8 @@ export function getAllowedPathsFromModuleIds(ids: number[] = []) {
 }
 
 export function isPathAllowed(pathname: string, ids: number[] = []) {
-  // allow the generic dashboard route for any authenticated user
-  if (pathname === "/dashboard") return true;
+  // allow the generic dashboard route and admin dashboard for any authenticated user
+  if (pathname === "/dashboard" || pathname === "/dashboard/admin") return true;
 
   const allowed = getAllowedPathsFromModuleIds(ids);
   for (const p of allowed) {

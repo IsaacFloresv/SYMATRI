@@ -91,7 +91,9 @@ export async function login(credentials: loginData) {
     token: session.token,
     email: session.email,
     datosPersonales: datosPersonalesFromResponse,
-    role: roleDescripcion,
+    // prefer descriptive label returned by roles/byId but fall back
+    // to the name provided in the login response if descripcion is blank
+    role: roleDescripcion || roleName,
     modulos,
   };
 

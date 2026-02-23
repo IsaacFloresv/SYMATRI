@@ -22,18 +22,25 @@ export const useAuth = () => {
       const rawRole = fullSession.role ? String(fullSession.role).toLowerCase() : "guest";
 
       // Mapear roles a rutas existentes
-      const roleToPath = (r: string) => {
-        if (r.includes("soporte")) return "/dashboard";
+      const roleToPath = (r: string, modules: number[]) => {
+        // soporte users should land on the admin dashboard – they are treated like admins
+        // backend description is "soporte" but just in case an english word is used
+        const isSupportRole = r.includes("soporte") || r.includes("support");
+        // older data stored support/admin in modules 1..10
+        const hasSupportModule = modules.some((m) => m >= 1 && m <= 10);
+        console.log("Determining redirect path for role:", r, "with modules:", modules);
+        if (isSupportRole || hasSupportModule) return "/dashboard/admin";
         if (r.includes("admin")) return "/dashboard/admin";
         if (r === "student" || r === "alumno") return "/dashboard/student";
         if (r === "profesor" || r === "teacher") return "/profesor/dashboard";
         if (r === "asistente") return "/asistente/dashboard";
         if (r === "encargado") return "/encargado/dashboard";
+        if (r === "soporte") return "/dashboard/admin";
         // guest u otros -> ruta genérica
         return "/dashboard";
       };
 
-      const redirectPath = roleToPath(rawRole);
+      const redirectPath = roleToPath(rawRole, fullSession.modulos || []);
       // Navegar al dashboard correspondiente
       navigate(redirectPath);
     },
