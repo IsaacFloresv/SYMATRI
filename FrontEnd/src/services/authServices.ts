@@ -93,7 +93,7 @@ export async function login(credentials: loginData) {
     datosPersonales: datosPersonalesFromResponse,
     // prefer descriptive label returned by roles/byId but fall back
     // to the name provided in the login response if descripcion is blank
-    role: roleDescripcion || roleName,
+    role: roleName,
     modulos,
   };
 

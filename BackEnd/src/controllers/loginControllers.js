@@ -1,5 +1,5 @@
 const { where } = require("sequelize");
-const { user, dataUser } = require("../database/models/index");
+const { user, dataUser, role } = require("../database/models/index");
 const { refreshAccessToken, auth, validatePassword, hashPassword } = require('@services/auth');
 
 const login = async (req, res) => {
@@ -7,7 +7,7 @@ const login = async (req, res) => {
     const { userName, pass } = req.body;
     const resp = await user.findOne({
       where: { userName },
-      attributes: ["id", "roleid","email", "pass"],
+      attributes: ["id", "roleid", "email", "pass"],
       include: [{
         model: dataUser,
         attributes: { exclude: ["id", "userId", "createdAt", "updatedAt"] },

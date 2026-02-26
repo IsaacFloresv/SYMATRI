@@ -26,7 +26,14 @@ const THEMES: { id: Theme; label: string; icon: any }[] = [
 ]
 
 export function SiteHeader({ role }: Props) {
-  const roleLabel = role ? String(role) : "guest"
+  let roleLabel = "guest"
+  if (role === "admin1") {
+    roleLabel = "Administrador"
+  } else if (role === "admin007") {
+    roleLabel = "Soporte"
+  } else {
+    roleLabel = role ? String(role) : "guest"
+  }
   const [theme, setTheme] = useState<Theme>(() => (getStoredTheme() as Theme) || "system")
   const activeUserPage = useUiStore((s) => s.activeUserPage)
 

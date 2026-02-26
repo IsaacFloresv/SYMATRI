@@ -19,7 +19,9 @@ export function PrivateRoutes({ children }: Props) {
 
     // Validar permiso para la ruta actual
     const allowed = isPathAllowed(location.pathname, session?.modulos || []);
+
     if (!allowed) {
+        console.log("algo fallo");
         // show 403 modal and redirigir al dashboard si no tiene acceso a this route
         useAuthStorage.getState().showForbidden();
         return <Navigate to="/dashboard" replace />;

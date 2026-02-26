@@ -30,7 +30,6 @@ import NotificacionesPage from "@/pages/privates/usuario/notificaciones/page";
 
 // Alumno Pages
 import DashBoardStudent from "@/pages/privates/alumno/dashboardStudent/page";
-import DashBoardAlumno from "@/pages/privates/alumno/dashboardAlumno/page";
 import VistaCalificacionesMaterias from "@/pages/privates/alumno/vistaCalificacionesMaterias/page";
 import VistaComunicaciones from "@/pages/privates/alumno/vistaComunicaciones/page";
 import VistaEventosAlumno from "@/pages/privates/alumno/vistaEventos/page";
@@ -87,14 +86,6 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
   },
   // Administrador Routes
-  {
-    path: "/dashboard/admin",
-    element: <PrivateRoutes>
-      <DashBoardAdmin />
-    </PrivateRoutes>,
-    errorElement: <NotFoundPage />,
-  },
-  // alias so links using alternate path don't 404
   {
     path: "/admin/dashboard",
     element: <PrivateRoutes>
@@ -193,14 +184,6 @@ export const router = createBrowserRouter([
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },
-  // Alumno Routes
-  {
-    path: "/alumno/dashboard",
-    element: <PrivateRoutes>
-      <DashBoardStudent />
-    </PrivateRoutes>,
-    errorElement: <NotFoundPage />,
-  },
   // Ruta genérica de dashboard (para guest y fallback)
   {
     path: "/dashboard",
@@ -209,10 +192,11 @@ export const router = createBrowserRouter([
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },
+  // Alumno Routes
   {
-    path: "/alumnos/dashboard",
+    path: "/alumno/dashboard",
     element: <PrivateRoutes>
-      <DashBoardAlumno />
+      <DashBoardStudent />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },

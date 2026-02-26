@@ -146,8 +146,8 @@ export default function DashBoardAdmin() {
           </Card>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Card className="bg-white dark:bg-[#111a22] rounded-xl border border-gray-200 dark:border-[#324d67] p-6">
-            <h2 className="text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Ausencias Mensuales (Últimos 3 meses)</h2>
+          <Card className="bg-white dark:bg-[#111a22] rounded-xl border border-gray-200 dark:border-[#324d67] p-6 pb-14">
+            <h2 className="flex justify-center text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Ausencias Mensuales (Últimos 3 meses)</h2>
             <div className="relative flex h-64 p-4 pt-4 pb-0">
               <div className="absolute bottom-0 left-0 w-full border-b border-gray-200 dark:border-gray-700" />
               <div className="flex flex-col justify-between text-right pr-2 text-xs text-gray-500 dark:text-gray-400">
@@ -159,7 +159,7 @@ export default function DashBoardAdmin() {
                 ))}
               </div>
               <div className="flex flex-1 h-full flex-col border-l border-gray-200 dark:border-gray-700">
-                <div className="flex flex-1 justify-around items-end gap-4">
+                <div className="flex flex-1 justify-around items-end gap-4 mb-[-1.4rem]">
                   {monthlyData.map((d) => {
                     const height = (d.value / monthlyMax) * 100;
                     return (
@@ -177,7 +177,7 @@ export default function DashBoardAdmin() {
                     );
                   })}
                 </div>
-                <div className="flex justify-around gap-4 mt-1">
+                <div className="flex justify-around gap-4 mt-1 translate-y-5">
                   {monthlyData.map((d) => (
                     <p key={d.label} className="text-sm text-gray-600 dark:text-gray-400 w-16">
                       {d.label}
@@ -187,8 +187,8 @@ export default function DashBoardAdmin() {
               </div>
             </div>
           </Card>
-          <Card className="bg-white dark:bg-[#111a22] rounded-xl border border-gray-200 dark:border-[#324d67] p-6">
-            <h2 className="text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Ausencias Semanales (Últimas 3 semanas)</h2>
+          <Card className="bg-white dark:bg-[#111a22] rounded-xl border border-gray-200 dark:border-[#324d67] p-6 pb-16">
+            <h2 className="flex justify-center text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Ausencias Semanales (Últimas 3 semanas)</h2>
             <div className="relative flex h-64 p-4 pt-4 pb-0">
               <div className="absolute bottom-0 left-0 w-full border-b border-gray-200 dark:border-gray-700" />
               <div className="flex flex-col justify-between text-right pr-2 text-xs text-gray-500 dark:text-gray-400">
@@ -199,14 +199,14 @@ export default function DashBoardAdmin() {
                 ))}
               </div>
               <div className="flex flex-1 h-full flex-col border-l border-gray-200 dark:border-gray-700">
-                <div className="flex flex-1 justify-around items-end gap-4">
+                <div className="flex flex-1 justify-around items-end gap-4 translate-y-[2.6rem]">
                   {weeklyData.map((d) => {
                     const height = (d.value / weeklyMax) * 100;
                     return (
                       <div key={d.label} className="flex flex-col items-center gap-2 w-16 text-center h-full">
                         {/* bar area with overlayed value */}
                         <div className="relative w-full flex-1 flex items-end">
-                          <div className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 text-sm font-bold text-black dark:text-white">
+                          <div className="absolute bottom-full mb-1 left-1/2 transform-translate-x-1/2 text-sm font-bold text-black dark:text-white">
                             {d.value}
                           </div>
                           <div
@@ -220,7 +220,7 @@ export default function DashBoardAdmin() {
                 </div>
                 <div className="flex justify-around gap-4 mt-1">
                   {weeklyData.map((d) => (
-                    <p key={d.label} className="text-sm text-gray-600 dark:text-gray-400 w-16">
+                    <p key={d.label} className="text-sm text-gray-600 dark:text-gray-400 w-16 translate-y-[2.4rem]">
                       {d.label}
                     </p>
                   ))}
