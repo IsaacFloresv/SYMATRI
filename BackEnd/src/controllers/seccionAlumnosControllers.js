@@ -12,7 +12,7 @@ const getAll = async (req, res) => {
           include: [
             {
               model: user,
-              attributes: ["id"],
+              attributes: ["id", "active"],
               as: "alumnoS",
               include: [
                 {
@@ -47,8 +47,8 @@ const getById = async (req, res) => {
           as: "seccionA",
           include: [
             {
-              model: User,
-              attributes: ["id"],
+              model: user,
+              attributes: ["id", "active"],
               as: "alumnoS",
               include: [
                 {

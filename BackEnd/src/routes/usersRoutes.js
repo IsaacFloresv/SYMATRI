@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const {getAll, getById, create, update, validate, deleteR} = require("../controllers/usersControllers");
+const {getAll, getAllByRol, getById, create, update, validate, deleteR} = require("../controllers/usersControllers");
 
 router.get("/", (req, res) => {
   res.json({ users: "aqui" });
 });
 
 router.get("/all", getAll);
-
+router.get("/byrole", getAllByRol);
 router.get("/byid", getById);
 router.post("/create", create);
 router.put("/update", update);

@@ -1,21 +1,31 @@
-const { secciones, user, dataUser } = require("../database/models/index");
+const { secciones, user, dataUser, grados } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
+    const { gradoId } = req.query;
+    const where = {};
+    if (gradoId) where.gradoId = gradoId;
+
     let result = await secciones.findAll({
+      where,
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
-       {
+        {
+          model: grados,
+          attributes: ["id", "name"],
+          as: "grado",
+        },
+        {
           model: user,
           attributes: { exclude: ["userId","pass", "roleId", "userName", "createdAt", "updatedAt"] },
           as: "ProfesorResponsable",
           include: [
-       {
-          model: dataUser,
-          attributes: { exclude: ["userId","id","address", "telefono", "createdAt", "updatedAt"] },
-          as: "datosPersonales",
-        },
-      ],
+            {
+              model: dataUser,
+              attributes: { exclude: ["userId","id","address", "telefono", "createdAt", "updatedAt"] },
+              as: "datosPersonales",
+            },
+          ],
         },
       ],
     });
@@ -32,20 +42,25 @@ const getById = async (req, res) => {
   try {
     const { id } = req.body;
     let result = await secciones.findAll({
-      where: {id},
+      where: { id },
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
-       {
+        {
+          model: grados,
+          attributes: ["id", "name"],
+          as: "grado",
+        },
+        {
           model: user,
           attributes: { exclude: ["userId","pass", "roleId", "userName", "createdAt", "updatedAt"] },
           as: "ProfesorResponsable",
           include: [
-       {
-          model: dataUser,
-          attributes: { exclude: ["userId","id","address", "telefono", "createdAt", "updatedAt"] },
-          as: "datosPersonales",
-        },
-      ],
+            {
+              model: dataUser,
+              attributes: { exclude: ["userId","id","address", "telefono", "createdAt", "updatedAt"] },
+              as: "datosPersonales",
+            },
+          ],
         },
       ],
     });

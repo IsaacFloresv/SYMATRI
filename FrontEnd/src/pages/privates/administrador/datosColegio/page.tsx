@@ -25,11 +25,11 @@ export default function DatosColegio() {
           <p className="text-slate-600 dark:text-slate-400">Aquí se muestra la información general registrada para el colegio.</p>
         </div>
         <Card className="bg-white dark:bg-[#1C2A38] rounded-xl shadow-sm overflow-hidden">
-          <div className="p-6 sm:p-8">
-            <div className="flex flex-col sm:flex-row items-start gap-6">
+          <div className="p-12 sm:p-8">
+            <div className="flex flex-col p-2 sm:flex-row items-center gap-2">
               <div
                 // fixed size and visible placeholder even without a logo
-                className="bg-center bg-no-repeat aspect-square bg-cover rounded-lg w-32 h-32 flex-shrink-0 bg-slate-200 dark:bg-slate-700"
+                className="p-x-5 bg-center bg-no-repeat aspect-square bg-cover rounded-lg w-45 h-45 flex-shrink-0 bg-slate-200 dark:bg-slate-700"
                 data-alt="Logo del Colegio"
                 style={{
                   backgroundImage: cfg.logo_url
@@ -37,7 +37,7 @@ export default function DatosColegio() {
                     : undefined,
                 }}
               ></div>
-              <div className="flex-grow">
+              <div className="flex-grow text-center">
                 <h2 className="text-slate-900 dark:text-white text-2xl sm:text-3xl font-bold leading-tight tracking-[-0.015em]">
                   {cfg.school_name || "Colegio Moderno"}
                 </h2>
@@ -79,7 +79,7 @@ export default function DatosColegio() {
           </div>
           <div className="px-6 sm:px-8 py-4 flex justify-end">
             <Link to="/admin/datos-colegio/editar">
-              <Button className="flex items-center justify-center gap-2 min-w-[84px] overflow-hidden rounded-lg h-10 px-4 bg-blue-500 text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-blue-600 transition-colors">
+              <Button className="flex w-50 items-center justify-center gap-2 min-w-[84px] overflow-hidden rounded-lg h-10 px-4">
                 <span className="material-symbols-outlined text-lg">edit</span>
                 <span className="truncate">Editar Información</span>
               </Button>

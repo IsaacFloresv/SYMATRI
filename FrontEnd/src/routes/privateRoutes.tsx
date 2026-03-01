@@ -18,13 +18,18 @@ export function PrivateRoutes({ children }: Props) {
     }
 
     // Validar permiso para la ruta actual
-    const allowed = isPathAllowed(location.pathname, session?.modulos || []);
-
+    const ids = session?.modulos || [];
+    const allowed = isPathAllowed(location.pathname, ids);
+    // debug unexpected denials
     if (!allowed) {
-        console.log("algo fallo");
+        console.log("PrivateRoutes denial", {
+          pathname: location.pathname,
+          role: session?.role,
+          modules: ids,
+        });
         // show 403 modal and redirigir al dashboard si no tiene acceso a this route
         useAuthStorage.getState().showForbidden();
-        return <Navigate to="/dashboard" replace />;
+        return <Navigate to="/admin/dashboard" replace />;
     }
 
     return (

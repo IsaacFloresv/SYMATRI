@@ -215,9 +215,9 @@ export default function EditDatosColegio() {
                             </div>
                         </div>
                         <div className="flex items-center justify-end gap-x-4 pt-6 border-t border-slate-200 dark:border-slate-700">
-                            <Button className="text-sm font-semibold leading-6 text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg" type="button" onClick={handleCancel}>Cancelar</Button>
+                            <Button className="w-50" variant="outline" type="button" onClick={handleCancel}>Cancelar</Button>
                             <Button
-                                className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                                className="w-50 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                                 type="submit"
                                 disabled={mutationLoading || isLoading || original.length === 0}
                             >

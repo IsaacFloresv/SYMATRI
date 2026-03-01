@@ -14,7 +14,7 @@ export default function pageDataAlumno() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-1 flex flex-col gap-6">
                     <div className="bg-white dark:bg-[#111a22] rounded-xl border border-gray-200 dark:border-[#324d67] p-6 text-center">
-                        <div className="mx-auto bg-center bg-no-repeat aspect-square bg-cover rounded-full size-24 mb-4" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAR7zsX06ko-7vd3eH99gNRb5PAV3JHHmvC1ZDn5ISKy_dwqJ8KnClxUSw3FBV9RD05F-wwvF-VfIO_uWJ_c7jFT4U8T64kW_YgDKyElez9JC5AOfYVwdZX4HqaDRdkiU29gDJbWgGrAarNc4Zf-ERA2Px9jzU9jvPcWf9QKM6YfqC5YVm8LENyWs8DYiCeL9QNjmxapFUa_MLFYJ9kz6N7KvS5UzAv4qsjrGhFXdwQpHWwFCsjZFGQgQz5TgmFlA-qipGZD_jmU5kI');"></div>
+                        <div className="mx-auto bg-center bg-no-repeat aspect-square bg-cover rounded-full size-24 mb-4" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAR7zsX06ko-7vd3eH99gNRb5PAV3JHHmvC1ZDn5ISKy_dwqJ8KnClxUSw3FBV9RD05F-wwvF-VfIO_uWJ_c7jFT4U8T64kW_YgDKyElez9JC5AOfYVwdZX4HqaDRdkiU29gDJbWgGrAarNc4Zf-ERA2Px9jzU9jvPcWf9QKM6YfqC5YVm8LENyWs8DYiCeL9QNjmxapFUa_MLFYJ9kz6N7KvS5UzAv4qsjrGhFXdwQpHWwFCsjZFGQgQz5TgmFlA-qipGZD_jmU5kI');" }}></div>
                         <h2 className="text-black dark:text-white text-xl font-bold leading-tight">Juan Pérez García</h2>
                         <p className="text-gray-500 dark:text-gray-400 text-sm">ID Alumno: SGE24001</p>
                         <span className="mt-4 inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">

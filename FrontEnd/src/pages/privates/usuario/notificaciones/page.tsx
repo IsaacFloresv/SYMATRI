@@ -4,7 +4,6 @@ import { toast } from "sonner";
 
 import { Card, CardHeader, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Toggle } from "@/components/ui/toggle"
 import { Button } from "@/components/ui/button"
 
 export default function NotificationsPage() {
@@ -21,9 +20,10 @@ export default function NotificationsPage() {
 
     // load from session when available
     useEffect(() => {
-      if (session?.notifications) {
-        setChannels(session.notifications.channels || defaultPrefs.channels);
-        setEvents(session.notifications.events || defaultPrefs.events);
+      const notif = (session as any)?.notifications;
+      if (notif) {
+        setChannels(notif.channels || defaultPrefs.channels);
+        setEvents(notif.events || defaultPrefs.events);
       }
     }, [session]);
 
@@ -34,7 +34,7 @@ export default function NotificationsPage() {
 
     const handleSave = () => {
       const newSession = { ...session, notifications: { channels, events } };
-      setUser(newSession);
+      setUser(newSession as any);
       toast.success('Preferencias guardadas');
     };
 

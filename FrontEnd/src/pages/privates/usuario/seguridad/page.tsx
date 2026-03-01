@@ -236,7 +236,7 @@ export default function SeguridadPage() {
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <span className="material-symbols-outlined text-sm text-slate-400 dark:text-zinc-600">lock</span>
                                         </div>
-                                        <Input className="w-full bg-slate-100 dark:bg-zinc-900/50 border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-500 rounded-lg pl-10 pr-4 py-2 cursor-not-allowed italic" id="recoveryPhone" readOnly type="tel" value={session?.datosPersonales?.telefono || ''} />
+                                        <Input className="w-full bg-slate-100 dark:bg-zinc-900/50 border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-500 rounded-lg pl-10 pr-4 py-2 cursor-not-allowed italic" id="recoveryPhone" readOnly type="tel" value={(session as any)?.datosPersonales?.telefono || ''} />
                                     </div>
                                 </div>
                             </div>

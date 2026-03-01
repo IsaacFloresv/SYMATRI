@@ -12,15 +12,30 @@ import DashBoardAdmin from "@/pages/privates/administrador/dashboardAdmin/page";
 import DatosColegio from "@/pages/privates/administrador/datosColegio/page";
 import EditDatosColegio from "@/pages/privates/administrador/datosColegio/pageEdit";
 import GestionAlumnos from "@/pages/privates/administrador/gestionAlumnos/page";
+import EditAlumno from "@/pages/privates/administrador/gestionAlumnos/editAlumno";
+import NuevoAlumno from "@/pages/privates/administrador/gestionAlumnos/nuevoAlumno";
+import NuevoEvento from "@/pages/privates/administrador/gestionEventos/nuevoEvento";
+import EditarEvento from "@/pages/privates/administrador/gestionEventos/editarEvento";
 import GestionEventos from "@/pages/privates/administrador/gestionEventos/page";
 import GestionGrados from "@/pages/privates/administrador/gestionGrados/page";
+import NuevoGrado from "@/pages/privates/administrador/gestionGrados/gestion";
 import GestionInformes from "@/pages/privates/administrador/gestionInformes/page";
+import NuevoInforme from "@/pages/privates/administrador/gestionInformes/nuevoInforme";
+import EditarInforme from "@/pages/privates/administrador/gestionInformes/editarInforme";
 import GestionMaterias from "@/pages/privates/administrador/gestionMaterias/page";
 import GestionProfesores from "@/pages/privates/administrador/gestionProfesores/page";
+import NuevoUsuario from "@/pages/privates/administrador/gestionUsuarios/gestionUsuarios";
+import NuevoProfesor from "@/pages/privates/administrador/gestionProfesores/gestionProfesores";
 import GestionSecciones from "@/pages/privates/administrador/gestionSecciones/page";
+import NuevoSeccion from "@/pages/privates/administrador/gestionSecciones/gestionSecciones";
 import GestionUsuarios from "@/pages/privates/administrador/gestionUsuarios/page";
+import EditarUsuario from "@/pages/privates/administrador/gestionUsuarios/editarPerfilU";
+// roles management
+import GestionRoles from "@/pages/privates/administrador/gestionRoles/page";
+import NuevoRol from "@/pages/privates/administrador/gestionRoles/gestionRoles";
 import VistaEventos from "@/pages/privates/administrador/vistaEventos/page";
 import VistaInformes from "@/pages/privates/administrador/vistaInformes/page";
+import NuevoMateria from "@/pages/privates/administrador/gestionMaterias/gestionMaterias";
 import VistaSecciones from "@/pages/privates/administrador/vistaSecciones/page";
 
 // Usuario Pages
@@ -115,9 +130,37 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
   },
   {
+    path: "/admin/gestion-alumnos/nuevo",
+    element: <PrivateRoutes>
+      <NuevoAlumno />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-alumnos/editar/:id",
+    element: <PrivateRoutes>
+      <EditAlumno />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
     path: "/admin/gestion-eventos",
     element: <PrivateRoutes>
       <GestionEventos />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-eventos/nuevo",
+    element: <PrivateRoutes>
+      <NuevoEvento />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-eventos/editar/:id",
+    element: <PrivateRoutes>
+      <EditarEvento />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },
@@ -129,9 +172,37 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
   },
   {
+    path: "/admin/gestion-grados/nuevo",
+    element: <PrivateRoutes>
+      <NuevoGrado />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-grados/editar/:id",
+    element: <PrivateRoutes>
+      <NuevoGrado />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
     path: "/admin/gestion-informes",
     element: <PrivateRoutes>
       <GestionInformes />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-informes/nuevo",
+    element: <PrivateRoutes>
+      <NuevoInforme />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-informes/editar/:id",
+    element: <PrivateRoutes>
+      <EditarInforme />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },
@@ -143,9 +214,23 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
   },
   {
+    path: "/admin/gestion-materias/nuevo",
+    element: <PrivateRoutes>
+      <NuevoMateria />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
     path: "/admin/gestion-profesores",
     element: <PrivateRoutes>
       <GestionProfesores />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-profesores/nuevo",
+    element: <PrivateRoutes>
+      <NuevoProfesor />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },
@@ -157,9 +242,51 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
   },
   {
+    path: "/admin/gestion-secciones/nuevo",
+    element: <PrivateRoutes>
+      <NuevoSeccion />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
     path: "/admin/gestion-usuarios",
     element: <PrivateRoutes>
       <GestionUsuarios />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-usuarios/nuevo",
+    element: <PrivateRoutes>
+      <NuevoUsuario />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-usuarios/editar/:id",
+    element: <PrivateRoutes>
+      <EditarUsuario />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-roles",
+    element: <PrivateRoutes>
+      <GestionRoles />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-roles/nuevo",
+    element: <PrivateRoutes>
+      <NuevoRol />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-roles/editar/:id",
+    element: <PrivateRoutes>
+      <NuevoRol />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },

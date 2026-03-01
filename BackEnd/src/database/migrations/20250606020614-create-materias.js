@@ -15,6 +15,9 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
+      gradoId: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

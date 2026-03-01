@@ -148,7 +148,7 @@ export default function DashBoardAdmin() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <Card className="bg-white dark:bg-[#111a22] rounded-xl border border-gray-200 dark:border-[#324d67] p-6 pb-14">
             <h2 className="flex justify-center text-black dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4">Ausencias Mensuales (Últimos 3 meses)</h2>
-            <div className="relative flex h-64 p-4 pt-4 pb-0">
+            <div className="relative flex h-66 p-4 pt-4 pb-0">
               <div className="absolute bottom-0 left-0 w-full border-b border-gray-200 dark:border-gray-700" />
               <div className="flex flex-col justify-between text-right pr-2 text-xs text-gray-500 dark:text-gray-400">
                 {/* dynamic tick labels computed from dataset */}
@@ -193,20 +193,20 @@ export default function DashBoardAdmin() {
               <div className="absolute bottom-0 left-0 w-full border-b border-gray-200 dark:border-gray-700" />
               <div className="flex flex-col justify-between text-right pr-2 text-xs text-gray-500 dark:text-gray-400">
                 {weeklyTicks.map((t, idx) => (
-                  <span key={idx} className="h-0 -translate-y-1/2">
+                  <span key={idx} className="h-0 -translate-y-1/6">
                     {t}
                   </span>
                 ))}
               </div>
               <div className="flex flex-1 h-full flex-col border-l border-gray-200 dark:border-gray-700">
-                <div className="flex flex-1 justify-around items-end gap-4 translate-y-[2.6rem]">
+                <div className="flex flex-1 justify-around items-end gap-4 mt-[-2.5rem] translate-y-[2.6rem]">
                   {weeklyData.map((d) => {
                     const height = (d.value / weeklyMax) * 100;
                     return (
                       <div key={d.label} className="flex flex-col items-center gap-2 w-16 text-center h-full">
                         {/* bar area with overlayed value */}
                         <div className="relative w-full flex-1 flex items-end">
-                          <div className="absolute bottom-full mb-1 left-1/2 transform-translate-x-1/2 text-sm font-bold text-black dark:text-white">
+                          <div className="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 text-sm font-bold text-black dark:text-white">
                             {d.value}
                           </div>
                           <div

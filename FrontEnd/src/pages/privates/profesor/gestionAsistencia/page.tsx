@@ -63,7 +63,7 @@ export default function registroAsistencia() {
                       <td className="h-[88px] px-6 py-2 text-sm font-bold leading-normal tracking-[0.015em]">
                         <div className="flex flex-wrap gap-2 custom-radio-group">
                           <label className="radio-label cursor-pointer rounded-lg border border-transparent px-3 py-1.5 text-xs font-semibold text-success-green bg-success-green/20">
-                            <input checked="" className="hidden" name="student_1" type="radio" /> Presente
+                            <input className="hidden" name="student_1" type="radio" /> Presente
                           </label>
                           <label className="radio-label cursor-pointer rounded-lg border border-transparent px-3 py-1.5 text-xs font-semibold text-danger-red bg-danger-red/20">
                             <input className="hidden" name="student_1" type="radio" /> Ausente
@@ -85,7 +85,7 @@ export default function registroAsistencia() {
                             <input className="hidden" name="student_2" type="radio" /> Presente
                           </label>
                           <label className="radio-label cursor-pointer rounded-lg border border-transparent px-3 py-1.5 text-xs font-semibold text-danger-red bg-danger-red/20">
-                            <input checked="" className="hidden" name="student_2" type="radio" /> Ausente
+                            <input className="hidden" name="student_2" type="radio" /> Ausente
                           </label>
                           <label className="radio-label cursor-pointer rounded-lg border border-transparent px-3 py-1.5 text-xs font-semibold text-warning-yellow bg-warning-yellow/20">
                             <input className="hidden" name="student_2" type="radio" /> Tardanza
@@ -107,7 +107,7 @@ export default function registroAsistencia() {
                             <input className="hidden" name="student_3" type="radio" /> Ausente
                           </label>
                           <label className="radio-label cursor-pointer rounded-lg border border-transparent px-3 py-1.5 text-xs font-semibold text-warning-yellow bg-warning-yellow/20">
-                            <input checked="" className="hidden" name="student_3" type="radio" /> Tardanza
+                            <input className="hidden" name="student_3" type="radio" /> Tardanza
                           </label>
                           <label className="radio-label cursor-pointer rounded-lg border border-transparent px-3 py-1.5 text-xs font-semibold text-info-gray bg-info-gray/20">
                             <input className="hidden" name="student_3" type="radio" /> Justificado
@@ -120,7 +120,7 @@ export default function registroAsistencia() {
                       <td className="h-[88px] px-6 py-2 text-sm font-bold leading-normal tracking-[0.015em]">
                         <div className="flex flex-wrap gap-2 custom-radio-group">
                           <label className="radio-label cursor-pointer rounded-lg border border-transparent px-3 py-1.5 text-xs font-semibold text-success-green bg-success-green/20">
-                            <input checked="" className="hidden" name="student_4" type="radio" /> Presente
+                            <input className="hidden" name="student_4" type="radio" /> Presente
                           </label>
                           <label className="radio-label cursor-pointer rounded-lg border border-transparent px-3 py-1.5 text-xs font-semibold text-danger-red bg-danger-red/20">
                             <input className="hidden" name="student_4" type="radio" /> Ausente

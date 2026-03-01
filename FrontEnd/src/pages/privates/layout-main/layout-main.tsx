@@ -64,17 +64,19 @@ export default function LayoutMain({ children }: Props) {
         <AppSidebar variant="inset" role={role} />
         <SidebarInset>
           <SiteHeader role={role} />
-          {activeUserPage ? (
-            activeUserPage === 'perfil' ? (
-              <PerfilPage />
-            ) : activeUserPage === 'seguridad' ? (
-              <SeguridadPage />
+          <div className="flex-1 overflow-y-auto pt-[var(--header-height)]">
+            {activeUserPage ? (
+              activeUserPage === 'perfil' ? (
+                <PerfilPage />
+              ) : activeUserPage === 'seguridad' ? (
+                <SeguridadPage />
+              ) : (
+                <NotificacionesPage />
+              )
             ) : (
-              <NotificacionesPage />
-            )
-          ) : (
-            children
-          )}
+              children
+            )}
+          </div>
         </SidebarInset>
       </SidebarProvider>
 

@@ -9,6 +9,17 @@ export function isPathAllowed(pathname: string, ids: number[] = []) {
   if (pathname === "/dashboard") return true;
 
   const allowed = getAllowedPathsFromModuleIds(ids);
+  // special case: soporte or administrador roles should always see profesores
+  // (useful if modulos array missing the id)
+  try {
+    const sess = require("@/hooks/useAuthStorage").useAuthStorage.getState().user;
+    const role = (sess?.role || "").toLowerCase();
+    if ((role.includes("soporte") || role.includes("admin")) &&
+        (pathname === "/admin/gestion-profesores" || pathname.startsWith("/admin/gestion-profesores/"))) {
+      return true;
+    }
+  } catch {}
+
   for (const p of allowed) {
     if (pathname === p) return true;
     // allow nested routes such as /admin/gestion-materias/123

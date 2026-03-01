@@ -27,9 +27,9 @@ export default function DashBoardAlumno() {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-green-500">+1.63%</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                 <div className="flex items-end h-8 w-16 gap-1">
-                                                    <div className="w-1/3 bg-green-500 rounded-sm" style="height: 90%;"></div>
-                                                    <div className="w-1/3 bg-green-500 rounded-sm" style="height: 92%;"></div>
-                                                    <div className="w-1/3 bg-green-500 rounded-sm" style="height: 93.5%;"></div>
+                                                    <div className="w-1/3 bg-green-500 rounded-sm" style={{ height: "90%" }}></div>
+                                                    <div className="w-1/3 bg-green-500 rounded-sm" style={{ height: "92%" }}></div>
+                                                    <div className="w-1/3 bg-green-500 rounded-sm" style={{ height: "93.5%" }}></div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -40,9 +40,9 @@ export default function DashBoardAlumno() {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-red-500">-1.11%</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                 <div className="flex items-end h-8 w-16 gap-1">
-                                                    <div className="w-1/3 bg-green-500 rounded-sm" style="height: 91%;"></div>
-                                                    <div className="w-1/3 bg-green-500 rounded-sm" style="height: 90%;"></div>
-                                                    <div className="w-1/3 bg-green-500 rounded-sm" style="height: 89%;"></div>
+                                                    <div className="w-1/3 bg-green-500 rounded-sm" style={{ height: "91%" }}></div>
+                                                    <div className="w-1/3 bg-green-500 rounded-sm" style={{ height: "90%" }}></div>
+                                                    <div className="w-1/3 bg-green-500 rounded-sm" style={{ height: "89%" }}></div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -53,9 +53,9 @@ export default function DashBoardAlumno() {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-red-500">-0.62%</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                 <div className="flex items-end h-8 w-16 gap-1">
-                                                    <div className="w-1/3 bg-green-500 rounded-sm" style="height: 78%;"></div>
-                                                    <div className="w-1/3 bg-green-500 rounded-sm" style="height: 81%;"></div>
-                                                    <div className="w-1/3 bg-green-500 rounded-sm" style="height: 80.5%;"></div>
+                                                    <div className="w-1/3 bg-green-500 rounded-sm" style={{ height: "78%" }}></div>
+                                                    <div className="w-1/3 bg-green-500 rounded-sm" style={{ height: "81%" }}></div>
+                                                    <div className="w-1/3 bg-green-500 rounded-sm" style={{ height: "80.5%" }}></div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -66,9 +66,9 @@ export default function DashBoardAlumno() {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-green-500">+10.29%</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                 <div className="flex items-end h-8 w-16 gap-1">
-                                                    <div className="w-1/3 bg-yellow-500 rounded-sm" style="height: 72%;"></div>
-                                                    <div className="w-1/3 bg-red-500 rounded-sm" style="height: 68%;"></div>
-                                                    <div className="w-1/3 bg-yellow-500 rounded-sm" style="height: 75%;"></div>
+                                                    <div className="w-1/3 bg-yellow-500 rounded-sm" style={{ height: "72%" }}></div>
+                                                    <div className="w-1/3 bg-red-500 rounded-sm" style={{ height: "68%" }}></div>
+                                                    <div className="w-1/3 bg-yellow-500 rounded-sm" style={{ height: "75%" }}></div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -79,9 +79,9 @@ export default function DashBoardAlumno() {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-red-500">-0.77%</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                 <div className="flex items-end h-8 w-16 gap-1">
-                                                    <div className="w-1/3 bg-red-500 rounded-sm" style="height: 62%;"></div>
-                                                    <div className="w-1/3 bg-red-500 rounded-sm" style="height: 65%;"></div>
-                                                    <div className="w-1/3 bg-red-500 rounded-sm" style="height: 64.5%;"></div>
+                                                    <div className="w-1/3 bg-red-500 rounded-sm" style={{ height: "62%" }}></div>
+                                                    <div className="w-1/3 bg-red-500 rounded-sm" style={{ height: "65%" }}></div>
+                                                    <div className="w-1/3 bg-red-500 rounded-sm" style={{ height: "64.5%" }}></div>
                                                 </div>
                                             </td>
                                         </tr>

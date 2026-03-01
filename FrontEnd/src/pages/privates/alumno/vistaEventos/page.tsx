@@ -217,10 +217,16 @@ export default function eventosAlumnos() {
         return new Date(year, month - 1, 1).getDay()
     }
 
+    interface DayCell {
+        day: number;
+        isCurrentMonth: boolean;
+        date: string;
+    }
+
     const getDaysForCalendar = (year: number, month: number) => {
         const daysInMonth = getDaysInMonth(year, month)
         const firstDay = getFirstDayOfMonth(year, month)
-        const days = []
+        const days: DayCell[] = []
 
         // Previous month days
         const prevMonth = month === 1 ? 12 : month - 1

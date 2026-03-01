@@ -1,4 +1,4 @@
-const { user, dataUser } = require("@models/index");
+const { user, dataUser, materiaProfesor, materias, roles } = require("@models/index");
 const { hashPassword } = require('@services/auth');
 
 const getAll = async (req, res) => {
@@ -10,7 +10,7 @@ const getAll = async (req, res) => {
 
     let users = await user.findAll({
       where,
-      attributes: { exclude: ["id", "roleId","pass", "createdAt", "updatedAt"] },
+      attributes: { exclude: ["id", "roleId", "pass", "createdAt", "updatedAt"] },
       include: [
         {
           model: dataUser,
@@ -21,6 +21,49 @@ const getAll = async (req, res) => {
     });
     res.json(users);
   } catch (error) {
+    res.json({
+      message: "No fue posible obtener la informacion",
+      res: false,
+    });
+  }
+};
+
+const getAllByRol = async (req, res) => {
+  try {
+    const { roleId } = req.query;
+
+    const where = {};
+    if (roleId) where.roleId = roleId;
+
+    let users = await user.findAll({
+      where,
+      attributes: { exclude: ["pass", "createdAt", "updatedAt"] },
+      include: [
+        {
+          model: dataUser,
+          attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+          as: "datosPersonales",
+        },{
+          model: roles,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+          as: "role",
+        }, {
+          model: materiaProfesor,
+          attributes: { exclude: ["profesorId", "id", "createdAt", "updatedAt"] },
+          as: "profesorAsignado",
+          include: [
+            {
+              model: materias,
+              attributes: { exclude: ["createdAt", "updatedAt"] },
+              as: "materia",
+            },
+          ]
+        },
+      ],
+    });
+    res.json(users);
+  } catch (error) {
+    console.log(error);
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,
@@ -97,7 +140,7 @@ const update = async (req, res) => {
 const validate = async (req, res) => {
   try {
     const { id } = req.body;
-    const isActive = {"active": true};
+    const isActive = { "active": true };
     let users = await user.update(isActive, {
       where: { id },
       fields: ["active"],
@@ -115,7 +158,7 @@ const validate = async (req, res) => {
 const deleteR = async (req, res) => {
   try {
     const { id } = req.body;
-    const isActive = {"active": false};
+    const isActive = { "active": false };
     let users = await user.update(isActive, {
       where: { id },
       fields: ["active"],
@@ -132,6 +175,7 @@ const deleteR = async (req, res) => {
 
 module.exports = {
   getAll,
+  getAllByRol,
   getById,
   create,
   update,

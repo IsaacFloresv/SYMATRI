@@ -40,7 +40,6 @@ export async function login(credentials: loginData) {
   
   // 2. Priorizar role desde la respuesta del usuario si existe, o desde datos personales
   let roleName = session.role || session.datosPersonales?.role || "guest";
-  let roleDescripcion = "";
   let modulos: number[] = [];
 
   // 3. Consultar endpoint de roles para obtener el role definitivo y modulos (si está disponible)
@@ -59,7 +58,6 @@ export async function login(credentials: loginData) {
         
        // La API es la fuente definitiva: si devuelve nombre lo usamos, y siempre intentamos leer modulos
         roleName = roleData.nombre || roleName;
-        roleDescripcion = roleData.descripcion || "";
         // soportar modulos como array o como JSON-string (compatibilidad con datos antiguos)
         let rawModulos: any = roleData.modulos ?? [];
         if (typeof rawModulos === 'string') {

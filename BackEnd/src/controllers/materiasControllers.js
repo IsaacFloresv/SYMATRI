@@ -1,10 +1,22 @@
 
-const { materias } = require("../database/models/index");
+const { materias, grados } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
+    const { gradoId } = req.query;
+    const where = {};
+    if (gradoId) where.gradoId = gradoId;
+
     let result = await materias.findAll({
+      where,
       attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: grados,
+          attributes: ["id", "name"],
+          as: "grado",
+        },
+      ],
     });
     res.json(result);
   } catch (error) {
@@ -19,10 +31,17 @@ const getById = async (req, res) => {
   try {
     const { id } = req.query;
     let result = await materias.findOne({
-      where: {id},
+      where: { id },
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
+      include: [
+        {
+          model: grados,
+          attributes: ["id", "name"],
+          as: "grado",
+        },
+      ],
     });
     res.json(result);
   } catch (error) {

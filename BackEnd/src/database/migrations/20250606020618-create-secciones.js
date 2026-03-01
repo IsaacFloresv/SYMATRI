@@ -18,6 +18,9 @@ module.exports = {
       profesorId: {
         type: Sequelize.INTEGER
       },
+      gradoId: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

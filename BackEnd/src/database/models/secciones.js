@@ -38,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'seccionId',
         as: 'seccionA',
       });
+      // relacion con grado
+      secciones.belongsTo(models.grados, {
+        foreignKey: 'gradoId',
+        as: 'grado',
+      });
 
     }
   }
@@ -46,6 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       periodo: DataTypes.STRING,
       name: DataTypes.STRING,
       profesorId: DataTypes.INTEGER,
+      gradoId: DataTypes.INTEGER,
     },
     {
       sequelize,

@@ -10,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'materiaId',
         as: 'materia',
       });
+      // relación con grado
+      materias.belongsTo(models.grados, {
+        foreignKey: 'gradoId',
+        as: 'grado',
+      });
 
       // Relación con notas
       materias.hasMany(models.notas, {
@@ -20,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   materias.init({
     name: DataTypes.STRING,
-    description: DataTypes.TEXT
+    description: DataTypes.TEXT,
+    gradoId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'materias',
