@@ -1,16 +1,91 @@
+import { useState, useEffect } from "react";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { api } from "@/lib/api";
+
+interface Teacher {
+  id: string;
+  name: string;
+  email: string;
+  active: boolean;
+}
+
 export default function VistaProfesores() {
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const headers: Record<string,string> = {};
+        if (api.token) headers.Authorization = `Bearer ${api.token}`;
+        const res = await fetch(`${api.baseUrl}/users/byrole?roleId=3`, { headers });
+        if (!res.ok) throw new Error("Error al obtener profesores");
+        const data = await res.json();
+        setTeachers((data || []).map((u: any) => ({
+          id: String(u.id),
+          name: `${u.datosPersonales?.firstName || ""} ${u.datosPersonales?.lastName || ""}`.trim() || u.userName,
+          email: u.email,
+          active: u.active,
+        })));
+      } catch (e: any) {
+        console.error(e);
+        setError(e.message || "Error");
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  const filtered = teachers.filter(t =>
+    !query || t.name.toLowerCase().includes(query.toLowerCase()) || t.email.toLowerCase().includes(query.toLowerCase())
+  );
+
   return (
-    <main className="flex-1 p-6 lg:p-10">
-      <div className="mx-auto max-w-7xl">
-        <div className="flex flex-wrap justify-between gap-3 mb-8">
-          <div className="flex flex-col gap-1">
-            <p className="text-gray-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Vista de Profesores</p>
-            <p className="text-gray-600 dark:text-[#92aec9] text-base font-normal leading-normal">Bienvenido a la vista de profesores.</p>
+    <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col gap-2 mb-6">
+          <h1 className="text-gray-900 dark:text-white text-3xl font-bold">Directorio de Profesores</h1>
+          <p className="text-gray-500 dark:text-gray-400">Busca, filtra y visualiza la información de todos los profesores del colegio.</p>
+        </div>
+        <div className="mb-4">
+          <Input
+            placeholder="Busca por nombre o email..."
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+          />
+        </div>
+        {loading && <p>Cargando...</p>}
+        {error && <p className="text-red-500">{error}</p>}
+        {!loading && !error && (
+          <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="overflow-x-auto">
+              <Table className="w-full">
+                <TableHeader className="bg-gray-50 dark:bg-gray-900/50">
+                  <TableRow>
+                    <TableHead>Nombre</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Estado</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody className="divide-y divide-gray-200 dark:divide-gray-800">
+                  {filtered.map(t => (
+                    <TableRow key={t.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                      <TableCell>{t.name}</TableCell>
+                      <TableCell>{t.email}</TableCell>
+                      <TableCell>{t.active ? "Activo" : "Inactivo"}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
-        </div>
-        <div className="bg-white dark:bg-[#192733] rounded-xl p-8 border border-gray-200 dark:border-gray-800">
-          <p className="text-gray-600 dark:text-[#92aec9] text-base font-normal">Esta página está en desarrollo...</p>
-        </div>
+        )}
       </div>
     </main>
   );

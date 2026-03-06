@@ -62,17 +62,23 @@ import VistaSeccionesProfesor from "@/pages/privates/profesor/vistaSecciones/pag
 
 // Asistente Pages
 import DashBoardAsistente from "@/pages/privates/asistente/dashboardAsistente/page";
-import VistaEventosAsistente from "@/pages/privates/asistente/vistaEventos/page";
-import VistaInformesAsistente from "@/pages/privates/asistente/vistaInformes/page";
+import VistaEventosAsistente from "@/pages/privates/asistente/vistaEventos/page.tsx";
+import EditarEventoAsistente from "@/pages/privates/asistente/vistaEventos/editarEvento.tsx";
+import GestionEventosAsistente from "@/pages/privates/asistente/vistaEventos/gestionEventos.tsx";
+import VistaInformesAsistente from "@/pages/privates/asistente/vistaInformes/page.tsx";
+import VistaInformeAsistente from "@/pages/privates/asistente/vistaInformes/vistaInforme.tsx";
 import VistaProfesores from "@/pages/privates/asistente/vistaProfesores/page";
 import VistaSeccionesAsistente from "@/pages/privates/asistente/vistaSecciones/page";
+import DatosAlumno from "@/pages/privates/asistente/dashboardAsistente/datosAlumno";
+import DatosDashBoard from "@/pages/privates/asistente/dashboardAsistente/datosDashBoard";
 
 // Encargado Pages
 import DashBoardEncargado from "@/pages/privates/encargado/dashboardEncargado/page";
 import GestionComunicacion from "@/pages/privates/encargado/gestionComunicacion/page";
 import GestionMatricula from "@/pages/privates/encargado/gestionMatricula/page";
-import VistaCalificacionesMateriasEncargado from "@/pages/privates/encargado/vistaCalificacionesMaterias/page";
-import VistaEventosEncargado from "@/pages/privates/encargado/vistaEventos/page";
+import VistaCalificacionesMateriasEncargado from "@/pages/privates/encargado/vistaCalificacionesMaterias/page.tsx";
+import VistaEventosEncargado from "@/pages/privates/encargado/vistaEventos/page.tsx";
+import LectorMensajes from "@/pages/privates/encargado/gestionComunicacion/lectorMensajes"; // dinámica (reemplaza MessageDetail)
 
 // Encargado Pages
 import DashBoard from "@/pages/privates/dashboard/page";
@@ -215,6 +221,13 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin/gestion-materias/nuevo",
+    element: <PrivateRoutes>
+      <NuevoMateria />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/admin/gestion-materias/editar/:id",
     element: <PrivateRoutes>
       <NuevoMateria />
     </PrivateRoutes>,
@@ -443,6 +456,13 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
   },
   {
+    path: "/asistente/datos-dashboard",
+    element: <PrivateRoutes>
+      <DatosDashBoard />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
     path: "/asistente/vista-eventos",
     element: <PrivateRoutes>
       <VistaEventosAsistente />
@@ -450,9 +470,30 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
   },
   {
+    path: "/asistente/vista-eventos/nuevo",
+    element: <PrivateRoutes>
+      <GestionEventosAsistente />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/asistente/vista-eventos/editar/:id",
+    element: <PrivateRoutes>
+      <EditarEventoAsistente />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
     path: "/asistente/vista-informes",
     element: <PrivateRoutes>
       <VistaInformesAsistente />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/asistente/vista-informe/:id",
+    element: <PrivateRoutes>
+      <VistaInformeAsistente />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },
@@ -470,6 +511,13 @@ export const router = createBrowserRouter([
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },
+  {
+    path: "/asistente/alumno/:id",
+    element: <PrivateRoutes>
+      <DatosAlumno />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
   // Encargado Routes
   {
     path: "/encargado/dashboard",
@@ -482,6 +530,14 @@ export const router = createBrowserRouter([
     path: "/encargado/gestion-comunicacion",
     element: <PrivateRoutes>
       <GestionComunicacion />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/encargado/gestion-comunicacion/:id",
+    element: <PrivateRoutes>
+      {/* use lectorMensajes for compatibility; messageDetail still available as alias */}
+      <LectorMensajes />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },

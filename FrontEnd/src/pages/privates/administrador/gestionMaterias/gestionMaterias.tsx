@@ -1,50 +1,159 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { useNavigate, useParams } from "react-router-dom";
+import { api } from "@/lib/api";
 
 export default function NuevoMateria() {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const isEditing = Boolean(id);
 
   const [form, setForm] = useState({
     name: "",
-    code: "",
+    // code field removed; instead choose profesor
+    profesorId: "",
     description: "",
-    grades: [] as string[],
+    gradoId: "", // store selected grade id as string
   });
 
-  const toggleGrade = (grade: string) => {
-    setForm((p) => {
-      const exists = p.grades.includes(grade);
-      return {
-        ...p,
-        grades: exists ? p.grades.filter((g) => g !== grade) : [...p.grades, grade],
-      };
-    });
-  };
+  const [gradesOptions, setGradesOptions] = useState<{ id: number; name: string }[]>([]);
+  const [teacherOptions, setTeacherOptions] = useState<{ id: string; name: string }[]>([]);
+  const [relationId, setRelationId] = useState<string>("");
+
+  // grades checkbox logic removed; using select now
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      // TODO: call API to create materia
-      console.log("submit", form);
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (api.token) headers.Authorization = `Bearer ${api.token}`;
+      const payload: any = {
+        name: form.name,
+        description: form.description,
+      };
+      if (form.gradoId) payload.gradoId = parseInt(form.gradoId, 10);
+
+      let url = `${api.baseUrl}/materias/create`;
+      let method: "POST" | "PUT" = "POST";
+      let materiaId: any = id;
+      if (isEditing && id) {
+        url = `${api.baseUrl}/materias/update`;
+        method = "PUT";
+        payload.id = id;
+      }
+
+      const res = await fetch(url, {
+        method,
+        headers,
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("materia save failed");
+      const result = await res.json();
+      // obtain id for new record
+      if (!isEditing && result && result.id) {
+        materiaId = result.id;
+      }
+
+      // handle assignment to professor
+      if (form.profesorId && materiaId) {
+        const relPayload: any = {
+          materiaId: materiaId,
+          profesorId: parseInt(form.profesorId, 10),
+        };
+        if (relationId) {
+          relPayload.id = relationId;
+          await fetch(`${api.baseUrl}/materiasProfesores/update`, {
+            method: "PUT",
+            headers,
+            body: JSON.stringify(relPayload),
+          });
+        } else {
+          await fetch(`${api.baseUrl}/materiasProfesores/create`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify(relPayload),
+          });
+        }
+      }
+
       navigate("/admin/gestion-materias");
     } catch (err) {
-      console.error(err);
+      console.error(isEditing ? "error updating materia" : "error creating materia", err);
     }
   };
 
-  const allGrades = [
-    "1º Primaria",
-    "2º Primaria",
-    "3º Primaria",
-    "4º Primaria",
-    "5º Primaria",
-    "6º Primaria",
-    "1º ESO",
-    "2º ESO",
-  ];
+
+  // fetch list of grades and teachers for dropdowns
+  useEffect(() => {
+    async function loadGrades() {
+      try {
+        const headers: Record<string,string> = {};
+        if (api.token) headers.Authorization = `Bearer ${api.token}`;
+        const res = await fetch(`${api.baseUrl}/grados/all`, { headers });
+        if (res.ok) {
+          const data: any[] = await res.json();
+          setGradesOptions(data.map((g) => ({ id: g.id, name: g.name })));
+        }
+      } catch (err) {
+        console.error("error loading grades", err);
+      }
+    }
+
+    async function loadTeachers() {
+      try {
+        const headers: Record<string,string> = {};
+        if (api.token) headers.Authorization = `Bearer ${api.token}`;
+        const res = await fetch(`${api.baseUrl}/users/byrole?roleId=3`, { headers });
+        if (res.ok) {
+          const data: any[] = await res.json();
+          const list = data.map((u) => {
+            const nombre = u.datosPersonales
+              ? `${u.datosPersonales.firstName || ""} ${u.datosPersonales.lastName || ""}`.trim()
+              : u.userName || "";
+            return { id: String(u.id), name: nombre };
+          });
+          setTeacherOptions(list);
+        }
+      } catch (err) {
+        console.error("error loading teachers", err);
+      }
+    }
+
+    loadGrades();
+    loadTeachers();
+  }, []);
+
+  useEffect(() => {
+    async function load() {
+      if (!isEditing || !id) return;
+      try {
+        const headers: Record<string,string> = {};
+        if (api.token) headers.Authorization = `Bearer ${api.token}`;
+        const res = await fetch(`${api.baseUrl}/materias/byid?id=${id}`, { headers });
+        if (res.ok) {
+          const data: any = await res.json();
+          setForm({
+            name: data.name || "",
+            profesorId:
+              data.materia && data.materia.length
+                ? String(data.materia[0].profesorAsignado?.id || "")
+                : "",
+            description: data.description || "",
+            gradoId: data.gradoId ? String(data.gradoId) : "",
+          });
+          if (data.materia && data.materia.length) {
+            setRelationId(String(data.materia[0].id));
+          }
+        }
+      } catch (err) {
+        console.error("error loading materia", err);
+      }
+    }
+    load();
+  }, [id, isEditing]);
 
   return (
     <main className="flex-1 p-6 lg:p-10">
@@ -53,10 +162,12 @@ export default function NuevoMateria() {
           {/* Card Header */}
           <div className="p-6 border-b border-gray-200 dark:border-[#324d67]">
             <h2 className="text-lg font-bold leading-tight tracking-[-0.015em] text-gray-900 dark:text-white">
-              Añadir Nueva Materia
+              {isEditing ? "Editar Materia" : "Añadir Nueva Materia"}
             </h2>
             <p className="text-base font-normal leading-normal text-gray-600 dark:text-[#92aec9]">
-              Completa los siguientes campos para registrar una nueva asignatura en el sistema.
+              {isEditing
+                ? "Modifica los datos de la asignatura existente y guarda los cambios."
+                : "Completa los siguientes campos para registrar una nueva asignatura en el sistema."}
             </p>
           </div>
           {/* Form */}
@@ -76,18 +187,27 @@ export default function NuevoMateria() {
                   />
                 </label>
               </div>
-              {/* Código de Identificación */}
+              {/* Seleccionar Profesor */}
               <div className="md:col-span-1">
                 <label className="flex flex-col">
                   <p className="pb-2 text-sm font-medium leading-normal text-gray-700 dark:text-white">
-                    Código de Identificación
+                    Profesor a Cargo
                   </p>
-                  <Input
-                    placeholder="Ej: MAT-AV-01"
-                    value={form.code}
-                    onChange={(e) => setForm((p) => ({ ...p, code: e.target.value }))}
-                    className="h-11"
-                  />
+                  <Select
+                    value={form.profesorId}
+                    onValueChange={(val) => setForm((p) => ({ ...p, profesorId: val }))}
+                  >
+                    <SelectTrigger className="w-full px-3 py-5">
+                      <SelectValue placeholder="Seleccione un profesor" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {teacherOptions.map((t) => (
+                        <SelectItem key={t.id} value={t.id}>
+                          {t.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </label>
               </div>
               {/* Descripción Breve */}
@@ -104,24 +224,28 @@ export default function NuevoMateria() {
                   />
                 </label>
               </div>
-              {/* Asignar Grados */}
+              {/* Seleccionar Grado */}
               <div className="md:col-span-2">
-                <p className="pb-2 text-sm font-medium leading-normal text-gray-700 dark:text-white">
-                  Asignar Grados
-                </p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 rounded-lg border border-gray-300 dark:border-[#324d67] p-4">
-                  {allGrades.map((g) => (
-                    <label key={g} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={form.grades.includes(g)}
-                        onChange={() => toggleGrade(g)}
-                        className="form-checkbox h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary focus:ring-2 focus:ring-primary/50 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800"
-                      />
-                      <span className="text-sm text-gray-900 dark:text-gray-300">{g}</span>
-                    </label>
-                  ))}
-                </div>
+                <label className="flex flex-col">
+                  <p className="pb-2 text-sm font-medium leading-normal text-gray-700 dark:text-white">
+                    Grado
+                  </p>
+                  <Select
+                    value={form.gradoId}
+                    onValueChange={(val) => setForm((p) => ({ ...p, gradoId: val }))}
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue placeholder="Selecciona un grado" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {gradesOptions.map((g) => (
+                        <SelectItem key={g.id} value={String(g.id)}>
+                          {g.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </label>
               </div>
               {/* Form Actions */}
               <div className="md:col-span-2 flex justify-end gap-3">

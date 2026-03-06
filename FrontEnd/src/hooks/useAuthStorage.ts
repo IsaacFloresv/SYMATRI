@@ -6,6 +6,10 @@ type AuthState = {
   user: Session | null;
   setUser: (user: Session | null) => void;
 
+  // selected child id for controlador de padres
+  selectedChildId: number | null;
+  setSelectedChildId: (id: number | null) => void;
+
   // Forbidden modal state (403)
   forbiddenOpen: boolean;
   showForbidden: () => void;
@@ -19,7 +23,9 @@ export const useAuthStorage = create<AuthState>((set) => ({
     if (user) setSession(user);
     else removeSession();
   },
-
+  // selected child (for encargado flows)
+  selectedChildId: null,
+  setSelectedChildId: (id) => set({ selectedChildId: id }),
   // modal 403 state
   forbiddenOpen: false,
   showForbidden: () => set({ forbiddenOpen: true }),

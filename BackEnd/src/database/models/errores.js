@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   errores.init({
     logErrors: DataTypes.TEXT,
-    estado: DataTypes.STRING
+    estado: { type: DataTypes.STRING, defaultValue: 'pendiente' }
   }, {
     sequelize,
     modelName: 'errores',

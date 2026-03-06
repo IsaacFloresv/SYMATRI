@@ -92,7 +92,9 @@ export default function GestionMaterias() {
   }, []);
 
   const filtered = useMemo(() => {
-    return subjects.filter((s) => {
+    // start with sorted list by ID ascending
+    const sorted = [...subjects].sort((a, b) => Number(a.id) - Number(b.id));
+    return sorted.filter((s) => {
       const q = query.toLowerCase();
       const matchQuery =
         !query ||
@@ -193,23 +195,17 @@ export default function GestionMaterias() {
             <Table className="w-full text-left">
               <TableHeader className="bg-[#192733]">
                 <TableRow>
-                  <TableHead className="p-4 w-12 text-center">
-                    <input
-                      type="checkbox"
-                      className="h-5 w-5 rounded border-[#324d67] border-2 bg-transparent text-primary focus:ring-2 focus:ring-offset-background-dark focus:ring-primary/50 focus:ring-offset-2"
-                    />
+                  <TableHead className="px-4 py-3 text-white text-sm font-medium leading-normal">
+                    Id
                   </TableHead>
                   <TableHead className="px-4 py-3 text-white text-sm font-medium leading-normal">
-                    Código
+                    Nombre
                   </TableHead>
                   <TableHead className="px-4 py-3 text-white text-sm font-medium leading-normal">
-                    Nombre de la Asignatura
+                    Profesor
                   </TableHead>
                   <TableHead className="px-4 py-3 text-white text-sm font-medium leading-normal">
-                    Profesor a Cargo
-                  </TableHead>
-                  <TableHead className="px-4 py-3 text-white text-sm font-medium leading-normal">
-                    Curso/Grado
+                    Grado
                   </TableHead>
                   <TableHead className="px-4 py-3 text-white text-sm font-medium leading-normal">
                     Acciones
@@ -222,12 +218,6 @@ export default function GestionMaterias() {
                     key={s.id}
                     className="border-t border-t-[#324d67] hover:bg-[#192733]/50 transition-colors"
                   >
-                    <TableCell className="p-4 text-center">
-                      <input
-                        type="checkbox"
-                        className="h-5 w-5 rounded border-[#324d67] border-2 bg-transparent text-primary focus:ring-2 focus:ring-offset-background-dark focus:ring-primary/50 focus:ring-offset-2"
-                      />
-                    </TableCell>
                     <TableCell className="px-4 py-3 text-[#92aec9] text-sm font-normal leading-normal">
                       {s.code}
                     </TableCell>
@@ -244,7 +234,14 @@ export default function GestionMaterias() {
                     </TableCell>
                     <TableCell className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" className="text-[#92aec9] hover:text-white hover:bg-[#233648]"><span className="material-symbols-outlined text-lg">edit</span></Button>
+                        <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-[#92aec9] hover:text-white hover:bg-[#233648]"
+                        onClick={() => navigate(`/admin/gestion-materias/editar/${s.id}`)}
+                      >
+                        <span className="material-symbols-outlined text-lg">edit</span>
+                      </Button>
                         <Button variant="ghost" size="sm" className="text-[#92aec9] hover:text-red-400 hover:bg-red-500/20"><span className="material-symbols-outlined text-lg">delete</span></Button>
                       </div>
                     </TableCell>

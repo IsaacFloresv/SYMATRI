@@ -13,7 +13,8 @@ module.exports = {
         type: Sequelize.TEXT
       },
       estado: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: 'pendiente'
       },
       createdAt: {
         type: Sequelize.DATE,

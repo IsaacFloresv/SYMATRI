@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
-import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle } from "@/components/ui/dialog";
+import DetailsProfesores from "./detailsProfesores";
 
 interface Teacher {
   id: string;
@@ -39,6 +39,7 @@ export default function GestionProfesores() {
   const [query, setQuery] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [subjectFilter, setSubjectFilter] = useState("");
   const [selected, setSelected] = useState<Teacher | null>(null);
 
   // load teachers with roleId=3 on mount
@@ -76,18 +77,36 @@ export default function GestionProfesores() {
     load();
   }, []);
 
+  const subjects = useMemo<string[]>(
+    () =>
+      Array.from(
+        new Set(
+          teachers
+            .flatMap((t) =>
+              t.profesorAsignado?.map((pa) => pa.materia?.name || "") || []
+            )
+            .filter(Boolean)
+        )
+      ).sort(),
+    [teachers]
+  );
+
   const filtered = useMemo(() => {
-    return teachers.filter((t) => {
+    // sort copy of teachers by numeric id ascending
+    const sorted = [...teachers].sort((a, b) => Number(a.id) - Number(b.id));
+    return sorted.filter((t) => {
       const q = query.toLowerCase();
-      const matchQuery =
-        !query ||
-        t.name.toLowerCase().includes(q) ||
-        t.id.toLowerCase().includes(q);
+      const matchQuery = !query || t.name.toLowerCase().includes(q);
       const matchDept = !departmentFilter || t.department === departmentFilter;
       const matchStatus = !statusFilter || t.status === statusFilter;
-      return matchQuery && matchDept && matchStatus;
+      const matchSubject =
+        !subjectFilter ||
+        (t.profesorAsignado || []).some(
+          (pa) => pa.materia?.name === subjectFilter
+        );
+      return matchQuery && matchDept && matchStatus && matchSubject;
     });
-  }, [teachers, query, departmentFilter, statusFilter]);
+  }, [teachers, query, departmentFilter, statusFilter, subjectFilter, subjectFilter]);
 
   const departments = useMemo<string[]>(
     () => Array.from(new Set(teachers.map((t) => t.department).filter((x): x is string => Boolean(x)))).sort(),
@@ -128,13 +147,25 @@ export default function GestionProfesores() {
               <span className="material-symbols-outlined text-gray-500">search</span>
             </div>
             <Input
-              placeholder="Buscar por nombre o ID..."
+              placeholder="Buscar por nombre..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="pl-10 pr-4 py-2 w-full"
             />
           </div>
           <div className="flex gap-3 overflow-x-auto py-2">
+            <Select value={subjectFilter} onValueChange={setSubjectFilter}>
+              <SelectTrigger className="h-8">
+                <SelectValue placeholder="Materia" />
+              </SelectTrigger>
+              <SelectContent>
+                {subjects.map((m) => (
+                  <SelectItem key={m} value={m}>
+                    {m}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
               <SelectTrigger className="h-8">
                 <SelectValue placeholder="Departamento" />
@@ -255,67 +286,10 @@ export default function GestionProfesores() {
       </div>
 
       {selected && (
-        <Dialog
-          open={Boolean(selected)}
-          onOpenChange={(open) => {
-            if (!open) setSelected(null);
-          }}
-        >
-          <DialogContent className="sm:max-w-lg">
-            <DialogHeader>
-              <DialogTitle>Detalles del Profesor</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-2 text-sm">
-              <p>
-                <strong>ID:</strong> {selected.id}
-              </p>
-              {selected.userName && (
-                <p>
-                  <strong>Usuario:</strong> {selected.userName}
-                </p>
-              )}
-              <p>
-                <strong>Email:</strong> {selected.email}
-              </p>
-              <p>
-                <strong>Estado:</strong> {selected.status}
-              </p>
-              {selected.datosPersonales && (
-                <>
-                  <p>
-                    <strong>Nombre completo:</strong> {selected.datosPersonales.firstName} {selected.datosPersonales.lastName}
-                  </p>
-                  <p>
-                    <strong>Género:</strong> {selected.datosPersonales.genero}
-                  </p>
-                  <p>
-                    <strong>Dirección:</strong> {selected.datosPersonales.address}
-                  </p>
-                  <p>
-                    <strong>Teléfono:</strong> {selected.datosPersonales.telefono}
-                  </p>
-                </>
-              )}
-              {selected.profesorAsignado && selected.profesorAsignado.length > 0 && (
-                <>
-                  <p>
-                    <strong>Materias asignadas:</strong>
-                  </p>
-                  <ul className="list-disc list-inside">
-                    {selected.profesorAsignado.map((pa) => (
-                      <li key={pa.materiaId}>
-                        {pa.materia?.name} (grado {pa.materia?.gradoId})
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
-            <DialogFooter>
-              <Button onClick={() => setSelected(null)}>Cerrar</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <DetailsProfesores
+          teacher={selected}
+          onClose={() => setSelected(null)}
+        />
       )}
     </main>
   );
