@@ -1,9 +1,8 @@
-const { actividades, User, dataUser } = require("../database/models/index");
+const { actividades, asistencia, User, dataUser } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
     const { userId } = req.query;
-
     const where = {};
     if (userId) {
       where.userId = userId;
@@ -30,7 +29,50 @@ const getAll = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    console.error(error);
+    res.json({
+      message: "No fue posible obtener la informacion",
+      res: false,
+    });
+  }
+};
+
+const getAllById = async (req, res) => {
+  try {
+    const { alumnoId, materiaId } = req.query;
+    const where = {};
+    if (alumnoId) {
+      where.alumnoId = alumnoId;
+    }
+    if (materiaId) {
+      where.materiaId = materiaId;
+    }
+
+    let result = await asistencia.findAll({
+      where,
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: User,
+          attributes: ["id"],
+          as: "generador",
+          include: [
+            {
+              model: dataUser,
+              attributes: ["firstName", "lastName"],
+              as: "datosPersonales",
+            },
+          ],
+        },
+        {
+          model: actividades,
+          attributes: ["id", "tipoActividad", "materiaId"],
+          as: "actividad",
+        }
+      ],
+    });
+
+    res.json(result);
+  } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",
       res: false,

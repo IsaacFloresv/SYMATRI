@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { useAuthStorage } from "@/hooks/useAuthStorage"
+import { useNavigate } from "react-router-dom"
 
 interface Subject {
   name: string
@@ -291,7 +292,11 @@ export default function StudentDashBoard() {
               <div className="max-h-[350px] overflow-y-auto">
                 <ul className="divide-y divide-border-dark">
                   {messages.map((message) => (
-                    <li key={message.id} className="p-4 flex items-center gap-3 hover:bg-card-dark/50 transition-colors">
+                    <li
+                      key={message.id}
+                      className="p-4 flex items-center gap-3 hover:bg-card-dark/50 transition-colors cursor-pointer"
+                      onClick={() => navigate(`/alumno/comunicaciones?id=${message.id}`)}
+                    >
                       <div className="bg-primary/20 text-primary rounded-full size-8 flex items-center justify-center flex-shrink-0">
                         <MessageIcon sender={message.sender} />
                       </div>

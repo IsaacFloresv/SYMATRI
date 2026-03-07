@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // relacion con actividades
       secciones.hasMany(models.actividades, {
-        foreignKey: 'seccionId',
+        foreignKey: 'seccionesId',
         as: 'secciones',
       });
 

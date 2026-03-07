@@ -1,18 +1,18 @@
-const { mensajeReceptors, user, dataUser } = require('@models/index');
+const { mensajeReceptors, mensajes, user, dataUser } = require('@models/index');
 
 // Obtener todos los registros
 const getAll = async (req, res) => {
   try {
     const resultados = await mensajeReceptors.findAll({
-    include: [
+      include: [
         {
           model: user,
-          attributes: { exclude: ["id","userName", "pass", "active", "roleId", "createdAt", "updatedAt"] },
+          attributes: { exclude: ["id", "userName", "pass", "active", "roleId", "createdAt", "updatedAt"] },
           as: "receptor",
           include: [
             {
               model: dataUser,
-              attributes: { exclude: ["id","address","telefono","userId", "createdAt", "updatedAt"] },
+              attributes: { exclude: ["id", "address", "telefono", "userId", "createdAt", "updatedAt"] },
               as: "datosPersonales",
             },
           ],
@@ -27,21 +27,42 @@ const getAll = async (req, res) => {
 
 const getAllById = async (req, res) => {
   try {
-    const { mensajeId } = req.body;
+    const { receptorId } = req.query;
+    console.log("Vamos por aquí");
+    console.log(receptorId);
     const registro = await mensajeReceptors.findAll({
-      where: { mensajeId },
-    include: [
+      where: { receptorId: receptorId },
+      include: [
         {
           model: user,
-          attributes: { exclude: ["id","userName", "pass", "active", "roleId", "createdAt", "updatedAt"] },
+          attributes: { exclude: ["id", "userName", "pass", "active", "roleId", "createdAt", "updatedAt"] },
           as: "receptor",
           include: [
             {
               model: dataUser,
-              attributes: { exclude: ["id","address","telefono","userId", "createdAt", "updatedAt"] },
+              attributes: { exclude: ["id", "address", "telefono", "userId", "createdAt", "updatedAt"] },
               as: "datosPersonales",
             },
           ],
+        },
+        {
+          model: mensajes,
+          attributes: { exclude: [ "createdAt", "updatedAt"] },
+          as: "mensaje",
+          include: [
+            {
+              model: user,
+              attributes: { exclude: [ "userName", "pass", "active", "roleId", "createdAt", "updatedAt"] },
+              as: "emisor",
+              include: [
+                {
+                  model: dataUser,
+                  attributes: { exclude: ["id", "address", "telefono", "userId", "createdAt", "updatedAt"] },
+                  as: "datosPersonales",
+                },
+              ],
+            },
+          ]
         }
       ],
     });
@@ -52,6 +73,7 @@ const getAllById = async (req, res) => {
       res.status(404).json({ message: 'Registro no encontrado', res: false });
     }
   } catch (error) {
+    console.log("hay error",error);
     res.status(500).json({ message: 'Error al buscar el registro', res: false });
   }
 };
@@ -106,7 +128,7 @@ const update = async (req, res) => {
   }
 };
 
-module.exports = {  
+module.exports = {
   getAll,
   getAllById,
   getById,

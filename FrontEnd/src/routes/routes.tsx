@@ -1,7 +1,11 @@
 // Rutas del sistema
+import React from "react";
 import { createBrowserRouter } from "react-router-dom"
 import { PublicRoutes } from "./publicRoutes";
 import { PrivateRoutes } from "./privateRoutes";
+
+// lazy-loaded pages
+const LeerMensaje = React.lazy(() => import('@/pages/privates/alumno/vistaComunicaciones/leerMensaje'));
 
 import LoginPage from '@/pages/public/login/page';
 import RegisterPage from "@/pages/public/register/page";
@@ -355,7 +359,15 @@ export const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
   },
   {
-    path: "/alumno/eventos",
+    path: "/alumno/comunicaciones/leer",
+    element: <PrivateRoutes>
+      <React.Suspense fallback={<div>Cargando...</div>}>
+        <LeerMensaje />
+      </React.Suspense>
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {    path: "/alumno/eventos",
     element: <PrivateRoutes>
       <VistaEventosAlumno />
     </PrivateRoutes>,

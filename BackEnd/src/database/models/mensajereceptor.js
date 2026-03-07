@@ -15,6 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'receptorId',
         as: 'receptor',
       });
+
+      // Relación con el mensaje
+      mensajeReceptors.belongsTo(models.mensajes, {
+        foreignKey: 'mensajeId',
+        as: 'mensaje',
+      });
     }
   }
   mensajeReceptors.init({

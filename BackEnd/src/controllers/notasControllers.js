@@ -50,6 +50,58 @@ const getAll = async (req, res) => {
   }
 };
 
+const getAllById = async (req, res) => {
+  try {
+    const { periodo, materiaId, alumnoId } = req.query;
+    let Nota = await notas.findAll({
+      where: {periodo, materiaId, alumnoId},
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: materias,
+          attributes: ["name"],
+          as: "materia",          
+        },
+        {
+          model: tipoNotas,
+          attributes: ["id", "nombre"],
+          as: "tipoNota",
+        },
+       {
+          model: user,
+          attributes: ["id"],
+          as: "alumnoNota",
+          include: [
+       {
+          model: dataUser,
+          attributes: ["firstName", "lastName"],
+          as: "datosPersonales",
+        },
+      ],
+        },
+        {
+          model: user,
+          attributes: ["id"],
+          as: "autor",
+          include: [
+       {
+          model: dataUser,
+          attributes: ["firstName", "lastName"],
+          as: "datosPersonales",
+        },
+      ],
+        }
+      ],
+    });
+    res.json(Nota);
+  } catch (error) {
+    res.json({
+      message: "No fue posible obtener la informacion",
+      res: false,
+    });
+  }
+};
+
 const getById = async (req, res) => {
   try {
     const { id } = req.query;
@@ -250,6 +302,7 @@ const deleteR = async (req, res) => {
 
 module.exports = {
   getAll,
+  getAllById,
   getById,
   getByAlumnoId,
   create,

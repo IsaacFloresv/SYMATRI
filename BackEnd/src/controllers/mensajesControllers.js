@@ -30,6 +30,39 @@ const getAll = async (req, res) => {
   }
 };
 
+const getAllById = async (req, res) => {
+  try {
+    const { emisorId } = req.query;
+    let result = await mensajes.findAll({
+      where: { emisorId : emisorId },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: user,
+          attributes: { exclude: ["id", "pass", "active", "roleId", "createdAt", "updatedAt"] },
+          as: "emisor",
+          include: [
+            {
+              model: dataUser,
+              attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+              as: "datosPersonales",
+            },
+          ],
+        }
+      ],
+    });
+    if (!result) {
+      return res.status(404).json({ message: "Mensaje no encontrado", res: false });
+    }
+    res.json(result);
+  } catch (error) {
+    res.json({
+      message: "No fue posible obtener la informacion",
+      res: false,
+    });
+  }
+};
+
 const getById = async (req, res) => {
   try {
     const { id } = req.query;
@@ -51,6 +84,9 @@ const getById = async (req, res) => {
         }
       ],
     });
+    if (!result) {
+      return res.status(404).json({ message: "Mensaje no encontrado", res: false });
+    }
     res.json(result);
   } catch (error) {
     res.json({
@@ -145,6 +181,7 @@ const deleteR = async (req, res) => {
 module.exports = {
   getAll,
   getById,
+  getAllById,
   create,
   update,
   isReaded,
