@@ -1,4 +1,4 @@
-const { actividades, horarios, user, dataUser, secciones, materiaProfesor, materias } = require('../database/models')
+const { actividades, horarios, user, dataUser, secciones, seccionAlumnos, materiaProfesor, materias } = require('../database/models')
 const { Op, fn, col, where: sqWhere } = require('sequelize')
 
 const parseISODate = (s) => s ? new Date(s + 'T00:00:00') : null
@@ -166,17 +166,25 @@ const search = async (req, res) => {
     }
 
     const actOr = []
-    if (userId) actOr.push({ userId: Number(userId) })
-    if (seccionId) {
-      // try to match against the 'seccionesId' JSON field (often stores section names)
-      const sec = await secciones.findByPk(seccionId, { attributes: ['id', 'name'] })
-      if (sec && sec.name) {
-        // JSON_CONTAINS(seccionesId, '"<name>"')
+
+    // Try to resolve whether the provided userId is a student and if so, collect their section(s).
+    let resolvedSeccionIds = []
+    if (userId) {
+      actOr.push({ userId: Number(userId) })
+      const seccionAlumnosRows = await seccionAlumnos.findAll({ where: { alumnoId: Number(userId) }, attributes: ['seccionId'], raw: true })
+      resolvedSeccionIds = seccionAlumnosRows.map(r => r.seccionId).filter(Boolean)
+    }
+
+    if (seccionId) resolvedSeccionIds.push(Number(seccionId))
+
+    if (resolvedSeccionIds.length) {
+      const seccionesRows = await secciones.findAll({ where: { id: resolvedSeccionIds }, attributes: ['id', 'name'], raw: true })
+      seccionesRows.forEach(sec => {
+        if (!sec) return
+        // Try matching both the stored section name (old format) and numeric section id (new format)
         actOr.push(sqWhere(fn('JSON_CONTAINS', col('seccionesId'), JSON.stringify(sec.name)), 1))
-      } else {
-        // fallback: look for numeric id inside JSON
-        actOr.push(sqWhere(fn('JSON_CONTAINS', col('seccionesId'), JSON.stringify(Number(seccionId))), 1))
-      }
+        actOr.push(sqWhere(fn('JSON_CONTAINS', col('seccionesId'), JSON.stringify(sec.id)), 1))
+      })
     }
 
     if (actOr.length) actividadesWhere[Op.and].push({ [Op.or]: actOr })
@@ -185,7 +193,7 @@ const search = async (req, res) => {
     const horarioWhere = {}
     const horOr = []
     if (userId) horOr.push({ profesorId: Number(userId) })
-    if (seccionId) horOr.push({ seccionId: Number(seccionId) })
+    if (resolvedSeccionIds.length) horOr.push({ seccionId: { [Op.in]: resolvedSeccionIds } })
     if (horOr.length) horarioWhere[Op.or] = horOr
 
     const [actividadRows, horarioRows] = await Promise.all([

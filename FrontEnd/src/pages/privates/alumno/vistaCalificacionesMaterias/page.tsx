@@ -33,12 +33,13 @@ export default function VistaCalificacionesMaterias()
   const navigate = useNavigate();
   const location = useLocation();
   const [grades, setGrades] = useState<GradeRow[]>([]);
-  const [schedule, setSchedule] = useState<EventItem[]>([]);
+  const [schedule, setSchedule] = useState<EventItem[]>([]); // Actividades relacionadas a la materia
   const [attendance, setAttendance] = useState<Attendance>({ attended: 0, total: 0, late: 0 });
 
-  // optional override via query string ?alumnoId=xxx
+  // optional override via query string ?alumnoId=xxx&materiaId=YYY
   const params = new URLSearchParams(location.search);
   const queryAlumno = params.get("alumnoId");
+  const queryMateriaId = params.get("materiaId");
 
   // determine which alumnoId to use: query override > child > own
   const alumnoId = queryAlumno ? Number(queryAlumno) : selectedChildId ?? session?.id;
@@ -46,10 +47,71 @@ export default function VistaCalificacionesMaterias()
   // filtro de periodo y materia
   const currentYear = new Date().getFullYear().toString();
   const [periodo, setPeriodo] = useState(currentYear);
-  const [materiaId, setMateriaId] = useState<number>(1);
+  const [materiaId, setMateriaId] = useState<number>(queryMateriaId ? Number(queryMateriaId) : 1);
   const [materias, setMaterias] = useState<{ id: number; name: string }[]>([]);
 
-  // load materias, events and attendance; does NOT fetch notas
+  const selectedMateria = materias.find((m) => m.id === materiaId);
+
+  useEffect(() => {
+    if (queryMateriaId) {
+      setMateriaId(Number(queryMateriaId));
+    }
+  }, [queryMateriaId]);
+
+  const loadAttendance = async (useAlumnoId?: number, useMateriaId?: number) => {
+    if (!useAlumnoId || !useMateriaId) return;
+    const headers: Record<string, string> = {};
+    if (api.token) headers.Authorization = `Bearer ${api.token}`;
+
+    try {
+      const query = new URLSearchParams({ alumnoId: String(useAlumnoId), materiaId: String(useMateriaId) }).toString();
+      const asRes = await fetch(`${api.baseUrl}/asistencia/allbyid?${query}`, { headers });
+      if (asRes.ok) {
+        const allA = await asRes.json();
+        const arrA = Array.isArray(allA) ? allA : [];
+        if (!Array.isArray(allA)) {
+          console.warn("expected asistencia array but got", allA);
+        }
+
+        const filtered = arrA; // el backend ya filtra por materiaId
+
+        const attended = filtered.filter((a: any) => a.estado === "presente").length;
+        const late = filtered.filter((a: any) => a.estado === "tardia" || a.estado === "tarde").length;
+        setAttendance({ attended, total: filtered.length, late });
+      }
+    } catch (e) {
+      console.error("error fetching asistencia", e);
+    }
+  };
+
+  const loadActivities = async (useMateriaId: number) => {
+    const headers: Record<string, string> = {};
+    if (api.token) headers.Authorization = `Bearer ${api.token}`;
+
+    try {
+      const query = new URLSearchParams({ materiaId: String(useMateriaId) }).toString();
+      const res = await fetch(`${api.baseUrl}/actividades/all?${query}`, { headers });
+      if (res.ok) {
+        const all = await res.json();
+        const arr = Array.isArray(all) ? all : [];
+        const filtered = arr
+          .map((a: any) => ({
+            id: a.id,
+            title: a.name,
+            date: a.fechaInicio || a.fecha || "",
+            status: a.fechaInicio
+              ? (new Date(a.fechaInicio) < new Date() ? "done" : "upcoming")
+              : ("upcoming" as "done" | "upcoming"),
+          }))
+          .slice(0, 10);
+        setSchedule(filtered);
+      }
+    } catch (e) {
+      console.error("error fetching actividades", e);
+    }
+  };
+
+  // load materias, actividades y asistencia; does NOT fetch notas
   const loadInitialData = async () => {
     if (!session?.id) return;
     const headers: Record<string, string> = {};
@@ -76,44 +138,11 @@ export default function VistaCalificacionesMaterias()
       }
     }
 
-    // eventos
-    try {
-      const evRes = await fetch(`${api.baseUrl}/eventos/search?userId=${session.id}`, { headers });
-      if (evRes.ok) {
-        const evAll = await evRes.json();
-        const arr = Array.isArray(evAll) ? evAll : [];
-        if (!Array.isArray(evAll)) {
-          console.warn("expected eventos array but got", evAll);
-        }
-        const evList: EventItem[] = arr.map((e: any) => ({
-          id: e.id,
-          title: e.title || e.nombre || "Evento",
-          date: e.fecha || e.date || "",
-          status: e.realizado ? "done" : "upcoming",
-        }));
-        setSchedule(evList.slice(0, 10));
-      }
-    } catch (e) {
-      console.error("error fetching eventos", e);
-    }
+    // activities (related to materia)
+    await loadActivities(materiaId);
 
-    // asistencia
-    try {
-      const asRes = await fetch(`${api.baseUrl}/asistencia/all`, { headers });
-      if (asRes.ok) {
-        const allA = await asRes.json();
-        const arrA = Array.isArray(allA) ? allA : [];
-        if (!Array.isArray(allA)) {
-          console.warn("expected asistencia array but got", allA);
-        }
-        const mine = arrA.filter((a: any) => a.alumnoId === session.id);
-        const attended = mine.filter((a: any) => a.presente).length;
-        const late = mine.filter((a: any) => a.tarde).length;
-        setAttendance({ attended, total: mine.length, late });
-      }
-    } catch (e) {
-      console.error("error fetching asistencia", e);
-    }
+    // asistencia (por alumno y materia)
+    await loadAttendance(alumnoId, materiaId);
   };
 
   // fetch notes based on current filtros
@@ -151,6 +180,10 @@ export default function VistaCalificacionesMaterias()
         }));
         list.sort((a, b) => a.actividad.localeCompare(b.actividad));
         setGrades(list);
+
+        // refresh attendance + activities for the materia
+        loadAttendance(alumnoId, effectiveMateria);
+        loadActivities(effectiveMateria);
       }
     } catch (e) {
       console.error("error fetching notas", e);
@@ -162,6 +195,21 @@ export default function VistaCalificacionesMaterias()
     console.log("session during load", session, "selectedChild", selectedChildId, "queryAlumno", queryAlumno);
     loadInitialData();
   }, [session, selectedChildId, queryAlumno]);
+
+  // if arriving with a materiaId in query, auto-load notas for it
+  useEffect(() => {
+    if (queryMateriaId && alumnoId) {
+      loadNotas();
+    }
+  }, [queryMateriaId, alumnoId]);
+
+  // Reload attendance + activities when alumnoId or materiaId changes
+  useEffect(() => {
+    if (alumnoId && materiaId) {
+      loadAttendance(alumnoId, materiaId);
+      loadActivities(materiaId);
+    }
+  }, [alumnoId, materiaId, materias]);
 
   const promedio = grades.length
     ? grades.reduce((acc, g) => acc + g.obtenido, 0) / grades.length
@@ -184,7 +232,7 @@ export default function VistaCalificacionesMaterias()
           </button>
           <div>
             <h1 className="text-4xl font-bold tracking-tight text-foreground-dark">
-              {grades[0]?.tipo || "Asignatura"}
+              {selectedMateria?.name || grades[0]?.tipo || "Asignatura"}
             </h1>
             <p className="text-muted-dark mt-1">Detalle de rendimiento y actividades del curso</p>
           </div>
@@ -269,7 +317,9 @@ export default function VistaCalificacionesMaterias()
                   {grades.length === 0 && (
                     <TableRow>
                       <TableCell colSpan={4} className="p-6 text-center">
-                        No hay calificaciones disponibles
+                        {selectedMateria
+                          ? "No hay calificaciones disponibles para esta materia"
+                          : "No hay calificaciones disponibles"}
                       </TableCell>
                     </TableRow>
                   )}
@@ -281,22 +331,28 @@ export default function VistaCalificacionesMaterias()
           <section>
             <h2 className="text-2xl font-bold mb-4 text-foreground-dark">Cronograma de Actividades</h2>
             <div className="relative pl-8 space-y-6 before:content-[''] before:absolute before:left-3 before:top-2 before:bottom-2 before:w-px before:bg-border-dark">
-              {schedule.map((ev) => (
-                <div key={ev.id} className="relative">
-                  <div className={`absolute -left-[25px] top-1 ${ev.status === 'done' ? 'bg-primary' : 'bg-muted-dark'} size-4 rounded-full border-4 border-background-dark`}></div>
-                  <div className={`p-4 rounded-lg border border-border-dark bg-card-dark flex justify-between items-center ${ev.status === 'upcoming' ? 'bg-card-dark/30' : ''}`}>
-                    <div>
-                      <p className="text-sm font-bold text-foreground-dark">{ev.title}</p>
-                      <p className="text-xs text-muted-dark">{ev.date}</p>
-                    </div>
-                    {ev.status === 'done' ? (
-                      <span className="material-symbols-outlined text-green-500">check_circle</span>
-                    ) : (
-                      <span className="text-[10px] text-primary px-2 py-0.5 bg-primary/10 rounded-full font-bold uppercase tracking-wider">Próximo</span>
-                    )}
-                  </div>
+              {schedule.length === 0 ? (
+                <div className="py-10 text-center text-sm text-muted-dark">
+                  No hay actividades registradas para esta materia.
                 </div>
-              ))}
+              ) : (
+                schedule.map((ev) => (
+                  <div key={ev.id} className="relative">
+                    <div className={`absolute -left-[25px] top-1 ${ev.status === 'done' ? 'bg-primary' : 'bg-muted-dark'} size-4 rounded-full border-4 border-background-dark`}></div>
+                    <div className={`p-4 rounded-lg border border-border-dark bg-card-dark flex justify-between items-center ${ev.status === 'upcoming' ? 'bg-card-dark/30' : ''}`}>
+                      <div>
+                        <p className="text-sm font-bold text-foreground-dark">{ev.title}</p>
+                        <p className="text-xs text-muted-dark">{ev.date}</p>
+                      </div>
+                      {ev.status === 'done' ? (
+                        <span className="material-symbols-outlined text-green-500">check_circle</span>
+                      ) : (
+                        <span className="text-[10px] text-primary px-2 py-0.5 bg-primary/10 rounded-full font-bold uppercase tracking-wider">Próximo</span>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </section>
         </div>
@@ -321,9 +377,15 @@ export default function VistaCalificacionesMaterias()
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-dark">Clases asistidas: <span className="text-foreground-dark font-medium">{attendance.attended}/{attendance.total}</span></p>
-                  <p className="text-sm text-muted-dark">Inasistencias: <span className="text-red-500 font-medium">{attendance.total - attendance.attended - attendance.late}</span></p>
-                  <p className="text-sm text-muted-dark">Retrasos: <span className="text-yellow-500 font-medium">{attendance.late}</span></p>
+                  {attendance.total === 0 ? (
+                    <p className="text-sm text-muted-dark">No hay registros de asistencia para esta materia.</p>
+                  ) : (
+                    <>
+                      <p className="text-sm text-muted-dark">Clases asistidas: <span className="text-foreground-dark font-medium">{attendance.attended}/{attendance.total}</span></p>
+                      <p className="text-sm text-muted-dark">Inasistencias: <span className="text-red-500 font-medium">{attendance.total - attendance.attended - attendance.late}</span></p>
+                      <p className="text-sm text-muted-dark">Retrasos: <span className="text-yellow-500 font-medium">{attendance.late}</span></p>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

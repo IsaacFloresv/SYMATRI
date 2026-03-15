@@ -6,8 +6,15 @@ const Sequelize = require("sequelize");
 const process = require("process");
 const basename = path.basename(__filename);
 
-//Archivo de configuracion
-const config = require("@config/config.js")
+// Archivo de configuracion
+let config;
+try {
+  // When using module path aliases (e.g., in production builds)
+  config = require("@config/config.js");
+} catch (err) {
+  // Fallback for direct node execution in this repo
+  config = require("../../config/config.js");
+}
 
 //objeto db
 const db = {};

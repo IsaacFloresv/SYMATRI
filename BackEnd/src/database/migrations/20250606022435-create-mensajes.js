@@ -30,7 +30,8 @@ module.exports = {
         defaultValue: false,
       },
       fechaEnvio: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: true
       },
       createdAt: {
         type: Sequelize.DATE,

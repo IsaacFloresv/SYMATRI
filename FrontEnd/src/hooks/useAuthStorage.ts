@@ -8,7 +8,9 @@ type AuthState = {
 
   // selected child id for controlador de padres
   selectedChildId: number | null;
+  selectedChildName: string | null;
   setSelectedChildId: (id: number | null) => void;
+  setSelectedChildName: (name: string | null) => void;
 
   // Forbidden modal state (403)
   forbiddenOpen: boolean;
@@ -25,7 +27,9 @@ export const useAuthStorage = create<AuthState>((set) => ({
   },
   // selected child (for encargado flows)
   selectedChildId: null,
+  selectedChildName: null,
   setSelectedChildId: (id) => set({ selectedChildId: id }),
+  setSelectedChildName: (name) => set({ selectedChildName: name }),
   // modal 403 state
   forbiddenOpen: false,
   showForbidden: () => set({ forbiddenOpen: true }),

@@ -145,9 +145,9 @@ const isReaded = async (req, res) => {
 
 const isArchived = async (req, res) => {
   try {
-    const { id } = req.body;
-    const isArchived = {"isArchived":true};
-    let result = await mensajes.update(isArchived, {
+    const { id, isArchived } = req.body;
+    const payload = { isArchived: typeof isArchived === "boolean" ? isArchived : true };
+    let result = await mensajes.update(payload, {
       where: { id },
       fields: ["isArchived"],
     });

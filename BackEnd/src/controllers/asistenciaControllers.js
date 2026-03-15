@@ -1,50 +1,15 @@
-const { actividades, asistencia, User, dataUser } = require("../database/models/index");
+const { actividades, asistencia, user, dataUser, materias } = require("../database/models/index");
+const { Op } = require("sequelize");
 
 const getAll = async (req, res) => {
   try {
-    const { userId } = req.query;
-    const where = {};
-    if (userId) {
-      where.userId = userId;
-    }
-
-    let result = await actividades.findAll({
-      where,
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-      include: [
-        {
-          model: User,
-          attributes: ["id"],
-          as: "generador",
-          include: [
-            {
-              model: dataUser,
-              attributes: ["firstName", "lastName"],
-              as: "datosPersonales",
-            },
-          ],
-        },
-      ],
-    });
-
-    res.json(result);
-  } catch (error) {
-    res.json({
-      message: "No fue posible obtener la informacion",
-      res: false,
-    });
-  }
-};
-
-const getAllById = async (req, res) => {
-  try {
-    const { alumnoId, materiaId } = req.query;
+    const { alumnoId, profesorId } = req.query;
     const where = {};
     if (alumnoId) {
-      where.alumnoId = alumnoId;
+      where.alumnoId = Number(alumnoId);
     }
-    if (materiaId) {
-      where.materiaId = materiaId;
+    if (profesorId) {
+      where.profesorId = Number(profesorId);
     }
 
     let result = await asistencia.findAll({
@@ -52,9 +17,9 @@ const getAllById = async (req, res) => {
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
-          model: User,
+          model: user,
           attributes: ["id"],
-          as: "generador",
+          as: "alumnoAsistente",
           include: [
             {
               model: dataUser,
@@ -65,16 +30,84 @@ const getAllById = async (req, res) => {
         },
         {
           model: actividades,
-          attributes: ["id", "tipoActividad", "materiaId"],
+          attributes: ["id", "name", "fechaInicio"],
           as: "actividad",
-        }
+        },
       ],
     });
 
     res.json(result);
   } catch (error) {
+    console.error('asistencia getAll error', error);
     res.json({
       message: "No fue posible obtener la informacion",
+      error: error?.message || error,
+      res: false,
+    });
+  }
+};
+
+const getAllById = async (req, res) => {
+  try {
+    const { alumnoId, materiaId } = req.query;
+    const where = {};
+    if (alumnoId) {
+      where.alumnoId = Number(alumnoId);
+    }
+
+    const actividadInclude = {
+      model: actividades,
+      attributes: ["id", "name", "fechaInicio"],
+      as: "actividad",
+      include: [
+        {
+          model: user,
+          as: "generador",
+          attributes: ["id"],
+          include: [
+            {
+              model: dataUser,
+              attributes: ["firstName", "lastName"],
+              as: "datosPersonales",
+            },
+          ],
+        },
+      ],
+    };
+
+    if (materiaId) {
+      actividadInclude.where = {
+        materiaId: Number(materiaId),
+      };
+      actividadInclude.required = true;
+    }
+
+    let result = await asistencia.findAll({
+      where,
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: user,
+          attributes: ["id"],
+          as: "alumnoAsistente",
+          include: [
+            {
+              model: dataUser,
+              attributes: ["firstName", "lastName"],
+              as: "datosPersonales",
+            },
+          ],
+        },
+        actividadInclude,
+      ],
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error('asistencia getAllById error', error);
+    res.json({
+      message: "No fue posible obtener la informacion",
+      error: error?.message || error,
       res: false,
     });
   }
@@ -90,7 +123,7 @@ const getById = async (req, res) => {
       },
       include: [
         {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: "generador",
           include: [
@@ -181,6 +214,7 @@ const deleteR = async (req, res) => {
 
 module.exports = {
   getAll,
+  getAllById,
   getById,
   create,
   update,

@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { useAuthStorage } from "@/hooks/useAuthStorage";
 import { api } from "@/lib/api";
 
 interface Message {
@@ -30,10 +31,33 @@ export default function GestionComunicacion() {
       try {
         const headers: Record<string, string> = {};
         if (api.token) headers.Authorization = `Bearer ${api.token}`;
-        const res = await fetch(`${api.baseUrl}/comunicaciones?folder=${filter}`, { headers });
+
+        const session = useAuthStorage((s) => s.user);
+        const receptorId = session?.id;
+        if (!receptorId) return;
+
+        const res = await fetch(`${api.baseUrl}/mensajeReceptor/allById?receptorId=${receptorId}`, { headers });
         if (res.ok) {
-          const data: Message[] = await res.json();
-          setMessages(data);
+          const data: any[] = await res.json();
+          const mapped: Message[] = data.map((item) => {
+            const msg = item.mensaje || {};
+            const senderName = msg.emisor?.datosPersonales
+              ? `${msg.emisor.datosPersonales.firstName || ""} ${msg.emisor.datosPersonales.lastName || ""}`.trim()
+              : msg.emisor?.userName || "";
+            const isDraft = !msg.fechaEnvio;
+            return {
+              id: String(item.id),
+              title: msg.asunto || "(sin asunto)",
+              body: msg.mensaje || "",
+              timestamp: msg.fechaEnvio || msg.createdAt || item.createdAt || "",
+              sender: senderName || "",
+              status: isDraft ? "borradores" : item.isArchived ? "archivados" : "recibidos",
+              priority: msg.priority || "normal",
+              tags: msg.tags || [],
+              avatarUrl: msg.emisor?.avatar || undefined,
+            };
+          });
+          setMessages(mapped);
         }
       } catch (err) {
         console.error("error loading messages", err);
@@ -52,13 +76,20 @@ export default function GestionComunicacion() {
     }
   }, [location.state]);
 
-  const filtered = messages.filter((m) => {
-    return (
-      !query ||
-      m.title.toLowerCase().includes(query.toLowerCase()) ||
-      m.body.toLowerCase().includes(query.toLowerCase())
-    );
-  });
+  const filtered = messages
+    .filter((m) => {
+      if (filter === "recibidos") return m.status === "recibidos";
+      if (filter === "archivados") return m.status === "archivados";
+      // no drafts support yet
+      return false;
+    })
+    .filter((m) => {
+      return (
+        !query ||
+        m.title.toLowerCase().includes(query.toLowerCase()) ||
+        m.body.toLowerCase().includes(query.toLowerCase())
+      );
+    });
 
   return (
     <main className="flex-1 flex flex-col h-screen overflow-hidden">

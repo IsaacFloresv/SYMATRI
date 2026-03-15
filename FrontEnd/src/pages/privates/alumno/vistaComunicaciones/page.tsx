@@ -191,6 +191,7 @@ export default function VistaComunicaciones() {
                         {msg.emisor?.datosPersonales.firstName} {msg.emisor?.datosPersonales.lastName}
                       </span>
                       <Button
+                      type="button"
                       variant="outline"
                       size="sm"
                       className="px-3 py-1"
@@ -217,6 +218,15 @@ export default function VistaComunicaciones() {
           setModalOpen(o);
         }}
         entry={selectedEntry}
+        onArchived={(mensajeId, isArchived) => {
+          setMessages((prev) =>
+            prev.map((entry) =>
+              entry.mensaje.id === mensajeId
+                ? { ...entry, mensaje: { ...entry.mensaje, isArchived } }
+                : entry
+            )
+          );
+        }}
       />
     </main>
   );

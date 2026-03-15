@@ -8,6 +8,7 @@ import { useAuthStorage } from "@/hooks/useAuthStorage"
 import { useNavigate } from "react-router-dom"
 
 interface Subject {
+  id: number
   name: string
   currentAverage: number
   previousAverage: number
@@ -31,11 +32,11 @@ interface Message {
 }
 
 const subjects: Subject[] = [
-  { name: "Matemáticas", currentAverage: 93.5, previousAverage: 92.0, change: 1.63, trend: [90, 92, 93.5] },
-  { name: "Lengua Española", currentAverage: 89.0, previousAverage: 90.0, change: -1.11, trend: [91, 90, 89] },
-  { name: "Ciencias Naturales", currentAverage: 80.5, previousAverage: 81.0, change: -0.62, trend: [78, 81, 80.5] },
-  { name: "Educación Física", currentAverage: 75.0, previousAverage: 68.0, change: 10.29, trend: [72, 68, 75] },
-  { name: "Historia", currentAverage: 64.5, previousAverage: 65.0, change: -0.77, trend: [62, 65, 64.5] },
+  { id: 1, name: "Matemáticas", currentAverage: 93.5, previousAverage: 92.0, change: 1.63, trend: [90, 92, 93.5] },
+  { id: 2, name: "Lengua Española", currentAverage: 89.0, previousAverage: 90.0, change: -1.11, trend: [91, 90, 89] },
+  { id: 3, name: "Ciencias Naturales", currentAverage: 80.5, previousAverage: 81.0, change: -0.62, trend: [78, 81, 80.5] },
+  { id: 4, name: "Educación Física", currentAverage: 75.0, previousAverage: 68.0, change: 10.29, trend: [72, 68, 75] },
+  { id: 5, name: "Historia", currentAverage: 64.5, previousAverage: 65.0, change: -0.77, trend: [62, 65, 64.5] },
 ]
 
 const events: Event[] = [
@@ -135,6 +136,7 @@ function MessageIcon({ sender }: { sender: string }) {
 }
 
 export default function StudentDashBoard() {
+  const navigate = useNavigate();
   const user = useAuthStorage((state) => state.user)
   const userName = user?.datosPersonales?.firstName || "Usuario"
 
@@ -142,7 +144,6 @@ export default function StudentDashBoard() {
     <main className="flex-1 px-16 py-4 bg-background">
       <header className="mb-8 text-left">
         <h1 className="text-4xl font-bold tracking-tight text-foreground mb-2">Resumen Académico</h1>
-        <p className="text-muted-foreground text-lg">Bienvenid@ de nuevo, {userName}.</p>
       </header>
       
       <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -180,7 +181,11 @@ export default function StudentDashBoard() {
                   </TableHeader>
                   <TableBody>
                     {subjects.map((subject, index) => (
-                      <TableRow key={index}>
+                      <TableRow
+                    key={index}
+                    className="cursor-pointer hover:bg-card-dark/40"
+                    onClick={() => navigate(`/alumno/calificaciones?materiaId=${subject.id}`)}
+                  >
                         <TableCell className="text-white font-medium px-3">
                           <div className="sm:hidden">
                             <div className="text-white font-medium">{subject.name}</div>
@@ -252,7 +257,7 @@ export default function StudentDashBoard() {
           </div>
         </div>
 
-        <div className="lg:col-span-1 flex flex-col space-y-8">
+        <div className="lg:col-span-1 flex flex-col space-y-4 pt-12">
           <Card>
             <CardHeader>
               <CardTitle>Próximos Eventos</CardTitle>

@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
   actividades.init({
     periodo: DataTypes.STRING,
     name: DataTypes.STRING,
+    materiaId: DataTypes.INTEGER,
     descripcion: DataTypes.TEXT,
     userId: DataTypes.INTEGER,
     seccionesId: DataTypes.JSON,

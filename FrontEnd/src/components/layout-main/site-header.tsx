@@ -1,5 +1,6 @@
 //import { Button } from "@/components/ui/button"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useLocation } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Sun, Moon, Monitor, Circle, ArrowLeft } from "lucide-react"
 import { applyTheme, getStoredTheme, type Theme } from "@/lib/theme"
 import { useUiStore } from "@/hooks/useUiStore"
+import { moduleMap } from "@/config/moduleMaps"
 
 type Props = {
   datosPersonales?: {
@@ -37,6 +39,7 @@ export function SiteHeader({ role }: Props) {
   }
   const [theme, setTheme] = useState<Theme>(() => (getStoredTheme() as Theme) || "system")
   const activeUserPage = useUiStore((s) => s.activeUserPage)
+  const location = useLocation()
 
   useEffect(() => {
     // keep local state in sync with persisted value (other tabs)
@@ -58,6 +61,27 @@ export function SiteHeader({ role }: Props) {
   const CurrentIcon = THEMES.find((x) => x.id === theme)?.icon || Sun
 
   const headerZClass = isMobile ? "z-40" : "z-60"
+
+  const { routeLabel, routeIcon: RouteIcon } = useMemo(() => {
+    const current = location.pathname;
+    const matches = Object.values(moduleMap)
+      .filter((m) => current.startsWith(m.path))
+      .sort((a, b) => b.path.length - a.path.length);
+
+    const match = matches[0];
+    return {
+      routeLabel: match?.label || "Dashboard",
+      routeIcon: match?.icon || null,
+    };
+  }, [location.pathname]);
+
+  const [iconPulse, setIconPulse] = useState(false);
+
+  useEffect(() => {
+    setIconPulse(true);
+    const t = window.setTimeout(() => setIconPulse(false), 220);
+    return () => window.clearTimeout(t);
+  }, [routeLabel]);
 
   return (
     <header
@@ -105,7 +129,17 @@ export function SiteHeader({ role }: Props) {
         </h1>
       </div>
     ) : (
-      <h1 className="font-medium truncate">Dashboard</h1>
+      <div className="flex items-center gap-2">
+        {RouteIcon ? (
+          <RouteIcon
+            className={cn(
+              "size-5 transition-transform duration-200 ease-out",
+              iconPulse && "scale-110"
+            )}
+          />
+        ) : null}
+        <h1 className="font-medium truncate">{routeLabel}</h1>
+      </div>
     )}
 
     <div className="ml-auto flex items-center gap-2 flex-shrink-0">

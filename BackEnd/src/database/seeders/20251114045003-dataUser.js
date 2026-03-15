@@ -125,8 +125,207 @@ module.exports = {
           address: "Av. Central #22",
           telefono: "78945699",
           userId: 15
+        },
+        {
+          firstName: "Alumno16",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #116",
+          telefono: "78945116",
+          userId: 16
+        },
+        {
+          firstName: "Alumno17",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #117",
+          telefono: "78945117",
+          userId: 17
+        },
+        {
+          firstName: "Alumno18",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #118",
+          telefono: "78945118",
+          userId: 18
+        },
+        {
+          firstName: "Alumno19",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #119",
+          telefono: "78945119",
+          userId: 19
+        },
+        {
+          firstName: "Alumno20",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #120",
+          telefono: "78945120",
+          userId: 20
+        },
+        {
+          firstName: "Alumno21",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #121",
+          telefono: "78945121",
+          userId: 21
+        },
+        {
+          firstName: "Alumno22",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #122",
+          telefono: "78945122",
+          userId: 22
+        },
+        {
+          firstName: "Alumno23",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #123",
+          telefono: "78945123",
+          userId: 23
+        },
+        {
+          firstName: "Alumno24",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #124",
+          telefono: "78945124",
+          userId: 24
+        },
+        {
+          firstName: "Alumno25",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #125",
+          telefono: "78945125",
+          userId: 25
+        },
+        {
+          firstName: "Alumno26",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #126",
+          telefono: "78945126",
+          userId: 26
+        },
+        {
+          firstName: "Alumno27",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #127",
+          telefono: "78945127",
+          userId: 27
+        },
+        {
+          firstName: "Alumno28",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #128",
+          telefono: "78945128",
+          userId: 28
+        },
+        {
+          firstName: "Alumno29",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #129",
+          telefono: "78945129",
+          userId: 29
+        },
+        {
+          firstName: "Alumno30",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #130",
+          telefono: "78945130",
+          userId: 30
+        },
+        {
+          firstName: "Alumno31",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #131",
+          telefono: "78945131",
+          userId: 31
+        },
+        {
+          firstName: "Alumno32",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #132",
+          telefono: "78945132",
+          userId: 32
+        },
+        {
+          firstName: "Alumno33",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #133",
+          telefono: "78945133",
+          userId: 33
+        },
+        {
+          firstName: "Alumno34",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #134",
+          telefono: "78945134",
+          userId: 34
+        },
+        {
+          firstName: "Alumno35",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #135",
+          telefono: "78945135",
+          userId: 35
+        },
+        {
+          firstName: "Alumno36",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #136",
+          telefono: "78945136",
+          userId: 36
+        },
+        {
+          firstName: "Alumno37",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #137",
+          telefono: "78945137",
+          userId: 37
+        },
+        {
+          firstName: "Alumno38",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #138",
+          telefono: "78945138",
+          userId: 38
+        },
+        {
+          firstName: "Alumno39",
+          lastName: "Ejemplo",
+          genero: "femenino",
+          address: "Calle Ejemplo #139",
+          telefono: "78945139",
+          userId: 39
+        },
+        {
+          firstName: "Alumno40",
+          lastName: "Ejemplo",
+          genero: "masculino",
+          address: "Calle Ejemplo #140",
+          telefono: "78945140",
+          userId: 40
         }
-
       ],
       {}
     );

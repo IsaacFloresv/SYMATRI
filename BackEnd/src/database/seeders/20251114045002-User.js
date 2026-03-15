@@ -117,6 +117,217 @@ module.exports = {
           roleId: 2,
           active: true
         },
+        {
+          userName: "alumno16",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno16@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno17",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno17@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno18",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno18@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno19",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno19@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno20",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno20@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno21",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno21@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno22",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno22@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno23",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno23@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno24",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno24@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno25",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno25@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno26",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno26@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno27",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno27@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno28",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno28@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno29",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno29@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno30",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno30@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno31",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno31@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno32",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno32@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno33",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno33@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno34",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno34@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno35",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno35@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno36",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno36@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno37",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno37@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno38",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno38@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno39",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno39@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno40",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno40@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno41",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno41@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno42",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno42@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno43",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno43@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno44",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno44@example.com",
+          roleId: 1,
+          active: true
+        },
+        {
+          userName: "alumno45",
+          pass: "$2b$10$83hmGQgre2mJTPGciioBJe3/nGReDazPq28vjJSVl90AeVNvYxFgS", //1234
+          email: "alumno45@example.com",
+          roleId: 1,
+          active: true
+        },
+
       ],
       {}
     );

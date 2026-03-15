@@ -1,12 +1,13 @@
-const { actividades, user, dataUser } = require("../database/models/index");
+const { actividades, user, dataUser, materias } = require("../database/models/index");
+const { Op } = require("sequelize");
 
 const getAll = async (req, res) => {
   try {
-    console.log("entro al getAll actividades");
-    const { userId } = req.query;
+    const { userId, materiaId } = req.query;
 
     const where = {};
-    if (userId) where.userId = userId;
+    if (userId) where.userId = Number(userId);
+    if (materiaId) where.materiaId = Number(materiaId);
 
     let result = await actividades.findAll({
       where,
@@ -47,7 +48,7 @@ const getById = async (req, res) => {
       },
       include: [
         {
-          model: User,
+          model: user,
           attributes: ["id"],
           as: "generador",
           include: [

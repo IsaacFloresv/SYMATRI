@@ -17,17 +17,43 @@ export const useAuth = () => {
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: (fullSession) => {
-      // Guardar sesión completa en Zustand
-      setUser(fullSession);
-      const rawRole = fullSession.role ? String(fullSession.role).toLowerCase() : "guest";
+      // Normalize role from backend. Some backends return roleId instead of role string.
+      const rawRole = (() => {
+        if (fullSession.role) return String(fullSession.role).toLowerCase();
+        const rid = (fullSession as any).roleId;
+        if (typeof rid === "number") {
+          switch (rid) {
+            case 1:
+              return "student";
+            case 2:
+              return "encargado";
+            case 3:
+              return "profesor";
+            case 4:
+              return "admin1";
+            case 5:
+              return "admin007";
+            default:
+              return "guest";
+          }
+        }
+        return "guest";
+      })();
+
+      // Guardar sesión completa en Zustand (con role normalizado)
+      const sessionToStore = { ...fullSession, role: rawRole };
+      setUser(sessionToStore);
+      // Update api token so authenticated calls include it.
+      import("@/lib/api")
+        .then(({ api }) => {
+          api.token = sessionToStore.token;
+        })
+        .catch((e) => {
+          console.warn("Unable to update api token", e);
+        });
+
       // Mapear roles a rutas existentes
       const roleToPath = (r: string) => {
-        // soporte users should land on the admin dashboard – they are treated like admins
-        // backend description is "soporte" but just in case an english word is used
-        //const isSupportRole = r.includes("admin007");
-        // older data stored support/admin in modules 1..10
-        //const hasSupportModule = modules.some((m) => m >= 1 && m <= 10);
-        //if (isSupportRole || hasSupportModule) return "/dashboard/admin";
         if (r === "admin1" || r === "admin007") return "/admin/dashboard";
         if (r === "student") return "/alumno/dashboard";
         if (r === "profesor") return "/profesor/dashboard";
@@ -36,10 +62,10 @@ export const useAuth = () => {
         // guest u otros -> ruta genérica
         else return "/dashboard";
       };
-      
+
       const redirectPath = roleToPath(rawRole);
       // Navegar al dashboard correspondiente
-      navigate(redirectPath)
+      navigate(redirectPath);
     },
     onError: (err) => console.error(err),
   });
@@ -50,6 +76,15 @@ export const useAuth = () => {
     // Eliminar la sesión canónica y limpiar estado en memoria
     removeSession();
     setUser(null);
+
+    // Clear token from api helper as well
+    import("@/lib/api")
+      .then(({ api }) => {
+        api.token = null;
+      })
+      .catch((e) => {
+        console.warn("Unable to clear api token", e);
+      });
 
     // Limpiar claves legacy por compatibilidad
     localStorage.removeItem("token");

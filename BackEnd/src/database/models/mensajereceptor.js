@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     mensajeId: DataTypes.INTEGER,
     receptorId: DataTypes.INTEGER,
     leido: DataTypes.BOOLEAN,
+    isArchived: DataTypes.BOOLEAN,
     fechaLectura: DataTypes.DATE
   }, {
     sequelize,

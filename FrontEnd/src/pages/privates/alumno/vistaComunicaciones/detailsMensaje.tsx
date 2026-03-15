@@ -1,8 +1,7 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { api } from "@/lib/api";
 
 // types matching API
 interface DatosPersonales { firstName: string; lastName: string; genero?: string; }
@@ -42,9 +41,10 @@ interface DetailsMensajeProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   entry?: MensajeReceptor;
+  onArchived?: (mensajeId: number, isArchived: boolean) => void;
 }
 
-export default function DetailsMensaje({ open, onOpenChange, entry }: DetailsMensajeProps) {
+export default function DetailsMensaje({ open, onOpenChange, entry, onArchived }: DetailsMensajeProps) {
   if (!entry) return null;
   const msg = entry.mensaje;
 
@@ -84,11 +84,6 @@ export default function DetailsMensaje({ open, onOpenChange, entry }: DetailsMen
                 Enviado: {formatDateTime(msg.fechaEnvio)}
               </p>
             </div>
-            <div className="shrink-0">
-              <div className="flex size-7 items-center justify-center">
-                <div className="size-2 rounded-full bg-[#0bda5b]" />
-              </div>
-            </div>
           </div>
         </div>
         {/* body */}
@@ -100,9 +95,37 @@ export default function DetailsMensaje({ open, onOpenChange, entry }: DetailsMen
         {/* footer */}
         <div className="flex items-center justify-between px-4 py-1 bg-gray-50/50 dark:bg-[#0b1219]">
           <div className="flex gap-3">
-            <Button variant="outline" className="flex items-center gap-2"><span className="material-symbols-outlined text-[18px]">archive</span>Archivar</Button>
+            <Button
+              variant="outline"
+              className="flex items-center gap-2"
+              onClick={async () => {
+                if (!msg?.id) return;
+                const headers: Record<string, string> = { "Content-Type": "application/json" };
+                if (api.token) headers.Authorization = `Bearer ${api.token}`;
+
+                try {
+                  const res = await fetch(`${api.baseUrl}/mensajes/isArchived`, {
+                    method: "PATCH",
+                    headers,
+                    body: JSON.stringify({ id: msg.id, isArchived: !msg.isArchived }),
+                  });
+
+                  if (res.ok) {
+                    onArchived?.(msg.id, !msg.isArchived);
+                    onOpenChange(false);
+                  } else {
+                    console.error("Error updating archive state", await res.text());
+                  }
+                } catch (error) {
+                  console.error("Error updating archive state", error);
+                }
+              }}
+            >
+              <span className="material-symbols-outlined text-[18px]">archive</span>
+              {msg.isArchived ? "Desarchivar" : "Archivar"}
+            </Button>
           </div>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cerrar</Button>
+          <Button className="border" variant="ghost" onClick={() => onOpenChange(false)}>Cerrar</Button>
         </div>
       </DialogContent>
     </Dialog>

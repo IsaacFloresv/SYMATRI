@@ -29,6 +29,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      isArchived: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       fechaLectura: {
         type: Sequelize.DATE,
         allowNull: true,

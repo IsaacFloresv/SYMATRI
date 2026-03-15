@@ -26,7 +26,8 @@ interface MensajeReceptor {
 export default function LeerMensaje() {
   const navigate = useNavigate();
   const loc = useLocation();
-  const entry = loc.state?.entry as MensajeReceptor | undefined;
+  // `navigate(..., { state: entry })` passes the object directly as state.
+  const entry = (loc.state as MensajeReceptor | undefined) ?? (loc.state as any)?.entry;
 
   useEffect(() => {
     if (!entry) {
@@ -70,7 +71,7 @@ export default function LeerMensaje() {
           </button>
         </div>
         <button
-          className="flex items-center justify-center rounded-lg h-10 bg-primary hover:bg-primary/90 text-white gap-2 text-sm font-bold px-4 transition-all shadow-lg shadow-primary/20"
+          className="flex items-center gap-2 rounded-md border border-black bg-[#e5e7eb] text-black font-medium px-4 py-2"
           onClick={() => navigate("/alumno/comunicaciones")}
         >
           <span className="material-symbols-outlined text-[20px]">inbox</span>
@@ -165,30 +166,6 @@ export default function LeerMensaje() {
               ))}
             </div>
           )}
-        </div>
-
-        {/* Reply Area */}
-        <div className="bg-[#111a22] rounded-xl border border-white/5 p-6 mt-4">
-          <h3 className="text-white text-base font-semibold mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-[20px]">reply</span>
-            Enviar respuesta
-          </h3>
-          <div className="relative">
-            <textarea
-              className="w-full bg-[#1c2a38] border border-white/10 rounded-lg p-4 text-white text-sm placeholder:text-[#92aec9] focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-              placeholder="Escribe tu respuesta aquí..."
-              rows={4}
-            />
-            <div className="absolute bottom-4 right-4 flex items-center gap-3">
-              <button className="p-2 text-[#92aec9] hover:text-white transition-colors">
-                <span className="material-symbols-outlined">attach_file</span>
-              </button>
-              <button className="flex items-center justify-center rounded-lg h-10 bg-primary hover:bg-primary/90 text-white gap-2 text-sm font-bold px-6 transition-all">
-                <span className="material-symbols-outlined text-[18px]">send</span>
-                Enviar
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </main>
