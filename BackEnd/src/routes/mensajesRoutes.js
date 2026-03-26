@@ -9,11 +9,7 @@ router.get("/", (req, res) => {
 
 router.get("/all", getAll);
 router.get("/byallid", getAllById);
-router.get("/byid", (req, res) => {
-  // if caller supplies emisorId we want all messages sent by that user
-  if (req.query.emisorId) return getAllById(req, res);
-  return getById(req, res);
-});
+router.get("/byid", getById);
 router.post("/create", create);
 router.put("/update", update);
 router.patch("/isReaded", isReaded);

@@ -18,7 +18,8 @@ module.exports = {
       { nombre: 'ExamenSorpresa', descripcion: 'Examen sorpresa', createdAt: new Date(), updatedAt: new Date() },
       { nombre: 'Taller', descripcion: 'Taller / actividad', createdAt: new Date(), updatedAt: new Date() },
       { nombre: 'Laboratorio', descripcion: 'Práctica de laboratorio', createdAt: new Date(), updatedAt: new Date() },
-      { nombre: 'Extra', descripcion: 'Extra / bonus', createdAt: new Date(), updatedAt: new Date() }
+      { nombre: 'Extra', descripcion: 'Extra / bonus', createdAt: new Date(), updatedAt: new Date() },
+      { nombre: 'Conducta', descripcion: 'Conducta', createdAt: new Date(), updatedAt: new Date() }
     ], {});
   },
 

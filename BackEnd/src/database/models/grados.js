@@ -3,7 +3,11 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class grados extends Model {
     static associate(models) {
-      // future associations (e.g. secciones) can be defined here
+      // Relación con materias
+      grados.hasMany(models.materias, {
+        foreignKey: 'gradoId',
+        as: 'materiasAsignadas',
+      });
     }
   }
   grados.init({

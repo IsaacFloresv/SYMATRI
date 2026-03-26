@@ -26,8 +26,7 @@ interface Attendance {
   late: number;
 }
 
-export default function VistaCalificacionesMaterias() 
-{
+export default function VistaCalificacionesMaterias() {
   const session = useAuthStorage((s) => s.user);
   const selectedChildId = useAuthStorage((s) => s.selectedChildId);
   const selectedChildName = useAuthStorage((s) => s.selectedChildName);
@@ -38,6 +37,9 @@ export default function VistaCalificacionesMaterias()
   const [grades, setGrades] = useState<GradeRow[]>([]);
   const [schedule, setSchedule] = useState<EventItem[]>([]); // Actividades relacionadas a la materia
   const [attendance, setAttendance] = useState<Attendance>({ attended: 0, total: 0, late: 0 });
+  const [materiaInfo, setMateriaInfo] = useState<any | null>(null);
+  const [profesorNombre, setProfesorNombre] = useState<string | null>(null);
+  const [conductaNota, setConductaNota] = useState<any | null>(null);
 
   // optional override via query string ?alumnoId=xxx&materiaId=YYY
   const params = new URLSearchParams(location.search);
@@ -114,6 +116,52 @@ export default function VistaCalificacionesMaterias()
     }
   };
 
+  const loadMateriaInfo = async (useMateriaId: number) => {
+    const headers: Record<string, string> = {};
+    if (api.token) headers.Authorization = `Bearer ${api.token}`;
+
+    try {
+      const res = await fetch(`${api.baseUrl}/materiasProfesores/byid?id=${useMateriaId}`, { headers });
+      if (res.ok) {
+        const info = await res.json();
+        setMateriaInfo(info);
+
+
+        // extraer profesor asignado (primer registro)
+        const prof = info?.materia?.[0]?.profesorAsignado?.datosPersonales;
+        if (prof) {
+          setProfesorNombre(`${prof.firstName || ""} ${prof.lastName || ""}`.trim());
+        } else {
+          setProfesorNombre(null);
+        }
+      }
+    } catch (e) {
+      console.error("error fetching materia info", e);
+    }
+  };
+
+  const loadConductaNota = async (useAlumnoId?: number, usePeriodo?: string) => {
+    if (!useAlumnoId || !usePeriodo) return;
+    const headers: Record<string, string> = {};
+    if (api.token) headers.Authorization = `Bearer ${api.token}`;
+
+    try {
+      const query = new URLSearchParams({ periodo: usePeriodo, materiaId: "16", alumnoId: String(useAlumnoId) }).toString();
+      const res = await fetch(`${api.baseUrl}/notas/allbyid?${query}`, { headers });
+      if (res.ok) {
+        const all: any = await res.json();
+        const arr = Array.isArray(all) ? all : [];
+        // Prefer the record that explicitly has tipoNota "Conducta" or tipoId 16.
+        const preferred = arr.find((n: any) =>
+          n?.tipoNota?.nombre?.toLowerCase()?.includes("conducta") || n?.tipoId === 16
+        );
+        setConductaNota(preferred || arr[0] || null);
+      }
+    } catch (e) {
+      console.error("error fetching conducta nota", e);
+    }
+  };
+
   // load materias, actividades y asistencia; does NOT fetch notas
   const loadInitialData = async () => {
     if (!session?.id) return;
@@ -126,7 +174,7 @@ export default function VistaCalificacionesMaterias()
         const mRes = await fetch(`${api.baseUrl}/materias/all`, { headers });
         if (mRes.ok) {
           const mAll = await mRes.json();
-          const list = mAll.map((m: any) => ({ id: m.id, name: m.name || m.nombre || "" }));
+          const list = mAll.map((m: any) => ({ id: Number(m.id), name: m.name || m.nombre || "" }));
           setMaterias(list);
           // set default materiaId if current does not exist
           if (!list.find((x) => x.id === materiaId)) {
@@ -156,7 +204,7 @@ export default function VistaCalificacionesMaterias()
 
     // use effective materia id in case it was just updated
     let effectiveMateria = materiaId;
-    if (materias.length > 0 && !materias.find((m) => m.id === effectiveMateria)) {
+    if (materias.length > 0 && !materias.find((m) => Number(m.id) === Number(effectiveMateria))) {
       effectiveMateria = materias[0].id;
       setMateriaId(effectiveMateria);
     }
@@ -183,10 +231,6 @@ export default function VistaCalificacionesMaterias()
         }));
         list.sort((a, b) => a.actividad.localeCompare(b.actividad));
         setGrades(list);
-
-        // refresh attendance + activities for the materia
-        loadAttendance(alumnoId, effectiveMateria);
-        loadActivities(effectiveMateria);
       }
     } catch (e) {
       console.error("error fetching notas", e);
@@ -204,7 +248,7 @@ export default function VistaCalificacionesMaterias()
         const headers: Record<string, string> = {};
         if (api.token) headers.Authorization = `Bearer ${api.token}`;
         fetch(`${api.baseUrl}/users/byid?id=${id}`, { headers })
-          .then((res) => res.ok ? res.json() : null)
+          .then((res) => (res.ok ? res.json() : null))
           .then((user) => {
             if (user?.dataUser?.firstName || user?.dataUser?.lastName) {
               setSelectedChildName(
@@ -217,7 +261,7 @@ export default function VistaCalificacionesMaterias()
     }
 
     loadInitialData();
-  }, [session, selectedChildId, queryAlumno, selectedChildName, setSelectedChildId, setSelectedChildName]);
+  }, [session?.id, queryAlumno]);
 
   // if arriving with a materiaId in query, auto-load notas for it
   useEffect(() => {
@@ -226,17 +270,42 @@ export default function VistaCalificacionesMaterias()
     }
   }, [queryMateriaId, alumnoId]);
 
+  // keep materia info synced with the selected materia
+  useEffect(() => {
+    if (materiaId) {
+      loadMateriaInfo(materiaId);
+    }
+  }, [materiaId]);
+
+  // keep conducta card synced with the selected alumno + periodo
+  useEffect(() => {
+    if (alumnoId && periodo) {
+      loadConductaNota(alumnoId, periodo);
+    }
+  }, [alumnoId, periodo]);
+
   // Reload attendance + activities when alumnoId or materiaId changes
   useEffect(() => {
-    if (alumnoId && materiaId) {
-      loadAttendance(alumnoId, materiaId);
-      loadActivities(materiaId);
-    }
-  }, [alumnoId, materiaId, materias]);
+    if (!alumnoId || !materiaId) return;
+
+    loadAttendance(alumnoId, materiaId);
+    loadActivities(materiaId);
+    loadMateriaInfo(materiaId);
+  }, [alumnoId, materiaId]);
 
   const promedio = grades.length
     ? grades.reduce((acc, g) => acc + g.obtenido, 0) / grades.length
     : 0;
+
+  const conductaScore = Number(conductaNota?.nota ?? 0);
+  const conductaLabel = conductaNota
+    ? conductaScore >= 9.5
+      ? "Excelente"
+      : conductaScore >= 8
+        ? "Bueno"
+        : "Regular"
+    : "Sin registros";
+  const conductaPuntuacion = conductaNota ? `${conductaScore.toFixed(1)}/10` : "-";
 
   return (
     <main className="flex-1 p-8 bg-background-dark flex flex-col">
@@ -253,8 +322,8 @@ export default function VistaCalificacionesMaterias()
               {selectedChildName
                 ? `Alumno: ${selectedChildName}`
                 : alumnoId
-                ? `Alumno ID: ${alumnoId}`
-                : "Sin alumno seleccionado"}
+                  ? `Alumno ID: ${alumnoId}`
+                  : "Sin alumno seleccionado"}
             </h2>
             <h1 className="text-5xl font-bold tracking-tight text-foreground-dark">
               {selectedMateria?.name || grades[0]?.tipo || "Asignatura"}
@@ -385,6 +454,55 @@ export default function VistaCalificacionesMaterias()
         <div className="lg:col-span-1 space-y-8">
           <section>
             <div className="p-6 rounded-lg border border-border-dark bg-card-dark">
+              {/* Header */}
+              <div className="flex items-center gap-1 px-6 mb-6">
+                <h3 className="text-lg font-semibold text-foreground-dark">
+                  Conducta en Clase
+                </h3>
+                <span className="material-symbols-outlined text-emerald-400 text-2xl">
+                  shield
+                </span>
+              </div>
+
+              {/* Contenido */}
+              <div className="flex flex-col items-center gap-6">
+                {/* Icono + badge */}
+                <div className="relative flex flex-col items-center">
+                  <div className="h-20 w-20 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-4xl text-emerald-500">
+                      mood
+                    </span>
+                  </div>
+
+                  <div className="mt-3 px-3 py-1 rounded-full bg-emerald-500 text-white text-xs font-semibold">
+                    {conductaLabel}
+                  </div>
+                </div>
+
+                {/* Puntuación */}
+                <div className="text-center space-y-1">
+                  <p className="text-xs text-muted-dark uppercase tracking-wide">
+                    Puntuación
+                  </p>
+                  <p className="text-2xl font-bold text-foreground-dark">
+                    {conductaPuntuacion}
+                  </p>
+                  {conductaNota?.tipoNota?.nombre && (
+                    <p className="text-xs text-muted-dark">{conductaNota.tipoNota.nombre}</p>
+                  )}
+                </div>
+
+                {!conductaNota && (
+                  <p className="text-sm text-muted-dark text-center">
+                    No hay registros de conducta disponibles. Si deseas registrar observaciones, utiliza el módulo de informes o contacto.
+                  </p>
+                )}
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div className="p-6 rounded-lg border border-border-dark bg-card-dark">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-foreground-dark">Asistencia</h3>
                 <span className="material-symbols-outlined text-primary">calendar_today</span>
@@ -392,8 +510,26 @@ export default function VistaCalificacionesMaterias()
               <div className="flex items-center gap-6 mb-6">
                 <div className="relative size-24 flex items-center justify-center">
                   <svg className="size-full -rotate-90" viewBox="0 0 36 36">
-                    <circle className="stroke-border-dark fill-none" cx="18" cy="18" r="16" stroke-width="3"></circle>
-                    <circle className="stroke-primary fill-none" cx="18" cy="18" r="16" stroke-dasharray="100" stroke-dashoffset={`${100 - (attendance.attended / (attendance.total || 1)) * 100}`} stroke-linecap="round" stroke-width="3"></circle>
+                    {/* background ring */}
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="16"
+                      strokeWidth={3}
+                      className="stroke-border-dark fill-none"
+                    />
+
+                    {/* percentage ring */}
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="16"
+                      strokeWidth={3}
+                      className="stroke-blue-500 fill-none"
+                      strokeDasharray={100}
+                      strokeDashoffset={100 - (attendance.attended / (attendance.total || 1)) * 100}
+                      strokeLinecap="round"
+                    />
                   </svg>
                   <div className="absolute text-center">
                     <p className="text-xl font-bold text-foreground-dark">
@@ -412,6 +548,32 @@ export default function VistaCalificacionesMaterias()
                     </>
                   )}
                 </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div className="p-6 rounded-lg border border-border-dark bg-card-dark">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-foreground-dark">Información del curso</h3>
+                <span className="material-symbols-outlined text-primary">school</span>
+              </div>
+              <div className="space-y-2 text-sm text-muted-dark">
+                <p>
+                  <span className="font-semibold text-foreground-dark">Materia:</span> {materiaInfo?.name || selectedMateria?.name || "No disponible"}
+                </p>
+                <p>
+                  <span className="font-semibold text-foreground-dark">Grado:</span> {materiaInfo?.grado?.name || "-"}
+                </p>
+                <p>
+                  <span className="font-semibold text-foreground-dark">Periodo:</span> {periodo}
+                </p>
+                <p>
+                  <span className="font-semibold text-foreground-dark">Descripción:</span> {materiaInfo?.description || "No hay descripción."}
+                </p>
+                <p>
+                  <span className="font-semibold text-foreground-dark">Profesor:</span> {profesorNombre ?? "(sin datos)"}
+                </p>
               </div>
             </div>
           </section>

@@ -17,7 +17,8 @@ module.exports = {
       { mensajeId: 3, receptorId: 11, leido: false, isArchived: false, fechaLectura: null },
       { mensajeId: 3, receptorId: 12, leido: false, isArchived: false, fechaLectura: null },
       { mensajeId: 3, receptorId: 13, leido: false, isArchived: false, fechaLectura: null },
-      { mensajeId: 3, receptorId: 14, leido: false, isArchived: false, fechaLectura: null }
+      { mensajeId: 3, receptorId: 14, leido: false, isArchived: false, fechaLectura: null },
+      { mensajeId: 16, receptorId: 15, leido: false, isArchived: false, fechaLectura: null }
     ]);
   },
 

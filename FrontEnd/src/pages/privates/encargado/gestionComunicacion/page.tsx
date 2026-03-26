@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import MessageDetail from "./messageDetail";
 import { useAuthStorage } from "@/hooks/useAuthStorage";
 import { api } from "@/lib/api";
 
@@ -15,16 +17,18 @@ interface Message {
   sender: string;
   priority?: "high" | "normal";
   tags?: string[];
-  status: "recibidos" | "archivados" | "borradores";
+  status: "recibidos" | "enviados" | "archivados" | "borradores";
   avatarUrl?: string;
 }
 
 export default function GestionComunicacion() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [filter, setFilter] = useState<"recibidos" | "archivados" | "borradores">("recibidos");
+  const [filter, setFilter] = useState<"recibidos" | "enviados" | "archivados" | "borradores">("recibidos");
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const location = useLocation();
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+  const session = useAuthStorage((s) => s.user);
 
   useEffect(() => {
     async function load() {
@@ -32,39 +36,64 @@ export default function GestionComunicacion() {
         const headers: Record<string, string> = {};
         if (api.token) headers.Authorization = `Bearer ${api.token}`;
 
-        const session = useAuthStorage((s) => s.user);
         const receptorId = session?.id;
         if (!receptorId) return;
 
-        const res = await fetch(`${api.baseUrl}/mensajeReceptor/allById?receptorId=${receptorId}`, { headers });
-        if (res.ok) {
-          const data: any[] = await res.json();
-          const mapped: Message[] = data.map((item) => {
+        // Recibidos se extraen de mensajeReceptor, el resto de la tabla mensajes
+        const endpoint =
+          filter === "recibidos"
+            ? `/mensajeReceptor/allById?receptorId=${receptorId}`
+            : `/mensajes/byallid?emisorId=${receptorId}`;
+
+        const res = await fetch(`${api.baseUrl}${endpoint}`, { headers });
+        if (!res.ok) return;
+
+        const data: any[] = await res.json();
+
+        const mapped: Message[] = data.map((item) => {
+          if (filter === "recibidos") {
             const msg = item.mensaje || {};
             const senderName = msg.emisor?.datosPersonales
               ? `${msg.emisor.datosPersonales.firstName || ""} ${msg.emisor.datosPersonales.lastName || ""}`.trim()
               : msg.emisor?.userName || "";
-            const isDraft = !msg.fechaEnvio;
             return {
               id: String(item.id),
               title: msg.asunto || "(sin asunto)",
               body: msg.mensaje || "",
-              timestamp: msg.fechaEnvio || msg.createdAt || item.createdAt || "",
+              timestamp: item.fechaLectura || msg.fechaEnvio || msg.createdAt || "",
               sender: senderName || "",
-              status: isDraft ? "borradores" : item.isArchived ? "archivados" : "recibidos",
+              status: msg.isArchived ? "archivados" : "recibidos",
               priority: msg.priority || "normal",
               tags: msg.tags || [],
               avatarUrl: msg.emisor?.avatar || undefined,
             };
-          });
-          setMessages(mapped);
-        }
+          }
+
+          // Mensajes enviados/borradores/archivados
+          const senderName = item.emisor?.datosPersonales
+            ? `${item.emisor.datosPersonales.firstName || ""} ${item.emisor.datosPersonales.lastName || ""}`.trim()
+            : item.emisor?.userName || "";
+          const isDraft = !item.fechaEnvio;
+          return {
+            id: String(item.id),
+            title: item.asunto || "(sin asunto)",
+            body: item.mensaje || "",
+            timestamp: item.fechaEnvio || item.createdAt || "",
+            sender: senderName || "",
+            status: isDraft ? "borradores" : item.isArchived ? "archivados" : "enviados",
+            priority: item.priority || "normal",
+            tags: item.tags || [],
+            avatarUrl: item.emisor?.avatar || undefined,
+          };
+        });
+
+        setMessages(mapped);
       } catch (err) {
         console.error("error loading messages", err);
       }
     }
     load();
-  }, [filter]);
+  }, [filter, session?.id]);
 
   // reload when navigating back with state
   useEffect(() => {
@@ -78,10 +107,11 @@ export default function GestionComunicacion() {
 
   const filtered = messages
     .filter((m) => {
+      if (filter === "enviados") return m.status === "enviados";
       if (filter === "recibidos") return m.status === "recibidos";
       if (filter === "archivados") return m.status === "archivados";
-      // no drafts support yet
-      return false;
+      if (filter === "borradores") return m.status === "borradores";
+      return true;
     })
     .filter((m) => {
       return (
@@ -90,6 +120,19 @@ export default function GestionComunicacion() {
         m.body.toLowerCase().includes(query.toLowerCase())
       );
     });
+
+  function formatDateTime(value?: string) {
+    if (!value) return "";
+    const date = new Date(value);
+    return date.toLocaleString(undefined, {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
 
   return (
     <main className="flex-1 flex flex-col h-screen overflow-hidden">
@@ -114,6 +157,14 @@ export default function GestionComunicacion() {
           </div>
         </div>
         <div className="flex border-b border-border-dark">
+          <button
+            className={`px-6 py-3 text-sm font-bold ${
+              filter === "enviados" ? "text-primary border-b-2 border-primary" : "text-muted-dark"
+            }`}
+            onClick={() => setFilter("enviados")}
+          >
+            Enviados
+          </button>
           <button
             className={`px-6 py-3 text-sm font-bold ${
               filter === "recibidos" ? "text-primary border-b-2 border-primary" : "text-muted-dark"
@@ -145,7 +196,7 @@ export default function GestionComunicacion() {
         {filtered.map((msg) => (
           <div
             key={msg.id}
-            onClick={() => navigate(`/encargado/gestion-comunicacion/${msg.id}`)}
+            onClick={() => setSelectedMessage(msg)}
             className="group p-5 rounded-xl border border-border-dark bg-card-dark hover:border-primary/50 transition-all cursor-pointer relative overflow-hidden"
           >
             {msg.priority === "high" && <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500" />}
@@ -170,12 +221,42 @@ export default function GestionComunicacion() {
                     )}
                   </h3>
                   <span className="text-xs text-muted-dark">
-                    {msg.timestamp}
+                    Enviado: {formatDateTime(msg.timestamp)}
                   </span>
                 </div>
                 <p className="text-sm text-muted-dark line-clamp-1 mb-3">
                   {msg.body}
                 </p>
+
+                <div className="flex justify-end gap-2 flex-wrap mb-3">
+                  {msg.status === "recibidos" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-40"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/encargado/gestion-comunicacion/${msg.id}?mode=reply`);
+                      }}
+                    >
+                      Responder
+                    </Button>
+                  )}
+                  {msg.status === "borradores" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-40"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/encargado/gestion-comunicacion/${msg.id}?mode=edit`);
+                      }}
+                    >
+                      Editar
+                    </Button>
+                  )}
+                </div>
+
                 <div className="flex items-center justify-between">
                   <div className="flex gap-2 flex-wrap">
                     {msg.tags?.map((tag) => (
@@ -204,7 +285,7 @@ export default function GestionComunicacion() {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              className="absolute bottom-8 right-8 size-14 bg-primary text-white rounded-full shadow-lg shadow-primary/20 hover:scale-110 active:scale-95 transition-transform flex items-center justify-center"
+              className="absolute bottom-8 right-8 size-14 bg-primary/20 text-white rounded-full shadow-lg shadow-primary/10 hover:scale-110 active:scale-95 transition-transform flex items-center justify-center"
             >
               <span className="material-symbols-outlined text-2xl">edit</span>
             </Button>
@@ -214,6 +295,26 @@ export default function GestionComunicacion() {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
+
+      <Dialog open={!!selectedMessage} onOpenChange={(open) => !open && setSelectedMessage(null)}>
+        <DialogContent className="max-w-[90vw] max-h-[90vh] overflow-y-auto">
+          {selectedMessage && (
+            <MessageDetail
+              message={selectedMessage}
+              folderLabel={
+                filter === "recibidos"
+                  ? "Recibidos"
+                  : filter === "enviados"
+                  ? "Enviados"
+                  : filter === "archivados"
+                  ? "Archivados"
+                  : "Borradores"
+              }
+              onClose={() => setSelectedMessage(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }

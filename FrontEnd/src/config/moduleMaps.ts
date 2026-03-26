@@ -88,6 +88,7 @@ export const moduleMap: Record<number, ModuleConfig> = {
   31: { id: 31, label: "Dashboard Encargado", path: "/encargado/dashboard", icon: IconDashboard },
   32: { id: 32, label: "Comunicaciones", path: "/encargado/gestion-comunicacion", icon: IconListDetails },
   33: { id: 33, label: "Matrícula", path: "/encargado/gestion-matricula", icon: IconFolder },
+  331: { id: 331, label: "Asistente Matrícula", path: "/encargado/asistente-matricula", icon: IconFolder },
   34: { id: 34, label: "Vistas: Notas", path: "/encargado/calificaciones", icon: IconReport },
 
   // Alumno modules

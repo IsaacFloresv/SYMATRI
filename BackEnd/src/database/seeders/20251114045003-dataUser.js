@@ -9,6 +9,7 @@ module.exports = {
         {
           firstName: "Soporte",
           lastName: "Soporte",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Soporte",
           telefono: "78945612",
@@ -17,6 +18,7 @@ module.exports = {
         {
           firstName: "Lelo",
           lastName: "Rodríguez",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle sin salida #3",
           telefono: "78945612",
@@ -25,6 +27,7 @@ module.exports = {
         {
           firstName: "Joy",
           lastName: "Mora",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle sin salida #5",
           telefono: "78945612",
@@ -33,6 +36,7 @@ module.exports = {
         {
           firstName: "Admin",
           lastName: "Admin",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle sin salida #10",
           telefono: "78945612",
@@ -40,7 +44,8 @@ module.exports = {
         },
         {
           firstName: "Admin2",
-          lastName: "Admin",
+          lastName: "Admin2",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle sin salida #11",
           telefono: "78945612",
@@ -49,6 +54,7 @@ module.exports = {
         {
           firstName: "Carlos",
           lastName: "Gómez",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle sin salida #12",
           telefono: "78945612",
@@ -57,6 +63,7 @@ module.exports = {
         {
           firstName: "Ana",
           lastName: "Pérez",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle sin salida #13",
           telefono: "78945612",
@@ -65,6 +72,7 @@ module.exports = {
         {
           firstName: "Mario",
           lastName: "Encargado",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle sin salida #14",
           telefono: "78945612",
@@ -73,6 +81,7 @@ module.exports = {
         {
           firstName: "Lucía",
           lastName: "Encargada",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle sin salida #15",
           telefono: "78945612",
@@ -81,6 +90,7 @@ module.exports = {
         {
           firstName: "Pedro",
           lastName: "Alumno",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle sin salida #16",
           telefono: "78945612",
@@ -89,6 +99,7 @@ module.exports = {
         {
           firstName: "Sofía",
           lastName: "Alumno",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle sin salida #17",
           telefono: "78945612",
@@ -97,6 +108,7 @@ module.exports = {
         {
           firstName: "Andrés",
           lastName: "Alumno",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle sin salida #18",
           telefono: "78945612",
@@ -105,6 +117,7 @@ module.exports = {
         {
           firstName: "Valeria",
           lastName: "Alumno",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle sin salida #19",
           telefono: "78945612",
@@ -113,6 +126,7 @@ module.exports = {
         {
           firstName: "Isaac",
           lastName: "Flores",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle sin salida #2",
           telefono: "78945612",
@@ -121,6 +135,7 @@ module.exports = {
         {
           firstName: "Abigail",
           lastName: "Rodríguez",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Av. Central #22",
           telefono: "78945699",
@@ -129,6 +144,7 @@ module.exports = {
         {
           firstName: "Alumno16",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #116",
           telefono: "78945116",
@@ -137,6 +153,7 @@ module.exports = {
         {
           firstName: "Alumno17",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #117",
           telefono: "78945117",
@@ -145,6 +162,7 @@ module.exports = {
         {
           firstName: "Alumno18",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #118",
           telefono: "78945118",
@@ -153,6 +171,7 @@ module.exports = {
         {
           firstName: "Alumno19",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #119",
           telefono: "78945119",
@@ -161,6 +180,7 @@ module.exports = {
         {
           firstName: "Alumno20",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #120",
           telefono: "78945120",
@@ -169,6 +189,7 @@ module.exports = {
         {
           firstName: "Alumno21",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #121",
           telefono: "78945121",
@@ -177,6 +198,7 @@ module.exports = {
         {
           firstName: "Alumno22",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #122",
           telefono: "78945122",
@@ -185,6 +207,7 @@ module.exports = {
         {
           firstName: "Alumno23",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #123",
           telefono: "78945123",
@@ -193,6 +216,7 @@ module.exports = {
         {
           firstName: "Alumno24",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #124",
           telefono: "78945124",
@@ -201,6 +225,7 @@ module.exports = {
         {
           firstName: "Alumno25",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #125",
           telefono: "78945125",
@@ -209,6 +234,7 @@ module.exports = {
         {
           firstName: "Alumno26",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #126",
           telefono: "78945126",
@@ -217,6 +243,7 @@ module.exports = {
         {
           firstName: "Alumno27",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #127",
           telefono: "78945127",
@@ -225,6 +252,7 @@ module.exports = {
         {
           firstName: "Alumno28",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #128",
           telefono: "78945128",
@@ -233,6 +261,7 @@ module.exports = {
         {
           firstName: "Alumno29",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #129",
           telefono: "78945129",
@@ -241,6 +270,7 @@ module.exports = {
         {
           firstName: "Alumno30",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #130",
           telefono: "78945130",
@@ -249,6 +279,7 @@ module.exports = {
         {
           firstName: "Alumno31",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #131",
           telefono: "78945131",
@@ -257,6 +288,7 @@ module.exports = {
         {
           firstName: "Alumno32",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #132",
           telefono: "78945132",
@@ -265,6 +297,7 @@ module.exports = {
         {
           firstName: "Alumno33",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #133",
           telefono: "78945133",
@@ -273,6 +306,7 @@ module.exports = {
         {
           firstName: "Alumno34",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #134",
           telefono: "78945134",
@@ -281,6 +315,7 @@ module.exports = {
         {
           firstName: "Alumno35",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #135",
           telefono: "78945135",
@@ -289,6 +324,7 @@ module.exports = {
         {
           firstName: "Alumno36",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #136",
           telefono: "78945136",
@@ -297,6 +333,7 @@ module.exports = {
         {
           firstName: "Alumno37",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #137",
           telefono: "78945137",
@@ -305,6 +342,7 @@ module.exports = {
         {
           firstName: "Alumno38",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #138",
           telefono: "78945138",
@@ -313,6 +351,7 @@ module.exports = {
         {
           firstName: "Alumno39",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "femenino",
           address: "Calle Ejemplo #139",
           telefono: "78945139",
@@ -321,6 +360,7 @@ module.exports = {
         {
           firstName: "Alumno40",
           lastName: "Ejemplo",
+          birthDate: "2008-10-10",
           genero: "masculino",
           address: "Calle Ejemplo #140",
           telefono: "78945140",

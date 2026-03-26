@@ -143,7 +143,9 @@ export default function StudentDashBoard() {
   return (
     <main className="flex-1 px-16 py-4 bg-background">
       <header className="mb-8 text-left">
-        <h1 className="text-4xl font-bold tracking-tight text-foreground mb-2">Resumen Académico</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-foreground mb-2">
+          Resumen Académico, {userName}
+        </h1>
       </header>
       
       <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8">

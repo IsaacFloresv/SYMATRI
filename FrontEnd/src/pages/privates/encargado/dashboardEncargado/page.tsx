@@ -135,8 +135,8 @@ export default function DashBoardEncargado() {
           type MatKey = { id: number; name: string };
           const byMat: Record<string, { meta: MatKey; vals: number[] }> = {};
           filtered.forEach((n: any) => {
-            const materiaId = Number(n.materia?.id ?? 0);
-            const materiaName = n.materia?.name || "Sin materia";
+            const materiaId = Number(n.materia?.id ?? n.materiaId ?? 0);
+            const materiaName = n.materia?.name || n.materia?.nombre || "Sin materia";
             const key = `${materiaId}|${materiaName}`;
             const val = Number(n.nota || n.valor || 0);
             if (!byMat[key]) byMat[key] = { meta: { id: materiaId, name: materiaName }, vals: [] };
@@ -306,10 +306,12 @@ export default function DashBoardEncargado() {
                                   : ""
                               }`}
                               onClick={() => {
-                                setSelectedMateriaId(g.materiaId ?? null);
+                                const targetMateriaId = g.materiaId ?? 0;
+                                if (!targetMateriaId) return;
+                                setSelectedMateriaId(targetMateriaId);
                                 navigate(
                                   `/encargado/calificaciones?materiaId=${encodeURIComponent(
-                                    String(g.materiaId ?? "")
+                                    String(targetMateriaId)
                                   )}`
                                 );
                               }}

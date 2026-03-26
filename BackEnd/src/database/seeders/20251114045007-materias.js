@@ -17,7 +17,8 @@ module.exports = {
       { name: 'Música', description: 'Fundamentos de música y apreciación.', gradoId: 10, createdAt: new Date(), updatedAt: new Date() },
       { name: 'Tecnología', description: 'Introducción a la tecnología y computación.', gradoId: 11, createdAt: new Date(), updatedAt: new Date() },
       { name: 'Educación Cívica', description: 'Formación ciudadana y ética.', gradoId: 12, createdAt: new Date(), updatedAt: new Date() },
-      { name: 'Economía', description: 'Conceptos básicos de economía.', gradoId: 12, createdAt: new Date(), updatedAt: new Date() }
+      { name: 'Economía', description: 'Conceptos básicos de economía.', gradoId: 12, createdAt: new Date(), updatedAt: new Date() },
+      { name: 'Conducta', description: 'Comportamiento en clase, participacion, manera de expresarse y respeto demostrado en todo aspecto de la vida estudiantil.', gradoId: 12, createdAt: new Date(), updatedAt: new Date() }
     ], {});
   },
 

@@ -15,6 +15,10 @@ module.exports = {
       lastName: {
         type: Sequelize.STRING
       },
+      birthDate: {
+        type: Sequelize.DATEONLY,
+        allowNull: true
+      },
       genero: {
         type: Sequelize.STRING
       },
@@ -26,14 +30,14 @@ module.exports = {
       },
       userId: {
         type: Sequelize.INTEGER,
-            allowNull: false,
+        allowNull: false,
       },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      updatedAt: {        
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),

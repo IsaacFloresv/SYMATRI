@@ -1,4 +1,4 @@
-const { materias, materiaProfesor, dataUser, user } = require("../database/models/index");
+const { materias, materiaProfesor, dataUser, user, grados } = require("../database/models/index");
 
 const getAll = async (req, res) => {
   try {
@@ -21,9 +21,14 @@ const getAll = async (req, res) => {
                   as: "datosPersonales",
                 },
               ],
-            },
+            },            
           ],
         },
+        {
+              model: grados,
+              attributes: ["id", "name"],
+              as: "grado",
+            }
       ],
     });
     res.json(result);
@@ -61,6 +66,11 @@ const getById = async (req, res) => {
               ],
             },
           ],
+        },
+        {
+          model: grados,
+          attributes: ["id", "name"],
+          as: "grado",
         },
       ],
     });

@@ -24,7 +24,13 @@ export function isPathAllowed(pathname: string, ids: number[] = []) {
     if (pathname === p) return true;
     // allow nested routes such as /admin/gestion-materias/123
     if (pathname.startsWith(p + "/")) return true;
+    // allow encargado matricula to access asistente-matricula
+    if (p === "/encargado/gestion-matricula" && pathname === "/encargado/asistente-matricula") return true;
   }
+
+  // If user has asistente-matricula but is trying to access gestion-matricula, allow too
+  if (pathname === "/encargado/gestion-matricula" && allowed.has("/encargado/asistente-matricula")) return true;
+
   return false;
 }
 

@@ -80,6 +80,7 @@ import DatosDashBoard from "@/pages/privates/asistente/dashboardAsistente/datosD
 import DashBoardEncargado from "@/pages/privates/encargado/dashboardEncargado/page";
 import GestionComunicacion from "@/pages/privates/encargado/gestionComunicacion/page";
 import GestionMatricula from "@/pages/privates/encargado/gestionMatricula/page";
+import AsistenteMatricula from "@/pages/privates/encargado/gestionMatricula/asistenteMatricula";
 import VistaCalificacionesMateriasEncargado from "@/pages/privates/encargado/vistaCalificacionesMaterias/page.tsx";
 import VistaEventosEncargado from "@/pages/privates/encargado/vistaEventos/page.tsx";
 import LectorMensajes from "@/pages/privates/encargado/gestionComunicacion/lectorMensajes"; // dinámica (reemplaza MessageDetail)
@@ -557,6 +558,13 @@ export const router = createBrowserRouter([
     path: "/encargado/gestion-matricula",
     element: <PrivateRoutes>
       <GestionMatricula />
+    </PrivateRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/encargado/asistente-matricula",
+    element: <PrivateRoutes>
+      <AsistenteMatricula />
     </PrivateRoutes>,
     errorElement: <NotFoundPage />,
   },

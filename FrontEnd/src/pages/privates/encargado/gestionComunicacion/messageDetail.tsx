@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { api } from "@/lib/api";
 
 interface Message {
@@ -12,16 +13,35 @@ interface Message {
   sender: string;
   priority?: "high" | "normal";
   tags?: string[];
-  status: "recibidos" | "archivados" | "borradores";
+  status: "recibidos" | "enviados" | "archivados" | "borradores";
   avatarUrl?: string;
   folder?: string;
 }
 
-export default function MessageDetail() {
+function formatDateTime(value?: string) {
+  if (!value) return "";
+  const date = new Date(value);
+  return date.toLocaleString(undefined, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
+interface MessageDetailProps {
+  message?: Message;
+  folderLabel?: string;
+  onClose?: () => void;
+}
+
+export default function MessageDetail({ message: initialMessage, folderLabel, onClose }: MessageDetailProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [message, setMessage] = useState<Message | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState<Message | null>(initialMessage ?? null);
+  const [loading, setLoading] = useState(!initialMessage);
   const [reply, setReply] = useState("");
 
   useEffect(() => {
@@ -44,8 +64,16 @@ export default function MessageDetail() {
         setLoading(false);
       }
     }
-    load();
-  }, [id]);
+
+    if (!initialMessage) {
+      load();
+    }
+  }, [id, initialMessage]);
+
+  const handleClose = () => {
+    if (onClose) return onClose();
+    navigate(-1);
+  };
 
   if (loading) {
     return <div className="p-8">Cargando mensaje...</div>;
@@ -63,7 +91,11 @@ export default function MessageDetail() {
         method: "POST",
         headers,
       });
-      navigate("/encargado/gestion-comunicacion", { state: { reload: true } });
+      if (onClose) {
+        onClose();
+      } else {
+        navigate("/encargado/gestion-comunicacion", { state: { reload: true } });
+      }
     } catch (err) {
       console.error("archive failed", err);
     }
@@ -76,13 +108,16 @@ export default function MessageDetail() {
   };
 
   return (
-    <main className="p-8">
-      <Button onClick={() => navigate(-1)} className="mb-4">
-        ← Volver
-      </Button>
+    <main className="p-2">
       <div className="max-w-2xl mx-auto bg-card-dark rounded-xl border border-border-dark shadow-2xl overflow-hidden flex flex-col">
         <div className="p-6 border-b border-border-dark flex justify-between items-start">
           <div className="space-y-2">
+            {folderLabel && (
+              <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-primary">
+                <span className="h-1 w-1 rounded-full bg-primary" />
+                {folderLabel}
+              </span>
+            )}
             <div className="flex gap-2 mb-1">
               {message.tags?.map((t) => (
                 <span
@@ -93,9 +128,12 @@ export default function MessageDetail() {
                 </span>
               ))}
             </div>
-            <h2 className="text-2xl font-bold text-foreground-dark">
+            <DialogTitle className="text-2xl font-bold text-foreground-dark">
               {message.title}
-            </h2>
+            </DialogTitle>
+            <DialogDescription className="text-sm text-muted-dark">
+              Detalle del mensaje en {folderLabel ?? "la carpeta"}.
+            </DialogDescription>
             <div className="flex items-center gap-2 mt-1">
               <Avatar className="size-8">
                 {message.avatarUrl ? (
@@ -109,17 +147,14 @@ export default function MessageDetail() {
                   {message.sender}
                 </span>
                 <span className="text-[11px] text-muted-dark">
-                  {message.timestamp}
+                  {formatDateTime(message.timestamp)}
+                </span>
+                <span className="text-[11px] text-muted-dark">
+                  Estado: {message.status || "—"} {message.priority ? `· Prioridad: ${message.priority}` : ""}
                 </span>
               </div>
             </div>
           </div>
-          <button
-            onClick={() => navigate(-1)}
-            className="text-muted-dark hover:text-foreground-dark transition-colors"
-          >
-            <span className="material-symbols-outlined">close</span>
-          </button>
         </div>
         <div className="p-6 overflow-y-auto custom-scrollbar space-y-6 prose prose-invert max-w-none text-foreground-dark/90 leading-relaxed">
           {message.body.split("\n").map((line, idx) => (
@@ -149,7 +184,7 @@ export default function MessageDetail() {
               Archivar
             </Button>
           </div>
-          <Button variant="ghost" onClick={() => navigate(-1)}>
+          <Button variant="ghost" onClick={handleClose}>
             Cerrar
           </Button>
         </div>
