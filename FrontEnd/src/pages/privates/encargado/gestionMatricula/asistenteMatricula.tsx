@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { api } from "@/lib/api";
 import { useAuthStorage } from "@/hooks/useAuthStorage";
+import { Button } from "@/components/ui/button";
 
 type Option = {
   value: string;
@@ -72,6 +73,8 @@ export default function AsistenteMatricula() {
 
   const session = useAuthStorage((s) => s.user);
   const [encargadoName, setEncargadoName] = useState("");
+  const [encargadoPhone, setEncargadoPhone] = useState("");
+  const [encargadoEmail, setEncargadoEmail] = useState("");
   const [studentName, setStudentName] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
@@ -126,12 +129,30 @@ export default function AsistenteMatricula() {
 
         const nombre = data?.datosPersonales?.firstName || data?.datosPersonales?.name || data?.datosPersonales?.nombre;
         const apellido = data?.datosPersonales?.lastName || data?.datosPersonales?.last_name || "";
-        setEncargadoName([nombre, apellido].filter(Boolean).join(" ").trim());
+        const encargadoFullName = [nombre, apellido].filter(Boolean).join(" ").trim();
+        setEncargadoName(encargadoFullName);
+
+        // Prefill parent/guardian info with encargado details
+        const encargadoPhoneValue = data?.datosPersonales?.telefono ?? data?.telefono ?? data?.datosPersonales?.phone ?? "";
+        const encargadoEmailValue = data?.email ?? data?.datosPersonales?.email ?? "";
+        setEncargadoPhone(encargadoPhoneValue);
+        setEncargadoEmail(encargadoEmailValue);
+        if (!parentName) setParentName(encargadoFullName);
+        if (!parentContact && encargadoPhoneValue) setParentContact(encargadoPhoneValue);
+        if (!parentEmail && encargadoEmailValue) setParentEmail(encargadoEmailValue);
       } catch (err) {
         console.error("Error cargando encargado", err);
         const anySession = session as any;
         if (anySession?.name || anySession?.userName) {
-          setEncargadoName(anySession.name || anySession.userName || "");
+          const fallbackName = anySession.name || anySession.userName || "";
+          setEncargadoName(fallbackName);
+          if (!parentName) setParentName(fallbackName);
+        }
+        if (!parentEmail && (anySession?.email || (anySession as any)?.datosPersonales?.email)) {
+          setParentEmail(anySession?.email || (anySession as any)?.datosPersonales?.email || "");
+        }
+        if (!parentContact && (anySession?.phone || (anySession as any)?.datosPersonales?.telefono || (anySession as any)?.datosPersonales?.phone)) {
+          setParentContact(anySession?.phone || (anySession as any)?.datosPersonales?.telefono || (anySession as any)?.datosPersonales?.phone || "");
         }
       }
     };
@@ -154,10 +175,10 @@ export default function AsistenteMatricula() {
             <h3 className="text-lg font-semibold">
               Progress: <span className="text-primary">66% Complete</span>
             </h3>
-            <button className="text-primary font-medium hover:underline flex items-center gap-1">
+            <Button className="font-medium flex items-center gap-1">
               <span className="material-symbols-outlined text-base">save</span>
               Save Draft
-            </button>
+            </Button>
           </div>
           <div className="w-full bg-input-light dark:bg-input-dark rounded-full h-2.5">
             <div className="bg-primary h-2.5 rounded-full" style={{ width: "66%" }} />
@@ -193,17 +214,18 @@ export default function AsistenteMatricula() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">       
             <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="encargado-name">
-                Encargado
+              <label className="block text-sm font-medium mb-1" htmlFor="address">
+                Address
               </label>
               <input
                 className="w-full bg-input-light dark:bg-input-dark border-transparent focus:ring-2 focus:ring-primary focus:border-transparent rounded-lg px-4 py-3 transition"
-                id="encargado-name"
+                id="address"
+                placeholder="Enter student's address"
                 type="text"
-                value={encargadoName}
-                readOnly
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
               />
             </div>
             <SelectableInput
@@ -218,19 +240,6 @@ export default function AsistenteMatricula() {
                 { value: "other", label: "Other" },
               ]}
             />
-            <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="address">
-                Address
-              </label>
-              <input
-                className="w-full bg-input-light dark:bg-input-dark border-transparent focus:ring-2 focus:ring-primary focus:border-transparent rounded-lg px-4 py-3 transition"
-                id="address"
-                placeholder="Enter student's address"
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </div>
           </div>
 
           <hr className="border-border-light dark:border-border-dark" />
@@ -312,13 +321,13 @@ export default function AsistenteMatricula() {
           </div>
 
           <div className="flex justify-end pt-4">
-            <button
-              className="bg-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-background-dark transition-all duration-300 flex items-center gap-2"
+            <Button
+              className="font-bold py-3 px-6 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-background-dark transition-all duration-300 flex items-center gap-2"
               type="submit"
             >
               <span className="material-symbols-outlined">person_add</span>
               <span>Enroll Student</span>
-            </button>
+            </Button>
           </div>
         </form>
       </div>
