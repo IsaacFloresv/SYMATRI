@@ -186,6 +186,45 @@ export default function AsistenteMatricula() {
         </div>
 
         <form className="bg-card-light dark:bg-card-dark p-6 sm:p-8 rounded-lg shadow-sm space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="encargado-name">
+                Encargado
+              </label>
+              <input
+                className="w-full bg-input-light dark:bg-input-dark border-transparent focus:ring-2 focus:ring-primary focus:border-transparent rounded-lg px-4 py-3 transition"
+                id="encargado-name"
+                type="text"
+                value={encargadoName}
+                readOnly
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="encargado-phone">
+                Encargado Phone
+              </label>
+              <input
+                className="w-full bg-input-light dark:bg-input-dark border-transparent focus:ring-2 focus:ring-primary focus:border-transparent rounded-lg px-4 py-3 transition"
+                id="encargado-phone"
+                type="tel"
+                value={encargadoPhone}
+                readOnly
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="encargado-email">
+                Encargado Email
+              </label>
+              <input
+                className="w-full bg-input-light dark:bg-input-dark border-transparent focus:ring-2 focus:ring-primary focus:border-transparent rounded-lg px-4 py-3 transition"
+                id="encargado-email"
+                type="email"
+                value={encargadoEmail}
+                readOnly
+              />
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium mb-1" htmlFor="student-name">

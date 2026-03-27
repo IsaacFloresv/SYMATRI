@@ -28,6 +28,21 @@ export function isPathAllowed(pathname: string, ids: number[] = []) {
     if (p === "/encargado/gestion-matricula" && pathname === "/encargado/asistente-matricula") return true;
   }
 
+  // allow encargado role to view events route explicitly
+  try {
+    const sess = require("@/hooks/useAuthStorage").useAuthStorage.getState().user;
+    const role = (sess?.role || "").toString().toLowerCase();
+    if (role.includes("encargado") && pathname === "/encargado/eventos") return true;
+  } catch {}
+
+  // allow event endpoint for encargado if they already have any encargado modules assigned
+  if (
+    pathname === "/encargado/eventos" &&
+    (allowed.has("/encargado/dashboard") || allowed.has("/encargado/gestion-matricula") || allowed.has("/encargado/calificaciones") || allowed.has("/encargado/gestion-comunicacion"))
+  ) {
+    return true;
+  }
+
   // If user has asistente-matricula but is trying to access gestion-matricula, allow too
   if (pathname === "/encargado/gestion-matricula" && allowed.has("/encargado/asistente-matricula")) return true;
 

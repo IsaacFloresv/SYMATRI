@@ -449,7 +449,8 @@ export default function DashBoardEncargado() {
                   {events.map((ev) => (
                     <li
                       key={ev.id}
-                      className="p-4 flex items-start gap-3 hover:bg-card-dark/50 transition-colors"
+                      className="p-4 flex items-start gap-3 hover:bg-card-dark/50 transition-colors cursor-pointer"
+                      onClick={() => navigate(`/encargado/eventos?eventId=${ev.id}`, { state: { event: ev } })}
                     >
                       <div className="flex-shrink-0 flex items-center justify-center rounded-lg bg-primary/20 text-primary size-10">
                         <span className="material-symbols-outlined text-xl">event</span>

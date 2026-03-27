@@ -38,6 +38,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       icon: m.icon,
     }));
 
+  // Si es encargado, aseguramos la entrada de eventos en el sidebar
+  const isEncargado = (session?.role || "").toString().toLowerCase().includes("encargado");
+  if (isEncargado && !navMain.some((item) => item.url === "/encargado/eventos")) {
+    navMain.push({
+      title: "Eventos",
+      url: "/encargado/eventos",
+      icon: moduleMap[35]?.icon,
+    });
+  }
+
   // Datos del usuario para el footer
   const userData = {
     name: `${datos.firstName} ${datos.lastName}`,

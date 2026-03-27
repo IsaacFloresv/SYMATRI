@@ -90,6 +90,7 @@ export const moduleMap: Record<number, ModuleConfig> = {
   33: { id: 33, label: "Matrícula", path: "/encargado/gestion-matricula", icon: IconFolder },
   331: { id: 331, label: "Asistente Matrícula", path: "/encargado/asistente-matricula", icon: IconFolder },
   34: { id: 34, label: "Vistas: Notas", path: "/encargado/calificaciones", icon: IconReport },
+  35: { id: 35, label: "Eventos", path: "/encargado/eventos", icon: IconBell },
 
   // Alumno modules
   41: { id: 41, label: "Dashboard Alumno", path: "/alumno/dashboard", icon: IconDashboard },
