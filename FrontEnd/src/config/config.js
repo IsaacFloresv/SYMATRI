@@ -10,7 +10,7 @@ export function required(name) {
 }
 
 export const config = {
-  // Variables obligatorias
+  // Variables obligatorias para el servicio de API
   token: required("VITE_API_TOKEN"),
   apiKeyHash: required("VITE_APIKEYHASH_APP"),
 

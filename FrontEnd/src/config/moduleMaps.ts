@@ -64,7 +64,7 @@ export const moduleMap: Record<number, ModuleConfig> = {
   97: { id: 97, label: "Datos del Colegio", path: "/admin/datos-colegio", icon: IconListDetails },
   98: { id: 98, label: "Editar Datos del Colegio", path: "/admin/gestion-datos-colegio", icon: IconListDetails },
 
-  // additional admin-only view pages (not restricted by module selection)
+  // additional Soporte
   90: { id: 90, label: "Vista: Eventos", path: "/admin/vista-eventos", icon: IconListDetails },
   91: { id: 91, label: "Vista: Informes", path: "/admin/vista-informes", icon: IconReport },
   92: { id: 92, label: "Vista: Secciones", path: "/admin/vista-secciones", icon: IconListDetails },

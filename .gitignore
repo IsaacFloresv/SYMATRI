@@ -11,13 +11,6 @@
 /BackEnd/node_modules/
 /BackEnd/package-lock.json
 
-# ⚙️ Archivos de configuración personalizados
-/FrontEnd/config
-/FrontEnd/config.js
-/FrontEnd/config.json
-/BackEnd/config
-/BackEnd/config.js
-/BackEnd/config.json
 
 # 🏗️ Carpetas de compilación y distribución
 /FrontEnd/dist/
