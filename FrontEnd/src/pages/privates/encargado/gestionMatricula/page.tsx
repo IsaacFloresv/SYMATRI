@@ -24,6 +24,7 @@ export default function GestionMatricula() {
 
   const [students, setStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [creatingNewStudent, setCreatingNewStudent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -67,6 +68,11 @@ export default function GestionMatricula() {
   }, [session?.id]);
 
   const handleStartEnrollment = () => {
+    if (creatingNewStudent) {
+      navigate(`/encargado/asistente-matricula?newStudent=true`);
+      return;
+    }
+
     if (!selectedStudent) return;
     navigate(`/encargado/asistente-matricula?alumnoId=${selectedStudent.id}`);
   };
@@ -114,11 +120,19 @@ export default function GestionMatricula() {
                   <p className="text-sm text-destructive">{error}</p>
                 ) : students.length > 0 ? (
                   <select
-                    value={selectedStudent?.id ?? ""}
+                    value={creatingNewStudent ? "new" : selectedStudent?.id ?? ""}
                     onChange={(e) => {
-                      const id = Number(e.target.value);
+                      const value = e.target.value;
+                      if (value === "new") {
+                        setSelectedStudent(null);
+                        setCreatingNewStudent(true);
+                        return;
+                      }
+
+                      const id = Number(value);
                       const stu = students.find((s) => s.id === id) || null;
                       setSelectedStudent(stu);
+                      setCreatingNewStudent(false);
                     }}
                     className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   >
@@ -128,6 +142,7 @@ export default function GestionMatricula() {
                         {getStudentName(stu)}
                       </option>
                     ))}
+                    <option value="new">+ Agregar estudiante nuevo</option>
                   </select>
                 ) : (
                   <p className="text-sm text-muted-foreground">No hay alumnos asignados.</p>

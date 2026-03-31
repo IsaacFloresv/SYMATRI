@@ -40,7 +40,19 @@ module.exports = {
         { periodo: '2025', name: '7-3', profesorId: 6, gradoId: 7 },
         { periodo: '2025', name: '8-3', profesorId: 7, gradoId: 8 },
         { periodo: '2025', name: '9-2', profesorId: 3, gradoId: 9 },
-        { periodo: '2025', name: '10-2', profesorId: 6, gradoId: 10 }
+        { periodo: '2025', name: '10-2', profesorId: 6, gradoId: 10 },
+        { periodo: '2026', name: '1-1', profesorId: 1, gradoId: 1 },
+        { periodo: '2026', name: '2-1', profesorId: 3, gradoId: 2 },
+        { periodo: '2026', name: '3-1', profesorId: 2, gradoId: 3},
+        { periodo: '2026', name: '4-1', profesorId: 5, gradoId: 4 },
+        { periodo: '2026', name: '5-1', profesorId: 4, gradoId: 5 },
+        { periodo: '2026', name: '6-1', profesorId: 7, gradoId: 6 },
+        { periodo: '2026', name: '7-1', profesorId: 2, gradoId: 7 },
+        { periodo: '2026', name: '8-1', profesorId: 4, gradoId: 8 },
+        { periodo: '2026', name: '9-1', profesorId: 1, gradoId: 9 },
+        { periodo: '2026', name: '10-1', profesorId: 5, gradoId: 10 },
+        { periodo: '2026', name: '11-1', profesorId: 3, gradoId: 11 },
+        { periodo: '2026', name: '12-1', profesorId: 6, gradoId: 12 }
       ],
       {}
     );
