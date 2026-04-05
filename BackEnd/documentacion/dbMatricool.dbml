@@ -1,0 +1,216 @@
+// DBML export created from BackEnd/documentacion/dbMatricool.txt
+// Compatible con https://dbdiagram.io
+// URL Proyecto https://dbdiagram.io/d/dbMatriCool-69d1ed9d0f7c9ef2c07eb3dc
+
+Table actividades {
+  id int [pk, increment]
+  periodo varchar(255)
+  name varchar(255)
+  materiaId int
+  userId int
+  seccionesId longtext [note: "JSON"]
+  estado tinyint
+  descripcion text
+  fechaInicio date
+  fechaFinal date
+  horaInicio time
+  horaFinal time
+  ubicacion text
+  objetivo varchar(255)
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table asistencia {
+  id int [pk, increment]
+  actividadId int
+  alumnoId int
+  profesorId int
+  estado varchar(255)
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table configs {
+  id int [pk, increment]
+  clave varchar(255)
+  valor text
+  tipo enum('INTEGER', 'STRING', 'BOOLEAN') [default: 'STRING']
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table datausers {
+  id int [pk, increment]
+  firstName varchar(255)
+  lastName varchar(255)
+  birthDate date
+  genero varchar(255)
+  address varchar(255)
+  telefono varchar(255)
+  userId int
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table encargadoalumnos {
+  id int [pk, increment]
+  alumnoId int
+  encargadoId int
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table errores {
+  id int [pk, increment]
+  logErrors text
+  estado varchar(255) [default: 'pendiente']
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table grados {
+  id int [pk, increment]
+  code varchar(255)
+  name varchar(255)
+  level varchar(255)
+  active tinyint [default: 1]
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table horarios {
+  id int [pk, increment]
+  periodo varchar(255)
+  seccionId int
+  profesorId int
+  dia varchar(255)
+  inicio time
+  final time
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table logs {
+  id int [pk, increment]
+  nameTable varchar(255)
+  userId int
+  estado tinyint
+  valorAnterior text
+  valorActual text
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table materiaprofesors {
+  id int [pk, increment]
+  materiaId int
+  profesorId int
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table materias {
+  id int [pk, increment]
+  name varchar(255)
+  description text
+  gradoId int
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table mensajereceptors {
+  id int [pk, increment]
+  mensajeId int [ref: > mensajes.id]
+  receptorId int [ref: > users.id]
+  leido tinyint [default: 0]
+  isArchived tinyint [default: 0]
+  fechaLectura datetime
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table mensajes {
+  id int [pk, increment]
+  periodo varchar(255)
+  asunto varchar(255)
+  mensaje text
+  emisorId int
+  isReaded tinyint [default: 0]
+  isArchived tinyint [default: 0]
+  fechaEnvio datetime
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table notas {
+  id int [pk, increment]
+  periodo varchar(255)
+  alumnoId int
+  materiaId int
+  usuarioId int
+  tipoId int
+  nota decimal(10, 0)
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table roles {
+  id int [pk, increment]
+  nombre varchar(255)
+  descripcion varchar(255)
+  modulos longtext [note: "JSON"]
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table seccionalumnos {
+  id int [pk, increment]
+  periodo varchar(255)
+  seccionId int
+  alumnoId int
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table secciones {
+  id int [pk, increment]
+  periodo varchar(255)
+  name varchar(255)
+  profesorId int
+  gradoId int
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table seccionprofesors {
+  id int [pk, increment]
+  periodo varchar(255)
+  seccionId int
+  profesorId int
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table sequelizemeta {
+  name varchar(255) [pk, unique]
+}
+
+Table tiponotas {
+  id int [pk, increment]
+  nombre varchar(255) [not null]
+  descripcion text
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
+
+Table users {
+  id int [pk, increment]
+  userName varchar(255) [unique]
+  pass varchar(255)
+  email varchar(255) [unique]
+  active tinyint [default: 0]
+  roleId int [default: 2]
+  createdAt datetime [default: "current_timestamp()"]
+  updatedAt datetime [default: "current_timestamp()"]
+}
