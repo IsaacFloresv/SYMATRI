@@ -9,6 +9,7 @@ const LeerMensaje = React.lazy(() => import('@/pages/privates/alumno/vistaComuni
 
 import LoginPage from '@/pages/public/login/page';
 import RegisterPage from "@/pages/public/register/page";
+import ChangePasswordPage from "@/pages/public/Password/page";
 import NotFoundPage from "@/pages/public/404/NotFoundPage";
 
 // Administrador Pages
@@ -108,6 +109,13 @@ export const router = createBrowserRouter([
     path: "/register",
     element: <PublicRoutes>
       <RegisterPage />
+    </PublicRoutes>,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: "/password",
+    element: <PublicRoutes>
+      <ChangePasswordPage />
     </PublicRoutes>,
     errorElement: <NotFoundPage />,
   },

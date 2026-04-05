@@ -26,7 +26,7 @@ module.exports = {
       },
       roleId: {
         type: Sequelize.INTEGER,
-        defaultValue:  1
+        defaultValue:  2
       },
       createdAt: {
         type: Sequelize.DATE,

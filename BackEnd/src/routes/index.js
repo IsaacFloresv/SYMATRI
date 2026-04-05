@@ -4,6 +4,7 @@ const router = express.Router();
 
 const actividadesRoutes = require("./actividadesRoutes")
 const asistenciaRoutes = require("./asistenciaRoutes")
+const authRoutes = require("./authRoutes")
 const configRoutes = require("./configRoutes")
 const dataUserRoutes = require("./dataUsersRoutes")
 const encargadoAlumnosRoutes = require("./encargadoAlumnosRoutes")
@@ -55,12 +56,18 @@ router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //Rutas
 router.get("/", (req, res) => res.json({ foo: "bar" }));
 
+// Endpoint público para crear usuarios desde registro
+// hacemos una ruta sine token para registro. Esto solo crea archivo de users.
+const { create: createUser } = require("../controllers/usersControllers");
+router.post("/users/create", createUser);
+
 
 
 
 
 router.use(`/actividades`, verifyToken, authorizeRole('admin007', 'admin1', 'alumno', 'encargado', 'profesor'), actividadesRoutes)
 router.use(`/asistencia`, verifyToken, authorizeRole('admin007', 'admin1', 'alumno', 'encargado', 'profesor'), asistenciaRoutes)
+router.use(`/auth`, authorizeRole('guest'), authRoutes)
 router.use(`/config`, verifyToken, authorizeRole('admin007', 'admin1'), configRoutes)
 router.use(`/errores`, verifyToken, authorizeRole('admin007', 'admin007'), erroresRoutes)
 router.use(`/logs`, verifyToken, authorizeRole('admin007', 'admin1'), logsRoutes)

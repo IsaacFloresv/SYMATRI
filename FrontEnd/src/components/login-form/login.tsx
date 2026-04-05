@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -13,6 +14,8 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
 
   const { form, loginMutation, onSubmit } = useAuth()
+
+  const navigate = useNavigate();
 
   return (
     <div className={cn("total-login flex flex-col gap-6", className)} {...props}>
@@ -50,12 +53,13 @@ export function LoginForm({
                       <FormItem>
                         <div className="flex items-center">
                           <FormLabel>Constrasena</FormLabel>
-                          <a
-                            href="#"
-                            className="ml-auto text-sm underline-offset-2 hover:underline"
+                          <button
+                            type="button"
+                            onClick={() => navigate("/password")}
+                            className="ml-auto text-sm underline-offset-2 hover:underline text-primary"
                           >
-                            Olvidaste tu contrasena?
-                          </a>
+                            Olvidaste tu contraseña?
+                          </button>
                         </div>
                         <FormControl>
                           <Input placeholder="An3t14mm@d"{...field} />
@@ -70,9 +74,13 @@ export function LoginForm({
                 </Button>
                 <div className="text-center text-sm">
                   No tiene una cuenta?{" "}
-                  <a href="#" className="underline underline-offset-4">
+                  <button
+                    type="button"
+                    onClick={() => navigate("/register")}
+                    className="underline underline-offset-4 text-primary"
+                  >
                     Registrate
-                  </a>
+                  </button>
                 </div>
               </div>
             </form>

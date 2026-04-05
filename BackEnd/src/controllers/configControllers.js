@@ -32,6 +32,22 @@ const getById = async (req, res) => {
   }
 };
 
+const getNameInstituto = async () => {
+  try {
+    const clave = "nombreInstituto";
+    let result = await config.findOne({
+      where: { clave },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error("Error al obtener el nombre del instituto:", error);
+    return null;
+  }
+}
+
 const create = async (req, res) => {
   try {
     const registroN = req.body;
@@ -109,6 +125,7 @@ const deleteR = async (req, res) => {
 module.exports = {
   getAll,
   getById,
+  getNameInstituto,
   create,
   update,
   validate,

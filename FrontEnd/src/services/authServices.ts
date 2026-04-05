@@ -101,6 +101,50 @@ export async function login(credentials: loginData) {
   return fullSession;
 }
 
+export type RegisterData = {
+  userName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  password: string;
+  rol?: string;
+}
+
+export async function registerUser(data: RegisterData) {
+  // Insertar en tabla users (endpoint de Users). También puede invocar al endpoint de login/register si se requiere.
+  const url = "http://localhost:4321/api/v1/users/create";
+
+  const payload = {
+    userName: data.userName,
+    pass: data.password,
+    email: data.email,
+    // active = false (pendiente activación)
+    active: false,
+    roleId: 1,
+    datosPersonales: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      telefono: data.phone,
+      address: data.address,
+    },
+  };
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const payload = await response.text().catch(() => null);
+    throw new Error(payload || "Error al registrar usuario");
+  }
+
+  return response.json();
+}
+
 export async function getMe(id: number, token: string) {
   const response = await fetch(`http://localhost:4321/users/byid?id=${id}`, {
     method: "GET",

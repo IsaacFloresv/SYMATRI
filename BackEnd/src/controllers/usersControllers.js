@@ -96,14 +96,57 @@ const getById = async (req, res) => {
   }
 };
 
+const getByEmail = async (emailP) => {
+  try {
+    const email = emailP;
+    const userResult = await user.findOne({
+      where: { email },
+      attributes: {
+        exclude: ["userId", "pass", "createdAt", "updatedAt"],
+      },
+      include: [
+        {
+          model: dataUser,
+          attributes: { exclude: ["id", "userId", "createdAt", "updatedAt"] },
+          as: "datosPersonales",
+        },
+      ],
+    });
+    return userResult;
+  } catch (error) {
+    console.error("getByEmail error", error);
+    return null;
+  }
+};
+
 const create = async (req, res) => {
   try {
-    const user = req.body;
-    user.pass = await hashPassword(user.pass);
-    let users = await user.create(user, {
+    const userData = req.body;
+    userData.pass = await hashPassword(userData.pass);
+
+    const createdUser = await user.create(userData, {
       attributes: { exclude: ["createdAt", "updatedAt"] },
     });
-    res.json(users);
+
+    // Si datosPersonales vienen, crear registro asociado en dataUser
+    if (userData.datosPersonales) {
+      await dataUser.create({
+        ...userData.datosPersonales,
+        userId: createdUser.id,
+      });
+    }
+
+    const result = await user.findOne({
+      where: { id: createdUser.id },
+      attributes: { exclude: ["pass", "createdAt", "updatedAt"] },
+      include: [{
+        model: dataUser,
+        as: "datosPersonales",
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      }],
+    });
+
+    res.json(result);
   } catch (error) {
     res.json({
       message: "No fue posible obtener la informacion",
@@ -177,6 +220,7 @@ module.exports = {
   getAll,
   getAllByRol,
   getById,
+  getByEmail,
   create,
   update,
   validate,

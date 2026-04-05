@@ -117,7 +117,7 @@ module.exports = (sequelize, DataTypes) => {
       active: DataTypes.BOOLEAN,
       roleId: {
         type: DataTypes.INTEGER,
-        defaultValue: 1
+        defaultValue: 2
       }
     },
     {
